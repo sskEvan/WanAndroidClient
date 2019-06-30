@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadingView">
+        <attr name="rotation_radius" format="dimension"/>
+        <attr name="dot_radius" format="dimension"/>
+        <attr name="path_wrapper_circle_radius" format="dimension"/>
+        <attr name="bg_color" format="color"/>
+        <attr name="dot_middle_color_1" format="color"/>
+        <attr name="dot_middle_color_2" format="color"/>
+        <attr name="dot_middle_color_3" format="color"/>
+        <attr name="dot_middle_color_4" format="color"/>
+        <attr name="dot_middle_color_5" format="color"/>
+        <attr name="dot_middle_color_6" format="color"/>
+        <attr name="success_path_wrapper_circle_color" format="color"/>
+        <attr name="failed_path_wrapper_circle_color" format="color"/>
+        <attr name="success_path_color" format="color"/>
+        <attr name="failed_path_color" format="color"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="CircleTextImageView">
+        <attr name="circle_color" format="color"/>
+        <attr name="circle_text_color" format="color"/>
+        <attr name="random_color" format="boolean"/>
+        <attr name="sub_first_character" format="boolean"/>
+        <attr name="circle_text_size" format="dimension"/>
+    </declare-styleable>
+
+
+</resources>

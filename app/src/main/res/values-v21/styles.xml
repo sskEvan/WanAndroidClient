@@ -1,0 +1,20 @@
+<resources>
+
+    <style name="WanAndroid" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="colorControlHighlight">@color/ripple_light_grey</item>
+
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
+    </style>
+
+    <style name="EditTextErrorAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/nsvRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/ivHeadPortraitBg"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_head_portrait_bg"
+                android:clickable="true"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.ssk.wanandroid.widget.ClickableImageView
+                android:id="@+id/ivHeadPortrait"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/ic_head_portrait_default"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivHeadPortraitBg"
+                app:layout_constraintBottom_toTopOf="@id/tvUserName"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点击登陆"
+                android:textSize="18dp"
+                android:textColor="@drawable/selector_white_text_bg"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivHeadPortrait"
+                app:layout_constraintBottom_toBottomOf="@id/ivHeadPortraitBg"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ivHeadPortraitBg"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,25 +1,30 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: "config.gradle"
 
 buildscript {
-    ext.kotlin_version = '1.3.11'
+
     repositories {
+        mavenCentral()
+        google()
+        maven { url 'https://dl.bintray.com/linkedme2016/lkme-deeplinks'}
         google()
         jcenter()
-        
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11"
+
     }
 }
 
 allprojects {
     repositories {
+        mavenCentral()
+        maven { url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/' }
+        maven { url "https://jitpack.io" }
+        maven { url 'https://dl.bintray.com/linkedme2016/lkme-deeplinks'}
         google()
         jcenter()
-        
     }
 }
 
