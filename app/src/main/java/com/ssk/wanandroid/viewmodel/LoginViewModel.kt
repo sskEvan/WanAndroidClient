@@ -17,30 +17,23 @@ class LoginViewModel : BaseViewModel() {
     val mLoginErrorMsg: MutableLiveData<String> = MutableLiveData()
     val mRegistErrorMsg: MutableLiveData<String> = MutableLiveData()
 
-    fun login(userName: String, passWord: String) {
-        launchOnUI(
-            {
-                val response = mRepository.login(userName, passWord)
-                handleResonseResult(
-                    response,
-                    { mLoginUser.value = response.data },
-                    { mLoginErrorMsg.value = response.errorMessage }
-                )
-            },
-            {})
+    fun login(userName: String, passWord: String) = launchOnUI {
+        val response = mRepository.login(userName, passWord)
+        handleResonseResult(
+            response,
+            { mLoginUser.value = response.data},
+            { mLoginErrorMsg.value = response.errorMessage }
+        )
     }
 
 
-    fun regist(userName: String, passWord: String) {
-        launchOnUI({
-            val response = mRepository.regist(userName, passWord)
-            handleResonseResult(
-                response,
-                { mRegisterUser.value = response.data },
-                { mRegistErrorMsg.value = response.errorMessage }
-            )
-        },
-            {})
+    fun regist(userName: String, passWord: String) = launchOnUI {
+        val response = mRepository.regist(userName, passWord)
+        handleResonseResult(
+            response,
+            { mRegisterUser.value = response.data},
+            { mRegistErrorMsg.value = response.errorMessage }
+        )
     }
 
 

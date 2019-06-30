@@ -15,8 +15,7 @@ class HomeViewModel : BaseViewModel() {
 
     val mBanners: MutableLiveData<List<Banner>> = MutableLiveData()
     val mArticleList: MutableLiveData<ArticleList> = MutableLiveData()
-    val mFetchArticleListErrorMsg: MutableLiveData<String> = MutableLiveData()
-    val mIsFetchArticleListException: MutableLiveData<Boolean> = MutableLiveData()
+    val mArticleListErrorMsg: MutableLiveData<String> = MutableLiveData()
 
     fun fetchBanners() {
 
@@ -24,27 +23,22 @@ class HomeViewModel : BaseViewModel() {
                 val result = mRepository.getBanners()
                 handleResonseResult(
                     result,
-                    { mBanners.value = result.data },
+                    { mBanners.value = result.data},
                     {})
             }
     }
 
     fun fetchArticleList(page: Int) {
-
-        launchOnUI(
-            {
+        launchOnUI{
                 val result = mRepository.getArticleList(page)
                 handleResonseResult(result,
                     {
                         mArticleList.value = result.data
-                        mIsFetchArticleListException.value = false
                     },
                     {
-                        mFetchArticleListErrorMsg.value = result.errorMessage
-                        mIsFetchArticleListException.value = false
+                        mArticleListErrorMsg.value = result.errorMessage
                     })
-            },
-            { mIsFetchArticleListException.value = true })
+            }
     }
 
 }

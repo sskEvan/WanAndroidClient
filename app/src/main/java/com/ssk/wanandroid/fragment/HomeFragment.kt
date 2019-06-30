@@ -145,12 +145,18 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                 }
             })
 
-            mFetchArticleListErrorMsg.observe(this@HomeFragment, Observer {
-                switchableConstraintLayout.switchFailedLayout()
-            })
-            mIsFetchArticleListException.observe(this@HomeFragment, Observer {
-                if(it) {
+            mArticleListErrorMsg.observe(this@HomeFragment, Observer {
+                if(!mIsRefreshing && !mIsLoadingMore) {
                     switchableConstraintLayout.switchFailedLayout()
+                }
+
+                if(mIsRefreshing) {
+                    srfArticle.finishRefresh(false)
+                    mIsRefreshing = false
+                }
+                if(mIsLoadingMore) {
+                    srfArticle.finishLoadMore(false)
+                    mIsLoadingMore = false
                 }
             })
         }

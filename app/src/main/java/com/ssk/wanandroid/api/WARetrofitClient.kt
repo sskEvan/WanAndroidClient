@@ -29,11 +29,11 @@ object WARetrofitClient : BaseRetrofitClient() {
             .cookieJar(cookieJar)
             .addInterceptor { chain ->
                 var request = chain.request()
-                if (!NetWorkUtils.isNetworkAvailable(AppContext)) {
-                    request = request.newBuilder()
-                        .cacheControl(CacheControl.FORCE_CACHE)
-                        .build()
-                }
+//                if (!NetWorkUtils.isNetworkAvailable(AppContext)) {
+//                    request = request.newBuilder()
+//                        .cacheControl(CacheControl.FORCE_CACHE)
+//                        .build()
+//                }
                 val response = chain.proceed(request)
                 if (!NetWorkUtils.isNetworkAvailable(AppContext)) {
                     val maxAge = 60 * 60

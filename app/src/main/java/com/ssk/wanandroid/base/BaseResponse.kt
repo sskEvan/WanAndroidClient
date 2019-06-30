@@ -5,4 +5,4 @@ package com.ssk.wanandroid.base
  */
 open class BaseResponse<out T>(val errorCode: Int,
                            val errorMessage: String,
-                           val data: T)
+                           val data: T?)
