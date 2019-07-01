@@ -46,14 +46,14 @@ class LoginActivity : WanActivity<LoginViewModel>() {
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
-                overridePendingTransition(R.anim.slide_none, R.anim.slide_bottom_out);
+                overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
             }
 
             R.id.menu_item_regist -> {
                 startActivity(RegistActivity::class.java)
 
                 finish()
-                overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_none);
+                overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
             }
         }
         return true
@@ -69,7 +69,7 @@ class LoginActivity : WanActivity<LoginViewModel>() {
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {
                         finish()
-                        overridePendingTransition(R.anim.slide_none, R.anim.slide_bottom_out);
+                        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
                     }
                 })
             })

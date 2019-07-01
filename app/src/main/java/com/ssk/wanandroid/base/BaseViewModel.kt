@@ -39,5 +39,16 @@ open class BaseViewModel : ViewModel(), LifecycleObserver {
         }
     }
 
+    suspend fun handleResonseResult(
+        response: BaseResponse<Any>,
+        successBlock: suspend CoroutineScope.() -> Unit
+    ) {
+        coroutineScope {
+            if (response.errorCode == 0) {
+                successBlock()
+            }
+        }
+    }
+
 
 }

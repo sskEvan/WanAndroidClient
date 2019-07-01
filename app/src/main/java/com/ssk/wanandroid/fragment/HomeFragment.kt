@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.ssk.wanandroid.ArticleDetailActivity
+import com.ssk.wanandroid.WanWebActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.SearchActivity
 import com.ssk.wanandroid.base.WanFragment
@@ -23,7 +23,6 @@ import com.ssk.wanandroid.utils.GlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
 import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
 import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
-import com.ssk.wanandroid.widget.SwitchableConstraintLayout
 import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -39,6 +38,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     }
 
     private val mBannerImages = mutableListOf<String>()
+    private val mBannerTitles = mutableListOf<String>()
     private val mBannerUrls = mutableListOf<String>()
     private var mIsRefreshing = false
     private var mIsLoadingMore = false
@@ -66,7 +66,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             setBannerStyle(BannerConfig.NUM_INDICATOR)
             setImageLoader(GlideImageLoader())
             setOnBannerListener() {
-                showToast("click POSITION $it")
+                forwardWanWebActivity(mBannerTitles[it], mBannerUrls[it])
             }
         }
 
@@ -80,10 +80,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener{_, view, position ->
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        val bundle = Bundle()
-                        bundle.putString("title", mArticleAdapter.data[position].title)
-                        bundle.putString("url", mArticleAdapter.data[position].link)
-                        startActivity(ArticleDetailActivity::class.java, bundle)
+                        forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link)
                     }
                     R.id.ivStar -> {
                         (view as ImageView).setImageResource(R.mipmap.ic_starred)
@@ -107,11 +104,9 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             mViewModel.fetchArticleList(mCurrentPage)
         }
 
-        switchableConstraintLayout.mRetryListener = object : SwitchableConstraintLayout.RetryListener {
-            override fun retry() {
-                mViewModel.fetchBanners()
-                mViewModel.fetchArticleList(mCurrentPage)
-            }
+        switchableConstraintLayout.setRetryListener {
+            mViewModel.fetchBanners()
+            mViewModel.fetchArticleList(mCurrentPage)
         }
     }
 
@@ -119,6 +114,17 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         super.initData(savedInstanceState)
         mViewModel.fetchBanners()
         mViewModel.fetchArticleList(mCurrentPage)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            immersiveStatusBar(R.color.colorPrimary, true)
+            animateToolbarTitle()
+            bannerLayout?.startAutoPlay()
+        }else {
+            bannerLayout?.stopAutoPlay()
+        }
     }
 
     override fun startObserve() {
@@ -163,9 +169,12 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     }
 
     private fun setBanner(bannerList: List<Banner>) {
+        mBannerImages.clear()
+        mBannerUrls.clear()
         for (banner in bannerList) {
             mBannerImages.add(banner.imagePath)
             mBannerUrls.add(banner.url)
+            mBannerTitles.add(banner.title)
         }
         bannerLayout!!.setImages(mBannerImages).setDelayTime(3000).start()
     }
@@ -176,20 +185,16 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             if(mCurrentPage == 0) {
                 data.clear()
             }
-
             addData(articleList.datas)
         }
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            immersiveStatusBar(R.color.colorPrimary, true)
-            animateToolbarTitle()
-            bannerLayout?.startAutoPlay()
-        }else {
-            bannerLayout?.stopAutoPlay()
-        }
+    private fun forwardWanWebActivity(title: String, url: String) {
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("url", url)
+        startActivity(WanWebActivity::class.java, bundle)
+        mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

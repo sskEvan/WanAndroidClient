@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_article_detail.*
 /**
  * Created by shisenkun on 2019-06-29.
  */
-class ArticleDetailActivity : BaseActivity() {
+class WanWebActivity : BaseActivity() {
 
     private var mIsReceivedError = true;
 
@@ -24,10 +24,8 @@ class ArticleDetailActivity : BaseActivity() {
         setupToolbar(true)
         immersiveStatusBar(R.color.colorPrimary, true)
 
-        switchableConstraintLayout.mRetryListener = object : SwitchableConstraintLayout.RetryListener {
-            override fun retry() {
-                webView.loadUrl(intent.extras?.getString("url"))
-            }
+        switchableConstraintLayout.setRetryListener {
+            webView.loadUrl(intent.extras?.getString("url"))
         }
 
         initWebView()
@@ -49,7 +47,7 @@ class ArticleDetailActivity : BaseActivity() {
 
                 override fun onPageFinished(p0: WebView?, p1: String?) {
                     super.onPageFinished(p0, p1)
-                    if(!mIsReceivedError) {
+                    if (!mIsReceivedError) {
                         switchableConstraintLayout.switchSuccessLayout()
                     }
                 }
@@ -66,6 +64,15 @@ class ArticleDetailActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         toolbar?.title = intent.extras?.getString("title")
+    }
+
+    override fun onDestroy() {
+        webView.webViewClient = null
+        super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
     }
 
 }

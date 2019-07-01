@@ -2,7 +2,6 @@ package com.ssk.wanandroid.fragment
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.ssk.wanandroid.LoginActivity
@@ -108,7 +107,7 @@ class MineFragment : BaseFragment() {
             showToast("更换头像...")
         }else {
             startActivity(LoginActivity::class.java)
-            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_none);
+            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
         }
 
     }

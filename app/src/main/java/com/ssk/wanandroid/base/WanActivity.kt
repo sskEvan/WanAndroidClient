@@ -66,6 +66,7 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
 
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
         toolbar = findViewById(R.id.toolbar)
+        toolbar!!.setNavigationOnClickListener{onBackPressed()}
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
@@ -79,6 +80,11 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
             t.scaleX = 0.8f
             t.animate().alpha(1f).scaleX(1f).setDuration(300)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
     }
 
     /**

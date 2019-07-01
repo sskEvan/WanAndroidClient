@@ -19,7 +19,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
 
     private val mLoadingLayoutResIdArray = intArrayOf(R.id.loadingView)
     private val mFailedLayoutResIdArray = intArrayOf(R.id.ivFailed, R.id.tvFailedMsg, R.id.btnRetry)
-    var mRetryListener: RetryListener? = null
+    private lateinit var mRetryListener: () -> Unit?
 
     init {
         View.inflate(context, R.layout.layout_switchable_constraint_layout_root, this)
@@ -31,7 +31,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
 
         btnRetry.setOnClickListener {
             switchLoadingLayout();
-            mRetryListener?.retry()
+            mRetryListener()
         }
     }
 
@@ -43,9 +43,9 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
                 for (i in 0..childCount - 1) {
                     if (getChildAt(i).id in mLoadingLayoutResIdArray) {
                         getChildAt(i).visibility = View.INVISIBLE
-                    }else if (getChildAt(i).id in mFailedLayoutResIdArray) {
+                    } else if (getChildAt(i).id in mFailedLayoutResIdArray) {
                         getChildAt(i).visibility = View.INVISIBLE
-                    }else {
+                    } else {
                         val view = getChildAt(i)
                         getChildAt(i).visibility = View.VISIBLE
                     }
@@ -63,7 +63,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
                 for (i in 0..childCount - 1) {
                     if (getChildAt(i).id in mFailedLayoutResIdArray) {
                         getChildAt(i).visibility = View.VISIBLE
-                    }else {
+                    } else {
                         getChildAt(i).visibility = View.INVISIBLE
                     }
                 }
@@ -76,11 +76,16 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
         for (i in 0..childCount - 1) {
             if (getChildAt(i).id in mLoadingLayoutResIdArray) {
                 getChildAt(i).visibility = View.VISIBLE
-            }else {
+            } else {
                 getChildAt(i).visibility = View.INVISIBLE
             }
         }
         loadingView.startRotateAnim()
+    }
+
+    fun setRetryListener(listener: () -> Unit) {
+        this.mRetryListener = listener
+        this.mRetryListener()
     }
 
     interface RetryListener {

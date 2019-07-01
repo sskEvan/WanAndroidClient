@@ -45,14 +45,14 @@ class RegistActivity : WanActivity<LoginViewModel>() {
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
-                overridePendingTransition(R.anim.slide_none, R.anim.slide_bottom_out);
+                overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
             }
 
             R.id.menu_item_login -> {
                 startActivity(LoginActivity::class.java)
 
                 finish()
-                overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_none);
+                overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
             }
         }
         return true
@@ -77,7 +77,7 @@ class RegistActivity : WanActivity<LoginViewModel>() {
                         AccountManager.isLogin = true
                         AccountManager.currentUser = it
                         finish()
-                        overridePendingTransition(R.anim.slide_none, R.anim.slide_bottom_out);
+                        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
                     }
                 })
             })

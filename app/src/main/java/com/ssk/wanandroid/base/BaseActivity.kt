@@ -41,6 +41,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected fun startActivity(clazz: Class<*>, bundle: Bundle) {
         startActivity(Intent(this, clazz).putExtras(bundle))
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_bottom_out)
     }
 
     abstract fun getLayoutId(): Int
@@ -48,6 +49,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        toolbar!!.setNavigationOnClickListener{onBackPressed()}
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
         animateToolbarTitle()
@@ -60,6 +62,11 @@ abstract class BaseActivity : AppCompatActivity() {
             t.scaleX = 0.8f
             t.animate().alpha(1f).scaleX(1f).setDuration(300)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
     }
 
     /**

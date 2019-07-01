@@ -44,7 +44,7 @@
                   android:label="搜索"
                   android:theme="@style/WanAndroid"/>
 
-        <activity android:name="com.ssk.wanandroid.ArticleDetailActivity"
+        <activity android:name="com.ssk.wanandroid.WanWebActivity"
                   android:label="文章详情"
                   android:theme="@style/WanAndroid"/>
     </application>

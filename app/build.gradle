@@ -36,7 +36,6 @@ dependencies {
     implementation rootProject.ext.dependencies["marterialDesign"]
 
     implementation rootProject.ext.dependencies["kotlin"]
-    implementation rootProject.ext.dependencies["kotlinStdLib"]
     implementation rootProject.ext.dependencies["coroutinesCore"]
     implementation rootProject.ext.dependencies["coroutinesAndroid"]
     implementation rootProject.ext.dependencies["persistentCookieJar"]

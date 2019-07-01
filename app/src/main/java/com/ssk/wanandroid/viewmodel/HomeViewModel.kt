@@ -21,10 +21,8 @@ class HomeViewModel : BaseViewModel() {
 
         launchOnUI{
                 val result = mRepository.getBanners()
-                handleResonseResult(
-                    result,
-                    { mBanners.value = result.data},
-                    {})
+                handleResonseResult(result,
+                    { mBanners.value = result.data})
             }
     }
 
