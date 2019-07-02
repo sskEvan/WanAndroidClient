@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.fragment
 
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.WanWebActivity
 import com.ssk.wanandroid.R
@@ -44,6 +46,8 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     private var mIsLoadingMore = false
     private val mArticleAdapter by lazy { ArticleAdapter() }
     private var mCurrentPage = 0
+    private lateinit var rvLayoutManager: LinearLayoutManager
+    private var mIsFabUpward = true;
 
     private var bannerLayout: com.youth.banner.Banner? = null
 
@@ -54,10 +58,20 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         setupToolbar(false)
         toolbar?.title = "首页"
         immersiveStatusBar(R.color.colorPrimary, true)
+
+        fab.setOnClickListener {
+            if(mIsFabUpward) {
+                rvArticle.smoothScrollToPosition(0)
+            }else {
+                rvArticle.smoothScrollToPosition(mArticleAdapter.data.size)
+            }
+        }
+
         initRvArticle()
     }
 
     private fun initRvArticle() {
+        rvLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         val headerLayout = layoutInflater.inflate(R.layout.layout_article_list_header,
             rvArticle.parent as ViewGroup,
             false)
@@ -65,14 +79,44 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         bannerLayout?.run {
             setBannerStyle(BannerConfig.NUM_INDICATOR)
             setImageLoader(GlideImageLoader())
-            setOnBannerListener() {
+            setOnBannerListener {
                 forwardWanWebActivity(mBannerTitles[it], mBannerUrls[it])
             }
         }
 
         rvArticle.run {
-            layoutManager = LinearLayoutManager(mActivity)
-            rvArticle.adapter = mArticleAdapter
+            layoutManager = rvLayoutManager
+            adapter = mArticleAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                @SuppressLint("RestrictedApi")
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    var firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    if(firstCompletelyVisibleIndex == 0 && fab.isShown) {
+                        fab.hide()
+                    }else {
+                        if(!fab.isShown) {
+                            fab.show()
+                        }
+                        var lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
+                        if(dy > 0) {  //向上滑动
+                            if(firstCompletelyVisibleIndex > 0) {
+                                if(mIsFabUpward) {
+                                    mIsFabUpward = false
+                                    fab.animate().rotation(180f).start()  //箭头向下动画
+                                }
+                            }
+                        }else if(dy < 0) { //向下滑动
+                            if(lastCompletelyVisibleIndex < adapter!!.itemCount) {
+                                if(!mIsFabUpward) {
+                                    mIsFabUpward = true
+                                    fab.animate().rotation(0f).start()  //箭头向上动画
+                                }
+                            }
+                        }
+                    }
+                }
+            })
         }
 
         mArticleAdapter.run {
@@ -139,12 +183,12 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                 if(mIsRefreshing) {
                     srfArticle.finishRefresh(true)
                     mIsRefreshing = false
-                }else {
-                    switchableConstraintLayout.switchSuccessLayout()
-                }
-                if(mIsLoadingMore) {
+                }else if(mIsLoadingMore) {
                     srfArticle.finishLoadMore(true)
                     mIsLoadingMore = false
+                }else {
+                    switchableConstraintLayout.switchSuccessLayout()
+                    fab.hide()
                 }
                 if(it != null) {
                     setArticles(it)
@@ -181,7 +225,6 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
     private fun setArticles(articleList: ArticleList) {
         mArticleAdapter.run {
-            Log.d("ssk", "setArticles")
             if(mCurrentPage == 0) {
                 data.clear()
             }

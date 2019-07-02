@@ -14,8 +14,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.constant.RefreshState
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle
 import com.ssk.wanandroid.R
-import kotlinx.android.synthetic.main.layout_common_refresh_footer.view.*
-import kotlinx.android.synthetic.main.layout_common_refresh_header.view.*
 import kotlinx.android.synthetic.main.layout_common_refresh_header.view.loadingView
 import kotlinx.android.synthetic.main.layout_common_refresh_header.view.tvMessage
 
@@ -54,24 +52,21 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     override fun onStateChanged(refreshLayout: RefreshLayout, oldState: RefreshState, newState: RefreshState) {
         when (newState) {
             RefreshState.None, RefreshState.PullUpToLoad -> {
-                loadingView.visibility = View.VISIBLE
                 tvMessage.setText("上拉加载更多")
             }
             RefreshState.ReleaseToLoad -> {
                 tvMessage.setText("释放加载更多")
-                loadingView.startRotateAnim()
             }
-            RefreshState.Loading, RefreshState . LoadReleased -> {
+            RefreshState.Loading -> {
                 tvMessage.setText("正在加载...")
+                loadingView.startRotateAnim()
             }
         }
     }
 
     override fun onFinish(refreshLayout: RefreshLayout, success: Boolean): Int {
-        Log.e(TAG, "onFinish success=$success")
         loadingView.stopAnim()
         if (success) {
-            loadingView.visibility = View.INVISIBLE
             tvMessage.setText("加载成功")
             return 0;
         } else {

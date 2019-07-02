@@ -268,7 +268,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             mAnimator!!.setDuration(mRotationDuration)
             mAnimator!!.setRepeatCount(ValueAnimator.INFINITE)
             mAnimator!!.start()
-
             mLoadingAnimListener?.onLoadingStart()
         }
 

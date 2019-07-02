@@ -85,11 +85,6 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
 
     fun setRetryListener(listener: () -> Unit) {
         this.mRetryListener = listener
-        this.mRetryListener()
-    }
-
-    interface RetryListener {
-        fun retry();
     }
 
 }
