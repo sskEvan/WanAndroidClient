@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cvItemRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp">
+
+        <ImageView
+                android:id="@+id/imgProject"
+                android:layout_width="108dp"
+                android:layout_height="192dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.ssk.wanandroid.widget.CircleTextImageView
+                android:id="@+id/ivAuthor"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="12dp"
+                app:layout_constraintLeft_toRightOf="@id/imgProject"
+                app:layout_constraintTop_toTopOf="parent"
+                app:sub_first_character="true"
+                app:random_color="true"/>
+
+        <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_marginLeft="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/primary_text"
+                app:layout_constraintLeft_toRightOf="@id/ivAuthor"
+                app:layout_constraintTop_toTopOf="@id/ivAuthor"
+                app:layout_constraintBottom_toBottomOf="@id/ivAuthor"/>
+
+        <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="12dp"
+                android:gravity="left"
+                android:text="title"
+                android:textColor="@color/primary_text"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toRightOf="@id/imgProject"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAuthor"/>
+
+        <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="12dp"
+                android:textSize="13sp"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:textColor="@color/secondary_text"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                app:layout_constraintLeft_toRightOf="@id/imgProject"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                app:layout_constraintBottom_toTopOf="@id/tvTime"/>
+
+        <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="time"
+                android:textColor="@color/third_text"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

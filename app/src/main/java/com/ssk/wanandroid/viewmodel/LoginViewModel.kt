@@ -2,7 +2,7 @@ package com.ssk.wanandroid.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.ssk.wanandroid.base.BaseViewModel
-import com.ssk.wanandroid.bean.User
+import com.ssk.wanandroid.bean.UserVo
 import com.ssk.wanandroid.repository.LoginRepository
 
 /**
@@ -12,8 +12,8 @@ class LoginViewModel : BaseViewModel() {
 
     private val mRepository by lazy { LoginRepository() }
 
-    val mLoginUser: MutableLiveData<User> = MutableLiveData()
-    val mRegisterUser: MutableLiveData<User> = MutableLiveData()
+    val mLoginUser: MutableLiveData<UserVo> = MutableLiveData()
+    val mRegisterUser: MutableLiveData<UserVo> = MutableLiveData()
     val mLoginErrorMsg: MutableLiveData<String> = MutableLiveData()
     val mRegistErrorMsg: MutableLiveData<String> = MutableLiveData()
 

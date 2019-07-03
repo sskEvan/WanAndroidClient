@@ -2,8 +2,8 @@ package com.ssk.wanandroid.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.ssk.wanandroid.base.BaseViewModel
-import com.ssk.wanandroid.bean.ArticleList
-import com.ssk.wanandroid.bean.Banner
+import com.ssk.wanandroid.bean.ArticleListVo
+import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.repository.HomeRepository
 
 /**
@@ -13,16 +13,16 @@ class HomeViewModel : BaseViewModel() {
 
     private val mRepository by lazy { HomeRepository() }
 
-    val mBanners: MutableLiveData<List<Banner>> = MutableLiveData()
-    val mArticleList: MutableLiveData<ArticleList> = MutableLiveData()
-    val mArticleListErrorMsg: MutableLiveData<String> = MutableLiveData()
+    val mBannerVoList: MutableLiveData<List<BannerVo>> = MutableLiveData()
+    val mArticalListVo: MutableLiveData<ArticleListVo> = MutableLiveData()
+    val mFetchArticleListErrorMsg: MutableLiveData<String> = MutableLiveData()
 
-    fun fetchBanners() {
+    fun fetchBannerList() {
 
         launchOnUI{
                 val result = mRepository.getBanners()
                 handleResonseResult(result,
-                    { mBanners.value = result.data})
+                    { mBannerVoList.value = result.data})
             }
     }
 
@@ -31,10 +31,10 @@ class HomeViewModel : BaseViewModel() {
                 val result = mRepository.getArticleList(page)
                 handleResonseResult(result,
                     {
-                        mArticleList.value = result.data
+                        mArticalListVo.value = result.data
                     },
                     {
-                        mArticleListErrorMsg.value = result.errorMessage
+                        mFetchArticleListErrorMsg.value = result.errorMessage
                     })
             }
     }

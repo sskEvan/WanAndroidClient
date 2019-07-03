@@ -57,6 +57,13 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     fun switchFailedLayout() {
+        switchFailedLayout("")
+    }
+
+    fun switchFailedLayout(failedMsg: String) {
+        if (failedMsg.isNotEmpty()) {
+            tvFailedMsg.setText(failedMsg)
+        }
         loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
             override fun onLoadingCancelAfterMinRotateDuration() {
                 loadingView.stopAnim()

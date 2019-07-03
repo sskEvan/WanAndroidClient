@@ -43,5 +43,10 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="TabLayoutTabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 </resources>

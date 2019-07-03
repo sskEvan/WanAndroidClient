@@ -3,20 +3,18 @@ package com.ssk.wanandroid.api
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.ssk.wanandroid.App
 import com.ssk.wanandroid.AppContext
 import com.ssk.wanandroid.utils.NetWorkUtils
 import okhttp3.Cache
-import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import java.io.File
 
 /**
  * Created by shisenkun on 2019-06-18.
  */
-object WARetrofitClient : BaseRetrofitClient() {
+object WanRetrofitClient : BaseRetrofitClient() {
 
-    val service by lazy { WARetrofitClient.getService(ApiService::class.java, ApiService.BASE_URL) }
+    val service by lazy { WanRetrofitClient.getService(ApiService::class.java, ApiService.BASE_URL) }
 
     private val cookieJar by lazy { PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(AppContext)) }
 

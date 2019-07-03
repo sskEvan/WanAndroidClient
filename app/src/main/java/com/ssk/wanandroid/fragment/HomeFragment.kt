@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -16,15 +15,15 @@ import com.ssk.wanandroid.WanWebActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.SearchActivity
 import com.ssk.wanandroid.base.WanFragment
-import com.ssk.wanandroid.bean.ArticleList
-import com.ssk.wanandroid.bean.Banner
-import com.ssk.wanandroid.ext.showToast
+import com.ssk.wanandroid.bean.ArticleListVo
+import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.fragment.adapter.ArticleAdapter
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.GlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
 import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
 import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
+import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -47,9 +46,9 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     private val mArticleAdapter by lazy { ArticleAdapter() }
     private var mCurrentPage = 0
     private lateinit var rvLayoutManager: LinearLayoutManager
-    private var mIsFabUpward = true;
+    private var mIsFabUpward = true
 
-    private var bannerLayout: com.youth.banner.Banner? = null
+    private var bannerLayout: Banner? = null
 
     override fun getLayoutResId() = R.layout.fragment_home
 
@@ -75,7 +74,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         val headerLayout = layoutInflater.inflate(R.layout.layout_article_list_header,
             rvArticle.parent as ViewGroup,
             false)
-        bannerLayout = headerLayout.findViewById(R.id.bannerLayout) as com.youth.banner.Banner
+        bannerLayout = headerLayout.findViewById(R.id.bannerLayout) as Banner
         bannerLayout?.run {
             setBannerStyle(BannerConfig.NUM_INDICATOR)
             setImageLoader(GlideImageLoader())
@@ -91,14 +90,14 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                 @SuppressLint("RestrictedApi")
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    var firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
                     if(firstCompletelyVisibleIndex == 0 && fab.isShown) {
                         fab.hide()
                     }else {
                         if(!fab.isShown) {
                             fab.show()
                         }
-                        var lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
+                        val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
                         if(dy > 0) {  //向上滑动
                             if(firstCompletelyVisibleIndex > 0) {
                                 if(mIsFabUpward) {
@@ -143,20 +142,20 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             mViewModel.fetchArticleList(mCurrentPage)
         }
         srfArticle.setOnLoadMoreListener {
-            ++mCurrentPage;
+            ++mCurrentPage
             mIsLoadingMore = true
             mViewModel.fetchArticleList(mCurrentPage)
         }
 
         switchableConstraintLayout.setRetryListener {
-            mViewModel.fetchBanners()
+            mViewModel.fetchBannerList()
             mViewModel.fetchArticleList(mCurrentPage)
         }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
-        mViewModel.fetchBanners()
+        mViewModel.fetchBannerList()
         mViewModel.fetchArticleList(mCurrentPage)
     }
 
@@ -173,13 +172,13 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
     override fun startObserve() {
         mViewModel.apply {
-            mBanners.observe(this@HomeFragment, Observer { it ->
+            mBannerVoList.observe(this@HomeFragment, Observer { it ->
                 it?.let {
                     setBanner(it)
                 }
             })
 
-            mArticleList.observe(this@HomeFragment, Observer { it ->
+            mArticalListVo.observe(this@HomeFragment, Observer { it ->
                 if(mIsRefreshing) {
                     srfArticle.finishRefresh(true)
                     mIsRefreshing = false
@@ -195,9 +194,9 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                 }
             })
 
-            mArticleListErrorMsg.observe(this@HomeFragment, Observer {
+            mFetchArticleListErrorMsg.observe(this@HomeFragment, Observer {
                 if(!mIsRefreshing && !mIsLoadingMore) {
-                    switchableConstraintLayout.switchFailedLayout()
+                    switchableConstraintLayout.switchFailedLayout(it)
                 }
 
                 if(mIsRefreshing) {
@@ -212,7 +211,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         }
     }
 
-    private fun setBanner(bannerList: List<Banner>) {
+    private fun setBanner(bannerList: List<BannerVo>) {
         mBannerImages.clear()
         mBannerUrls.clear()
         for (banner in bannerList) {
@@ -223,7 +222,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         bannerLayout!!.setImages(mBannerImages).setDelayTime(3000).start()
     }
 
-    private fun setArticles(articleList: ArticleList) {
+    private fun setArticles(articleList: ArticleListVo) {
         mArticleAdapter.run {
             if(mCurrentPage == 0) {
                 data.clear()

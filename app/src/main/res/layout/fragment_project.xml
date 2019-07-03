@@ -15,10 +15,33 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
+    <com.ssk.wanandroid.widget.SwitchableConstraintLayout
+            android:id="@+id/switchableConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Project Fragment"
-            android:gravity="center"/>
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:tabIndicatorColor="@color/white_text"
+                app:tabIndicatorHeight="3dp"
+                app:tabSelectedTextColor="@color/white_text"
+                app:tabTextAppearance="@style/TabLayoutTabTextStyle"
+                app:tabTextColor="@color/tab_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabMode="scrollable"/>
+
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </com.ssk.wanandroid.widget.SwitchableConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

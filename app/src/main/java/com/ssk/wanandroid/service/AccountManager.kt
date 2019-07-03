@@ -1,6 +1,6 @@
 package com.ssk.wanandroid.service
 
-import com.ssk.wanandroid.bean.User
+import com.ssk.wanandroid.bean.UserVo
 import com.ssk.wanandroid.ext.pref
 
 /**
@@ -12,5 +12,5 @@ object AccountManager {
     var password by pref("")
 
     var isLogin = false
-    var currentUser: User? = null
+    var currentUser: UserVo? = null
 }
