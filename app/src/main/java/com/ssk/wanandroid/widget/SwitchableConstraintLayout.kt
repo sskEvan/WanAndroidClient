@@ -19,6 +19,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
 
     private val mLoadingLayoutResIdArray = intArrayOf(R.id.loadingView)
     private val mFailedLayoutResIdArray = intArrayOf(R.id.ivFailed, R.id.tvFailedMsg, R.id.btnRetry)
+    private val mEmptyLayoutResIdArray = intArrayOf(R.id.ivEmpty, R.id.tvEmpty)
     private lateinit var mRetryListener: () -> Unit?
 
     init {
@@ -45,8 +46,9 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
                         getChildAt(i).visibility = View.INVISIBLE
                     } else if (getChildAt(i).id in mFailedLayoutResIdArray) {
                         getChildAt(i).visibility = View.INVISIBLE
+                    } else if (getChildAt(i).id in mEmptyLayoutResIdArray) {
+                        getChildAt(i).visibility = View.INVISIBLE
                     } else {
-                        val view = getChildAt(i)
                         getChildAt(i).visibility = View.VISIBLE
                     }
                 }
@@ -77,6 +79,21 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
             }
         }
         loadingView.stopAnimAfterMinRotateDuration()
+    }
+
+    fun switchEmptyLayout() {
+        loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
+            override fun onLoadingCancelAfterMinRotateDuration() {
+                super.onLoadingCancelAfterMinRotateDuration()
+                for (i in 0..childCount - 1) {
+                    if (getChildAt(i).id in mEmptyLayoutResIdArray) {
+                        getChildAt(i).visibility = View.VISIBLE
+                    } else {
+                        getChildAt(i).visibility = View.INVISIBLE
+                    }
+                }
+            }
+        }
     }
 
     fun switchLoadingLayout() {

@@ -2,8 +2,6 @@ package com.ssk.wanandroid.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,13 +11,18 @@ import com.ssk.wanandroid.R
 import com.ssk.wanandroid.WanWebActivity
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ArticleListVo
+import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
+import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
+import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
 import com.ssk.wanandroid.fragment.adapter.ProjectAdapter
+import com.ssk.wanandroid.service.EventManager
 import com.ssk.wanandroid.viewmodel.ProjectDetailViewModel
 import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
 import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
 import kotlinx.android.synthetic.main.fragment_project_detail.*
-import kotlinx.android.synthetic.main.fragment_project_detail.fab
 import kotlinx.android.synthetic.main.fragment_project_detail.switchableConstraintLayout
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * Created by shisenkun on 2019-07-03.
@@ -41,21 +44,16 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     private val mProjectAdapter by lazy { ProjectAdapter() }
     private var mCurrentPage = 0
     private lateinit var rvLayoutManager: LinearLayoutManager
-    private var mIsFabUpward = true
     private var mProjectId = 0
+    private var mIsFabShown= false
+    private var mIsFabUpward = true
 
     override fun getLayoutResId() = R.layout.fragment_project_detail
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
 
-        fab.setOnClickListener {
-            if (mIsFabUpward) {
-                rvProject.smoothScrollToPosition(0)
-            } else {
-                rvProject.smoothScrollToPosition(mProjectAdapter.data.size)
-            }
-        }
+
 
         initRvArticle()
     }
@@ -71,25 +69,30 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
-                    if (firstCompletelyVisibleIndex == 0 && fab.isShown) {
-                        fab.hide()
-                    } else {
-                        if (!fab.isShown) {
-                            fab.show()
+                    if (firstCompletelyVisibleIndex == 0) {
+                        if(mIsFabShown) {
+                            mIsFabShown = false
+                            EventManager.post(OnProjectFragmentFabVisiableControlEvent(false))
                         }
+                    } else {
+                        if(!mIsFabShown) {
+                            mIsFabShown = true
+                            EventManager.post(OnProjectFragmentFabVisiableControlEvent(true))
+                        }
+
                         val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
                         if (dy > 0) {  //向上滑动
                             if (firstCompletelyVisibleIndex > 0) {
-                                if (mIsFabUpward) {
+                                if(mIsFabUpward) {
                                     mIsFabUpward = false
-                                    fab.animate().rotation(180f).start()  //箭头向下动画
+                                    EventManager.post(OnProjectFragmentFabUpwardControlEvent(false))
                                 }
                             }
                         } else if (dy < 0) { //向下滑动
                             if (lastCompletelyVisibleIndex < adapter!!.itemCount) {
-                                if (!mIsFabUpward) {
+                                if(!mIsFabUpward) {
                                     mIsFabUpward = true
-                                    fab.animate().rotation(0f).start()  //箭头向上动画
+                                    EventManager.post(OnProjectFragmentFabUpwardControlEvent(true))
                                 }
                             }
                         }
@@ -146,7 +149,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                     mIsLoadingMore = false
                 } else {
                     switchableConstraintLayout.switchSuccessLayout()
-                    fab.hide()
+                    EventManager.post(OnProjectFragmentFabVisiableControlEvent(false))
                 }
                 if (it != null) {
                     setProjectList(it)
@@ -170,12 +173,18 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         }
     }
 
-    private fun setProjectList(projectList: ArticleListVo) {
-        mProjectAdapter.run {
-            if (mCurrentPage == 0) {
-                data.clear()
+    private fun setProjectList(projectListVo: ArticleListVo) {
+        if(projectListVo.datas == null || projectListVo.datas.size == 0) {
+            switchableConstraintLayout.switchEmptyLayout()
+        }else {
+            mProjectAdapter.run {
+                if (mCurrentPage == 0) {
+                    data.clear()
+                }
+                addData(projectListVo.datas)
+
+                srfProject.setNoMoreData(projectListVo.over)
             }
-            addData(projectList.datas)
         }
     }
 
@@ -185,6 +194,15 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         bundle.putString("url", url)
         startActivity(WanWebActivity::class.java, bundle)
         mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: OnProjectFragmentFabClickResponseEvent) {
+        if(event.isUpward) {
+            rvProject.smoothScrollToPosition(0)
+        }else {
+            rvProject.smoothScrollToPosition(mProjectAdapter.data.size)
+        }
     }
 
 }

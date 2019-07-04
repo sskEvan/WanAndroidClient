@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.ssk.wanandroid.LoadingDialog
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.service.EventManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.DeviceInfo
 
@@ -36,6 +37,12 @@ abstract class BaseFragment : Fragment() {
         mActivity = activity as BaseActivity
         initView(savedInstanceState)
         initData(savedInstanceState)
+        EventManager.register(this)
+    }
+
+    override fun onDestroyView() {
+        EventManager.unregister(this)
+        super.onDestroyView()
     }
 
     open fun initView(savedInstanceState: Bundle?) {}

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.ssk.wanandroid.LoadingDialog
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.service.EventManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.DeviceInfo
 import java.lang.reflect.ParameterizedType
@@ -41,9 +42,11 @@ abstract class WanFragment<VM: BaseViewModel> : Fragment() {
         initView(savedInstanceState)
         initData(savedInstanceState)
         startObserve()
+        EventManager.register(this)
     }
 
     override fun onDestroyView() {
+        EventManager.unregister(this)
         mViewModel.let { lifecycle.removeObserver(it) }
         super.onDestroyView()
     }

@@ -55,6 +55,9 @@ ext {
                     "mpermission"                    : 'com.zhy:mpermission-api:1.0.0',
                     "mpermission-compiler"           : 'com.zhy:mpermission-compiler:1.0.0',
 
+                    //eventBus
+                    "eventBus"                       : 'org.greenrobot:eventbus:3.0.0'
+
     ]
 
 }

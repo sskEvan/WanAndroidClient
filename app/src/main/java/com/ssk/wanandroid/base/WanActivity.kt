@@ -1,17 +1,16 @@
 package com.ssk.wanandroid.base
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.ssk.wanandroid.LoadingDialog
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.service.EventManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.DeviceInfo
 import java.lang.reflect.ParameterizedType
@@ -33,9 +32,11 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
         initView(savedInstanceState)
         initData(savedInstanceState)
         startObserve()
+        EventManager.register(this)
     }
 
     override fun onDestroy() {
+        EventManager.unregister(this)
         mViewModel.let { lifecycle.removeObserver(it) }
         super.onDestroy()
     }

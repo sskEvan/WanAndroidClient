@@ -222,12 +222,13 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         bannerLayout!!.setImages(mBannerImages).setDelayTime(3000).start()
     }
 
-    private fun setArticles(articleList: ArticleListVo) {
+    private fun setArticles(articleListVo: ArticleListVo) {
         mArticleAdapter.run {
             if(mCurrentPage == 0) {
                 data.clear()
             }
-            addData(articleList.datas)
+            addData(articleListVo.datas)
+            srfArticle.setNoMoreData(articleListVo.over)
         }
     }
 

@@ -7,11 +7,16 @@ import androidx.viewpager.widget.ViewPager
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ProjectTagVo
-import com.ssk.wanandroid.ext.showToast
+import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
+import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
+import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
 import com.ssk.wanandroid.fragment.adapter.ProjectTagPagerAdapter
 import com.ssk.wanandroid.viewmodel.ProjectViewModel
 import kotlinx.android.synthetic.main.fragment_project.*
 import kotlinx.android.synthetic.main.fragment_project.switchableConstraintLayout
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * Created by shisenkun on 2019-06-23.
@@ -26,6 +31,7 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
 
     private lateinit var mPagerAdapter: ProjectTagPagerAdapter
     private var mCurrentPagerPosition = 0
+    private var mIsFabUpward = true
 
     override fun getLayoutResId() = R.layout.fragment_project
 
@@ -41,6 +47,13 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
         super.initView(savedInstanceState)
         setupToolbar(false)
         toolbar?.title = "项目"
+        switchableConstraintLayout.setRetryListener {
+            mViewModel.fetchProjectTagList()
+        }
+
+        fab.setOnClickListener {
+            EventBus.getDefault().post(OnProjectFragmentFabClickResponseEvent(mIsFabUpward))
+        }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -84,4 +97,22 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
         viewPager.currentItem = mCurrentPagerPosition;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: OnProjectFragmentFabVisiableControlEvent) {
+        if(event.needShow) {
+            if(!fab.isShown) fab.show()
+        }else {
+            if(fab.isShown) fab.hide()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: OnProjectFragmentFabUpwardControlEvent) {
+        mIsFabUpward = event.isFabUpward
+        if(mIsFabUpward) {
+            fab.animate().rotation(0f).start()  //箭头向上动画
+        }else {
+            fab.animate().rotation(180f).start()  //箭头向下动画
+        }
+    }
 }

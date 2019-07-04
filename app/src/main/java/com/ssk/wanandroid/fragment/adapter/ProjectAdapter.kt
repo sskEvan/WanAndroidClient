@@ -21,7 +21,7 @@ class ProjectAdapter(layoutResId: Int = R.layout.item_project) : BaseQuickAdapte
             .addOnClickListener(R.id.cvItemRoot)
 
 
-        Glide.with(mContext).load(item.envelopePic).into(helper.getView(R.id.imgProject))
+        Glide.with(mContext).load(item.envelopePic).placeholder(R.mipmap.ic_project_default).into(helper.getView(R.id.imgProject))
         helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)
     }
 }

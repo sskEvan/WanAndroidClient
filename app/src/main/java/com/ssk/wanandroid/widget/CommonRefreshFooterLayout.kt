@@ -29,6 +29,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     private val mFinishDuration = 500
     private var mRefreshKernel: RefreshKernel? = null
     private var mBackgroundColor = R.color.common_footer_bg
+    private var mNoMoreData = false
 
     init {
         View.inflate(context, R.layout.layout_common_refresh_footer, this)
@@ -50,16 +51,19 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     override fun onStateChanged(refreshLayout: RefreshLayout, oldState: RefreshState, newState: RefreshState) {
-        when (newState) {
-            RefreshState.None, RefreshState.PullUpToLoad -> {
-                tvMessage.setText("上拉加载更多")
-            }
-            RefreshState.ReleaseToLoad -> {
-                tvMessage.setText("释放加载更多")
-            }
-            RefreshState.Loading -> {
-                tvMessage.setText("正在加载...")
-                loadingView.startRotateAnim()
+        if(!mNoMoreData) {
+            when (newState) {
+                RefreshState.None, RefreshState.PullUpToLoad -> {
+                    tvMessage.setText("上拉加载更多")
+                }
+                RefreshState.ReleaseToLoad -> {
+                    tvMessage.setText("释放加载更多")
+                }
+                RefreshState.Loading -> {
+                    tvMessage.setText("正在加载...")
+                    if (loadingView.visibility != View.VISIBLE) loadingView.visibility = View.VISIBLE
+                    loadingView.startRotateAnim()
+                }
             }
         }
     }
@@ -76,6 +80,11 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     override fun setNoMoreData(noMoreData: Boolean): Boolean {
+        mNoMoreData = noMoreData
+        if (noMoreData) {
+            tvMessage.setText("没有更多数据了")
+            loadingView.visibility = View.INVISIBLE
+        }
         return true
     }
 

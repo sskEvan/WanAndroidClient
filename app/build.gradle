@@ -48,6 +48,7 @@ dependencies {
     implementation rootProject.ext.dependencies["coroutinesAdapter"]
     implementation rootProject.ext.dependencies["logInterceptor"]
 
+    implementation rootProject.ext.dependencies["eventBus"]
     implementation rootProject.ext.dependencies["glide"]
     implementation rootProject.ext.dependencies["banner"]
     implementation rootProject.ext.dependencies["BRVAH"]

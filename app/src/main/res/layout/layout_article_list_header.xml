@@ -17,7 +17,7 @@
             android:orientation="vertical"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
-            app:banner_default_image="@mipmap/ic_place_holder_default"
+            app:banner_default_image="@mipmap/ic_banner_default"
             app:cardCornerRadius="6dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
