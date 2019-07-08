@@ -10,7 +10,7 @@ import com.ssk.wanandroid.bean.ProjectTagVo
 import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
-import com.ssk.wanandroid.fragment.adapter.ProjectTagPagerAdapter
+import com.ssk.wanandroid.adapter.ProjectTagPagerAdapter
 import com.ssk.wanandroid.viewmodel.ProjectViewModel
 import kotlinx.android.synthetic.main.fragment_project.*
 import kotlinx.android.synthetic.main.fragment_project.switchableConstraintLayout

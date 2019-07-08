@@ -1,4 +1,4 @@
-package com.ssk.wanandroid.fragment.adapter
+package com.ssk.wanandroid.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -9,7 +9,7 @@ import com.ssk.wanandroid.widget.CircleTextImageView
 /**
  * Created by shisenkun on 2019-06-25.
  */
-class ArticleAdapter(layoutResId: Int = R.layout.item_article) : BaseQuickAdapter<ArticleVo, BaseViewHolder>(layoutResId) {
+class KnowledgeAdapter(layoutResId: Int = R.layout.item_knowledge) : BaseQuickAdapter<ArticleVo, BaseViewHolder>(layoutResId) {
 
     var showStar = true
 

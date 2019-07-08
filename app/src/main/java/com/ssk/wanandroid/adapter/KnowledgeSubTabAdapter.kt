@@ -1,4 +1,4 @@
-package com.ssk.wanandroid.fragment.adapter
+package com.ssk.wanandroid.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -36,6 +36,7 @@ class KnowledgeSubTabAdapter(data: List<KnowledgeTabVo>) : BaseQuickAdapter<Know
             }
             TYPE_SUB_TAB -> {
                 helper.setText(R.id.tvSubProject, item.name)
+                    .addOnClickListener(R.id.clKnowledgeTag)
             }
         }
     }

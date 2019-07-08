@@ -1,4 +1,4 @@
-package com.ssk.wanandroid.fragment.adapter
+package com.ssk.wanandroid.adapter
 
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter

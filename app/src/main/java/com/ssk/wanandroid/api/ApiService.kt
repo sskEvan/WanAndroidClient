@@ -37,4 +37,7 @@ interface ApiService {
     @GET("/tree/json")
     fun getKnowledgeTabList(): Deferred<BaseResponse<List<KnowledgeTabVo>>>
 
+    @GET("/article/list/{page}/json")
+    fun getKnowledgeDetailList(@Path("page") page: Int, @Query("cid") cid: Int): Deferred<BaseResponse<ArticleListVo>>
+
 }

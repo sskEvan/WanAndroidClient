@@ -47,6 +47,10 @@
         <activity android:name="com.ssk.wanandroid.WanWebActivity"
                   android:label="文章详情"
                   android:theme="@style/WanAndroid"/>
+
+        <activity android:name="com.ssk.wanandroid.KnowledgeDetailActivity"
+                  android:label="知识体系列表"
+                  android:theme="@style/WanAndroid"/>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.ssk.wanandroid.fragment.adapter
+package com.ssk.wanandroid.adapter
 
 import android.view.View
 import android.widget.ImageView

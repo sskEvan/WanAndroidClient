@@ -17,7 +17,7 @@ import com.ssk.wanandroid.SearchActivity
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ArticleListVo
 import com.ssk.wanandroid.bean.BannerVo
-import com.ssk.wanandroid.fragment.adapter.ArticleAdapter
+import com.ssk.wanandroid.adapter.ArticleAdapter
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.GlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel

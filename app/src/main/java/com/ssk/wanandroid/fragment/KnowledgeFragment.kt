@@ -6,11 +6,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.wanandroid.KnowledgeDetailActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.KnowledgeTabVo
-import com.ssk.wanandroid.fragment.adapter.KnowledgeSubTabAdapter
-import com.ssk.wanandroid.fragment.adapter.KnowledgeTagAdapter
+import com.ssk.wanandroid.adapter.KnowledgeSubTabAdapter
+import com.ssk.wanandroid.adapter.KnowledgeTagAdapter
 import com.ssk.wanandroid.viewmodel.KnowledgeViewModel
 import com.ssk.wanandroid.widget.SubProjectDecoration
 import kotlinx.android.synthetic.main.fragment_knowledge.*
@@ -74,8 +75,6 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
                     super.onScrollStateChanged(recyclerView, newState)
                     Log.d("ssk", "newState=$newState")
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {  //进行第二次滑动
-                        smoothScrollToPositionAndTopSecondIfNeeded(recyclerView, mScrollingPosition)
-
                         if(!mIsScrolling) {
                             val firstPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                             if(mKnowledgeSubTagVoList[firstPosition].children.size > 0) {
@@ -91,6 +90,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
                                 }
                             }
                         }
+                        smoothScrollToPositionAndTopSecondIfNeeded(recyclerView, mScrollingPosition)
                     }
                 }
             })
@@ -182,6 +182,17 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
     private fun setKnowledgeSubTabs(knowledgeSubTagVoList: List<KnowledgeTabVo>) {
         mKnowledgeSubTagVoList = knowledgeSubTagVoList
         mKnowledgeSubTabAdapter = KnowledgeSubTabAdapter(mKnowledgeSubTagVoList)
+        mKnowledgeSubTabAdapter!!.onItemChildClickListener  = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+            when (view.id) {
+                R.id.clKnowledgeTag -> {
+                    val bundle = Bundle()
+                    bundle.putInt("knowledgeId", knowledgeSubTagVoList[position].id)
+                    bundle.putString("title", knowledgeSubTagVoList[position].name)
+                    startActivity(KnowledgeDetailActivity::class.java, bundle)
+                    mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
+                }
+            }
+        }
         rvKnowledgeSubTag.adapter = mKnowledgeSubTabAdapter
         rvKnowledgeSubTag.addItemDecoration(SubProjectDecoration(mActivity, knowledgeSubTagVoList))
     }
