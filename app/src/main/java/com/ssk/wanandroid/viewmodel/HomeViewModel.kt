@@ -20,7 +20,7 @@ class HomeViewModel : BaseViewModel() {
     fun fetchBannerList() {
 
         launchOnUI{
-                val result = mRepository.getBanners()
+                val result = mRepository.getBannerList()
                 handleResonseResult(result,
                     { mBannerVoList.value = result.data})
             }

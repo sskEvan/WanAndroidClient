@@ -10,8 +10,8 @@ import com.ssk.wanandroid.bean.ProjectTagVo
  */
 class ProjectRepository : BaseRepository() {
 
-    suspend fun getProjectTags(): BaseResponse<List<ProjectTagVo>> {
-        return apiCall { WanRetrofitClient.service.getProjectTags().await() }
+    suspend fun getProjectTagList(): BaseResponse<List<ProjectTagVo>> {
+        return apiCall { WanRetrofitClient.service.getProjectTagList().await() }
     }
 
 }

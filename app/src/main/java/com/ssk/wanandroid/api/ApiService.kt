@@ -1,10 +1,7 @@
 package com.ssk.wanandroid.api
 
 import com.ssk.wanandroid.base.BaseResponse
-import com.ssk.wanandroid.bean.ArticleListVo
-import com.ssk.wanandroid.bean.BannerVo
-import com.ssk.wanandroid.bean.ProjectTagVo
-import com.ssk.wanandroid.bean.UserVo
+import com.ssk.wanandroid.bean.*
 import kotlinx.coroutines.Deferred
 import retrofit2.http.*
 
@@ -29,12 +26,15 @@ interface ApiService {
     fun getBanner(): Deferred<BaseResponse<List<BannerVo>>>
 
     @GET("/article/list/{page}/json")
-    fun getHomeArticles(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
+    fun getHomeArticleList(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
 
     @GET("/project/tree/json")
-    fun getProjectTags(): Deferred<BaseResponse<List<ProjectTagVo>>>
+    fun getProjectTagList(): Deferred<BaseResponse<List<ProjectTagVo>>>
 
     @GET("/article/list/{page}/json")
     fun getProjectDetailList(@Path("page") page: Int, @Query("cid") cid: Int): Deferred<BaseResponse<ArticleListVo>>
+
+    @GET("/tree/json")
+    fun getKnowledgeTabList(): Deferred<BaseResponse<List<KnowledgeTabVo>>>
 
 }

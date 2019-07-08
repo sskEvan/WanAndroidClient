@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
     <com.ssk.wanandroid.widget.SwitchableConstraintLayout
-            android:id="@+id/sclRoot"
+            android:id="@+id/switchableConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
@@ -33,22 +33,18 @@
                 android:id="@+id/rvKnowledgeTag"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:background="@color/gray_light"
+                android:overScrollMode="never"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/gl"/>
 
-        <com.ssk.wanandroid.widget.SwitchableConstraintLayout
-                android:id="@+id/sclKnowledgeSubTag"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvKnowledgeSubTag"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:overScrollMode="never"
                 app:layout_constraintLeft_toRightOf="@id/gl"
-                app:layout_constraintRight_toRightOf="parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvKnowledgeSubTag"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-        </com.ssk.wanandroid.widget.SwitchableConstraintLayout>
+                app:layout_constraintRight_toRightOf="parent"/>
 
     </com.ssk.wanandroid.widget.SwitchableConstraintLayout>
 

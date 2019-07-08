@@ -11,12 +11,12 @@ import com.ssk.wanandroid.bean.BannerVo
  */
 class HomeRepository : BaseRepository() {
 
-    suspend fun getBanners(): BaseResponse<List<BannerVo>> {
+    suspend fun getBannerList(): BaseResponse<List<BannerVo>> {
         return apiCall { WanRetrofitClient.service.getBanner().await() }
     }
 
     suspend fun getArticleList(page: Int): BaseResponse<ArticleListVo> {
-        return apiCall { WanRetrofitClient.service.getHomeArticles(page).await() }
+        return apiCall { WanRetrofitClient.service.getHomeArticleList(page).await() }
     }
 
 }
