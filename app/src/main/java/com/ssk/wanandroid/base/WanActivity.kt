@@ -67,8 +67,10 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
 
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
         toolbar = findViewById(R.id.toolbar)
-        toolbar!!.setNavigationOnClickListener{onBackPressed()}
         setSupportActionBar(toolbar)
+        toolbar!!.setNavigationOnClickListener{
+            onBackPressed()
+        }
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
         animateToolbarTitle()

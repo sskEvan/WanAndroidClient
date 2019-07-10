@@ -184,7 +184,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
         mKnowledgeSubTabAdapter = KnowledgeSubTabAdapter(mKnowledgeSubTagVoList)
         mKnowledgeSubTabAdapter!!.onItemChildClickListener  = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
             when (view.id) {
-                R.id.clKnowledgeTag -> {
+                R.id.clKnowledgeSubTag -> {
                     val bundle = Bundle()
                     bundle.putInt("knowledgeId", knowledgeSubTagVoList[position].id)
                     bundle.putString("title", knowledgeSubTagVoList[position].name)

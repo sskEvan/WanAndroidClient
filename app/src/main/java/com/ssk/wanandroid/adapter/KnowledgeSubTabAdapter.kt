@@ -36,7 +36,7 @@ class KnowledgeSubTabAdapter(data: List<KnowledgeTabVo>) : BaseQuickAdapter<Know
             }
             TYPE_SUB_TAB -> {
                 helper.setText(R.id.tvSubProject, item.name)
-                    .addOnClickListener(R.id.clKnowledgeTag)
+                    .addOnClickListener(R.id.clKnowledgeSubTag)
             }
         }
     }

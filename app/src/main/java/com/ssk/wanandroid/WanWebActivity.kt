@@ -7,17 +7,16 @@ import android.util.Log
 import android.webkit.*
 import androidx.annotation.RequiresApi
 import com.ssk.wanandroid.base.BaseActivity
-import com.ssk.wanandroid.widget.SwitchableConstraintLayout
-import kotlinx.android.synthetic.main.activity_article_detail.*
+import kotlinx.android.synthetic.main.activity_web.*
 
 /**
  * Created by shisenkun on 2019-06-29.
  */
 class WanWebActivity : BaseActivity() {
 
-    private var mIsReceivedError = true;
+    private var mIsNetworkError = true;
 
-    override fun getLayoutId() = R.layout.activity_article_detail
+    override fun getLayoutId() = R.layout.activity_web
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -42,20 +41,25 @@ class WanWebActivity : BaseActivity() {
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
-                    mIsReceivedError = false
+                    mIsNetworkError = false
                 }
 
                 override fun onPageFinished(p0: WebView?, p1: String?) {
                     super.onPageFinished(p0, p1)
-                    if (!mIsReceivedError) {
+                    if (!mIsNetworkError) {
                         switchableConstraintLayout.switchSuccessLayout()
                     }
                 }
 
+                @RequiresApi(Build.VERSION_CODES.M)
                 override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                     super.onReceivedError(view, request, error)
-                    mIsReceivedError = true
-                    switchableConstraintLayout.switchFailedLayout()
+
+                    if(error?.errorCode == -2) {  //网络错误
+                        mIsNetworkError = true
+                        switchableConstraintLayout.switchFailedLayout("网络错误,请检查网络连接")
+                    }
+
                 }
             }
         }
