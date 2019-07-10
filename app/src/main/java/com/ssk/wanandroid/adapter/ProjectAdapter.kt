@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.adapter
 
+import android.text.Html
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -16,7 +17,7 @@ class ProjectAdapter(layoutResId: Int = R.layout.item_project) : BaseQuickAdapte
 
         helper.setText(R.id.tvAuthor, item.author)
             .setText(R.id.tvTitle, item.title)
-            .setText(R.id.tvDescription, item.desc)
+            .setText(R.id.tvDescription, Html.fromHtml(item.desc))
             .setText(R.id.tvTime, item.niceDate)
             .addOnClickListener(R.id.cvItemRoot)
 

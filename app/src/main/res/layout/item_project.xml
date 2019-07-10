@@ -67,7 +67,7 @@
         <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:textSize="13sp"
                 android:ellipsize="end"
@@ -75,6 +75,7 @@
                 android:textColor="@color/secondary_text"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                app:layout_constraintVertical_chainStyle="spread_inside"
                 app:layout_constraintLeft_toRightOf="@id/imgProject"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle"
@@ -88,6 +89,7 @@
                 android:text="time"
                 android:textColor="@color/third_text"
                 app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDescription"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
