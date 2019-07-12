@@ -13,7 +13,7 @@ import com.ssk.wanandroid.bean.KnowledgeTabVo
  */
 class KnowledgeTagAdapter(layoutResId: Int = R.layout.item_knowledge_tag) : BaseQuickAdapter<KnowledgeTabVo, BaseViewHolder>(layoutResId) {
 
-    private var mLastSeletedPosition = 0
+    var mLastSeletedPosition = 0
 
     override fun convert(helper: BaseViewHolder, item: KnowledgeTabVo) {
         helper.setText(R.id.tvKnowledgeTag, item.name)

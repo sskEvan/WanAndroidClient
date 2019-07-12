@@ -30,7 +30,6 @@ class SubProjectDecoration(val context: Context, val datas: List<KnowledgeTabVo>
 
     init {
         mPaint.isAntiAlias = true
-        mPaint.style = Paint.Style.FILL
         mStickyHeaderPaint.isFakeBoldText = true
         mStickyHeaderPaint.textSize = dp2px(15F).toFloat()
         mStickyHeaderPaint.isAntiAlias = true
