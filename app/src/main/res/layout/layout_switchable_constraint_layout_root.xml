@@ -44,6 +44,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_retry_button"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_marginTop="20dp"
             android:text="重新加载"
             android:textSize="15sp"
