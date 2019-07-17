@@ -21,7 +21,7 @@ class ProjectViewModel : BaseViewModel() {
             val result = mRepository.getProjectTagList()
             handleResonseResult(result,
                 { mProjectTagVoList.value = result.data },
-                { mFetchProjectTagListErrorMsg.value = result.errorMessage })
+                { mFetchProjectTagListErrorMsg.value = result.errorMsg })
         }
     }
 

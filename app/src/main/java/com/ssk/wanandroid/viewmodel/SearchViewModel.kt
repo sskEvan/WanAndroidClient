@@ -3,9 +3,7 @@ package com.ssk.wanandroid.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.ssk.wanandroid.base.BaseViewModel
 import com.ssk.wanandroid.bean.ArticleListVo
-import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.bean.HotSearchVo
-import com.ssk.wanandroid.repository.HomeRepository
 import com.ssk.wanandroid.repository.SearchRepository
 
 /**
@@ -32,7 +30,7 @@ class SearchViewModel : BaseViewModel() {
             val result = mRepository.searchArticle(page, key)
             handleResonseResult(result,
                 {mSearchResult.value = result.data},
-                {mSearchResultErrorMsg.value = result.errorMessage})
+                {mSearchResultErrorMsg.value = result.errorMsg})
 
         }
     }

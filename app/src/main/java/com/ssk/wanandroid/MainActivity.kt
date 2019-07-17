@@ -9,6 +9,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssk.wanandroid.base.BaseActivity
+import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.fragment.HomeFragment
 import com.ssk.wanandroid.fragment.KnowledgeFragment
 import com.ssk.wanandroid.fragment.MineFragment
@@ -19,8 +20,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
-    private val mFragmentList = arrayListOf<Fragment>()
+    private var mBackPressTime = 0L
 
+    private val mFragmentList = arrayListOf<Fragment>()
     private val mHomeFragment by lazy { HomeFragment.create() }
     private val mKnowledgeFragment by lazy { KnowledgeFragment.create() }
     private val mProjectFragment by lazy { ProjectFragment.create() }
@@ -63,5 +65,17 @@ class MainActivity : BaseActivity() {
             override fun getCount() = mFragmentList.size
         }
     }
+
+    override fun onBackPressed() {
+        val now = System.currentTimeMillis()
+        if (now - mBackPressTime > 2000) {
+            showToast("请再按一次退出应用")
+            mBackPressTime = now
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun doExitAnim() {}
 
 }

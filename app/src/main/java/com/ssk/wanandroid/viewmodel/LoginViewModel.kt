@@ -22,7 +22,7 @@ class LoginViewModel : BaseViewModel() {
         handleResonseResult(
             response,
             { mLoginUser.value = response.data},
-            { mLoginErrorMsg.value = response.errorMessage }
+            { mLoginErrorMsg.value = response.errorMsg }
         )
     }
 
@@ -32,7 +32,7 @@ class LoginViewModel : BaseViewModel() {
         handleResonseResult(
             response,
             { mRegisterUser.value = response.data},
-            { mRegistErrorMsg.value = response.errorMessage }
+            { mRegistErrorMsg.value = response.errorMsg }
         )
     }
 

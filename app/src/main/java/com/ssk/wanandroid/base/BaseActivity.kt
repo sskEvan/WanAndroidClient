@@ -72,7 +72,7 @@ abstract class BaseActivity : AppCompatActivity() {
         doExitAnim()
     }
 
-    fun doExitAnim() {
+    open fun doExitAnim() {
         overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
     }
 

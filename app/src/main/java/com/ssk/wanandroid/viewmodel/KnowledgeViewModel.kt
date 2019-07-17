@@ -30,7 +30,7 @@ class KnowledgeViewModel : BaseViewModel() {
                     }
                     mKnowledgeSubTabVoList.value = knowledgeTagVoList
                 },
-                { mFetchKnowledgeTabListErrorMsg.value = result.errorMessage })
+                { mFetchKnowledgeTabListErrorMsg.value = result.errorMsg })
         }
     }
 

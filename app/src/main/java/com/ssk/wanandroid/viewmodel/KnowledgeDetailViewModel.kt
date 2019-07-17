@@ -21,7 +21,7 @@ class KnowledgeDetailViewModel : BaseViewModel() {
             val result = mRepository.getKnowledgeDetailList(page, id)
             handleResonseResult(result,
                 { mKnowledgeDetailList.value = result.data },
-                { mFetchKnowledgeDetailListErrorMsg.value = result.errorMessage })
+                { mFetchKnowledgeDetailListErrorMsg.value = result.errorMsg })
         }
     }
 

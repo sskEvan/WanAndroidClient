@@ -158,7 +158,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                         forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link)
                     }
                     R.id.collectButton -> {
-                        if(AccountManager.isLogin) {
+                        if(AccountManager.currentUser != null) {
                             mCollectPosition = position
                             if(mArticleAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()

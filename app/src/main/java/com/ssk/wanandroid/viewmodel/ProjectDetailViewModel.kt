@@ -21,7 +21,7 @@ class ProjectDetailViewModel : BaseViewModel() {
             val result = mRepository.getProjectDetailList(page, id)
             handleResonseResult(result,
                 { mProjectDetailList.value = result.data },
-                { mFetchProjectDetailListErrorMsg.value = result.errorMessage })
+                { mFetchProjectDetailListErrorMsg.value = result.errorMsg })
         }
     }
 

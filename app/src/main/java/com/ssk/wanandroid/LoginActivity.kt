@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.service.AccountManager
@@ -63,8 +64,8 @@ class LoginActivity : WanActivity<LoginViewModel>() {
         super.startObserve()
         mViewModel.apply {
             mLoginUser.observe(this@LoginActivity, Observer {
-                AccountManager.isLogin = true
                 AccountManager.currentUser = it
+                AccountManager.currentUserJson = Gson().toJson(it)
                 dismissLoadingDialogSuccess("登陆成功")
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {

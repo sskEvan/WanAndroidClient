@@ -5,8 +5,6 @@ import com.ssk.wanandroid.base.BaseViewModel
 import com.ssk.wanandroid.bean.ArticleListVo
 import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.repository.HomeRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * Created by shisenkun on 2019-06-24.
@@ -40,7 +38,7 @@ class HomeViewModel : BaseViewModel() {
                         mArticalListVo.value = result.data
                     },
                     {
-                        mFetchArticleListErrorMsg.value = result.errorMessage
+                        mFetchArticleListErrorMsg.value = result.errorMsg
                     })
             }
     }
@@ -50,7 +48,7 @@ class HomeViewModel : BaseViewModel() {
             val result = mRepository.collectArticle(articleId)
             handleResonseResult(result,
                 { mCollectArticleSuccess.value = true},
-                { mCollectArticleErrorMsg.value = "收藏失败:" + result.errorMessage})
+                { mCollectArticleErrorMsg.value = "收藏失败:" + result.errorMsg})
         }
     }
 
@@ -59,7 +57,7 @@ class HomeViewModel : BaseViewModel() {
             val result = mRepository.unCollectArticle(articleId)
             handleResonseResult(result,
                 { mUnCollectArticleSuccess.value = true},
-                { mUnCollectArticleErrorMsg.value = "取消收藏失败:" + result.errorMessage})
+                { mUnCollectArticleErrorMsg.value = "取消收藏失败:" + result.errorMsg})
         }
     }
 

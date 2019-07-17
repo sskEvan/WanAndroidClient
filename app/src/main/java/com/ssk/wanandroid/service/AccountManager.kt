@@ -10,7 +10,7 @@ import com.ssk.wanandroid.ext.pref
 object AccountManager {
     var username by pref("")
     var password by pref("")
+    var currentUserJson by pref("")
 
-    var isLogin = false
     var currentUser: UserVo? = null
 }

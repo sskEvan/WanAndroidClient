@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.service.AccountManager
@@ -74,7 +75,7 @@ class RegistActivity : WanActivity<LoginViewModel>() {
                 dismissLoadingDialogSuccess("登陆成功")
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {
-                        AccountManager.isLogin = true
+                        AccountManager.currentUserJson = Gson().toJson(it)
                         AccountManager.currentUser = it
                         finish()
                         overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);

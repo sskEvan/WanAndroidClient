@@ -11,6 +11,10 @@
         <item name="android:windowSharedElementsUseOverlay">false</item>
     </style>
 
+    <style name="WanAndroid.SplashActivity">
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
     <style name="WanAndroid.MainActivity">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
