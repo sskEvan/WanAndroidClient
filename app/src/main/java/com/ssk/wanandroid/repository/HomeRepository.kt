@@ -19,4 +19,12 @@ class HomeRepository : BaseRepository() {
         return apiCall { WanRetrofitClient.service.getHomeArticleList(page).await() }
     }
 
+    suspend fun collectArticle(articleId: Int): BaseResponse<ArticleListVo> {
+        return apiCall { WanRetrofitClient.service.collectArticle(articleId).await() }
+    }
+
+    suspend fun unCollectArticle(articleId: Int): BaseResponse<ArticleListVo> {
+        return apiCall { WanRetrofitClient.service.unCollectArticle(articleId).await() }
+    }
+
 }

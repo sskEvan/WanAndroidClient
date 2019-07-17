@@ -27,7 +27,7 @@ class KnowledgeAdapter(layoutResId: Int = R.layout.item_knowledge) : BaseQuickAd
             .setText(R.id.tvTitle, item.title)
             .setText(R.id.tvCategory, category)
             .setText(R.id.tvTime, item.niceDate)
-            .addOnClickListener(R.id.ivStar)
+            .addOnClickListener(R.id.ivCollect)
             .addOnClickListener(R.id.cvItemRoot)
 
         helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)

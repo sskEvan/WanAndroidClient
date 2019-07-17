@@ -54,5 +54,6 @@ dependencies {
     implementation rootProject.ext.dependencies["BRVAH"]
     implementation rootProject.ext.dependencies["smartRefreshLayout"]
     implementation rootProject.ext.dependencies["smartRefreshHeader"]
+    implementation rootProject.ext.dependencies["flowLayout"]
 
 }

@@ -42,7 +42,7 @@
 
         <activity android:name="com.ssk.wanandroid.SearchActivity"
                   android:label="搜索"
-                  android:theme="@style/WanAndroid"/>
+                  android:theme="@style/WanAndroid.SearchActivity"/>
 
         <activity android:name="com.ssk.wanandroid.WanWebActivity"
                   android:label="文章详情"

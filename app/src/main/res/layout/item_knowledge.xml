@@ -70,15 +70,15 @@
                 android:textSize="12sp"
                 android:textColor="@color/third_text"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivStar"
-                app:layout_constraintBottom_toBottomOf="@id/ivStar"/>
+                app:layout_constraintTop_toTopOf="@id/ivCollect"
+                app:layout_constraintBottom_toBottomOf="@id/ivCollect"/>
 
         <com.ssk.wanandroid.widget.ClickableImageView
-                android:id="@+id/ivStar"
+                android:id="@+id/ivCollect"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/ic_unstar"
+                android:src="@mipmap/ic_uncollect"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle"/>
 

@@ -40,4 +40,17 @@ interface ApiService {
     @GET("/article/list/{page}/json")
     fun getKnowledgeDetailList(@Path("page") page: Int, @Query("cid") cid: Int): Deferred<BaseResponse<ArticleListVo>>
 
+    @GET("/hotkey/json")
+    fun getHotSearch(): Deferred<BaseResponse<List<HotSearchVo>>>
+
+    @FormUrlEncoded
+    @POST("/article/query/{page}/json")
+    fun searchArticle(@Path("page") page: Int, @Field("k") key: String): Deferred<BaseResponse<ArticleListVo>>
+
+    @POST("/lg/collect/{id}/json")
+    fun collectArticle(@Path("id") id: Int): Deferred<BaseResponse<ArticleListVo>>
+
+    @POST("/lg/uncollect_originId/{id}/json")
+    fun unCollectArticle(@Path("id") id: Int): Deferred<BaseResponse<ArticleListVo>>
+
 }

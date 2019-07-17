@@ -33,6 +33,15 @@
         <item name="colorControlHighlight">@color/white_text</item>
     </style>
 
+    <style name="WanAndroid.SearchActivity">
+        <item name="android:windowBackground">@color/scrim</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="DialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>//无标题
         <item name="android:windowFrame">@null</item>

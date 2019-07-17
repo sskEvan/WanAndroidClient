@@ -69,6 +69,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        doExitAnim()
+    }
+
+    fun doExitAnim() {
         overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
     }
 

@@ -2,6 +2,8 @@ package com.ssk.wanandroid.fragment
 
 import android.os.Bundle
 import android.text.Html
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.ssk.wanandroid.R

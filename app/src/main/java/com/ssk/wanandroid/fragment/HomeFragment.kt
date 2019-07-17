@@ -5,12 +5,13 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.google.android.material.snackbar.Snackbar
+import com.ssk.wanandroid.LoginActivity
 import com.ssk.wanandroid.WanWebActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.SearchActivity
@@ -18,14 +19,20 @@ import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ArticleListVo
 import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.adapter.ArticleAdapter
+import com.ssk.wanandroid.ext.showToast
+import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.GlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
+import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
 import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
+import android.widget.TextView
+import android.graphics.Color
+
 
 /**
  * Created by shisenkun on 2019-06-23.
@@ -47,15 +54,40 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     private var mCurrentPage = 0
     private lateinit var rvLayoutManager: LinearLayoutManager
     private var mIsFabUpward = true
+    private var mCollectPosition = 0
 
     private var bannerLayout: Banner? = null
 
     override fun getLayoutResId() = R.layout.fragment_home
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         setupToolbar(false)
+        toolbar = mContentView.findViewById(R.id.toolbar)
         toolbar?.title = "首页"
+        toolbar?.inflateMenu(R.menu.menu_home)
+        toolbar?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_item_search -> {
+                    if (AndroidVersion.hasLollipopMR1()) { // Android 5.0版本启用transition动画会存在一些效果上的异常，因此这里只在Android 5.1以上启用此动画
+                        val searchMenuView: View? = toolbar?.findViewById(R.id.menu_item_search)
+                        val options = ActivityOptions.makeSceneTransitionAnimation(
+                            mActivity, searchMenuView,
+                            getString(R.string.transition_search_back)
+                        ).toBundle()
+                        startActivity(Intent(mActivity, SearchActivity::class.java), options)
+                    } else {
+                        startActivity(Intent(mActivity, SearchActivity::class.java))
+                    }
+                }
+            }
+            true
+        }
         immersiveStatusBar(R.color.colorPrimary, true)
 
         fab.setOnClickListener {
@@ -125,8 +157,22 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link)
                     }
-                    R.id.ivStar -> {
-                        (view as ImageView).setImageResource(R.mipmap.ic_starred)
+                    R.id.collectButton -> {
+                        if(AccountManager.isLogin) {
+                            mCollectPosition = position
+                            if(mArticleAdapter.data[position].collect) {
+                                (view as CollectButton).startUncollectAnim()
+                                mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
+                            }else {
+                                (view as CollectButton).startCollectAnim()
+                                mViewModel.collectArticle(mArticleAdapter.data[position].id)
+                            }
+                            mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
+                        }else {
+                            showToast("请先登陆!")
+                            startActivity(LoginActivity::class.java)
+                            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
+                        }
                     }
                 }
             }
@@ -208,7 +254,33 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                     mIsLoadingMore = false
                 }
             })
+
+            mCollectArticleSuccess.observe(this@HomeFragment, Observer {
+                showSnackBar("收藏成功!")
+            })
+
+            mUnCollectArticleSuccess.observe(this@HomeFragment, Observer {
+                showSnackBar("取消收藏成功!")
+            })
+
+            mCollectArticleErrorMsg.observe(this@HomeFragment, Observer {
+                showSnackBar(it)
+                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
+                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
+
+            mUnCollectArticleErrorMsg.observe(this@HomeFragment, Observer {
+                showSnackBar(it)
+                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
+                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
         }
+    }
+
+    private fun showSnackBar(msg: String) {
+        val snackBar = Snackbar.make(clRoot, msg, Snackbar.LENGTH_SHORT)
+        (snackBar.getView().findViewById(R.id.snackbar_text) as TextView).setTextColor(Color.WHITE)
+        snackBar.show()
     }
 
     private fun setBanner(bannerList: List<BannerVo>) {
@@ -238,29 +310,6 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         bundle.putString("url", url)
         startActivity(WanWebActivity::class.java, bundle)
         mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_search -> {
-                if (AndroidVersion.hasLollipopMR1()) { // Android 5.0版本启用transition动画会存在一些效果上的异常，因此这里只在Android 5.1以上启用此动画
-                    val searchMenuView: View? = toolbar?.findViewById(R.id.menu_item_search)
-                    val options = ActivityOptions.makeSceneTransitionAnimation(
-                        mActivity, searchMenuView,
-                        getString(R.string.transition_search_back)
-                    ).toBundle()
-                    startActivity(Intent(mActivity, SearchActivity::class.java), options)
-                } else {
-                    startActivity(Intent(mActivity, SearchActivity::class.java))
-                }
-            }
-        }
-        return true
     }
 
 }

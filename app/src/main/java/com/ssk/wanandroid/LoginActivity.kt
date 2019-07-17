@@ -44,10 +44,6 @@ class LoginActivity : WanActivity<LoginViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
-            }
 
             R.id.menu_item_regist -> {
                 startActivity(RegistActivity::class.java)
@@ -57,6 +53,10 @@ class LoginActivity : WanActivity<LoginViewModel>() {
             }
         }
         return true
+    }
+
+    override fun doExitAnim() {
+        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
     }
 
     override fun startObserve() {

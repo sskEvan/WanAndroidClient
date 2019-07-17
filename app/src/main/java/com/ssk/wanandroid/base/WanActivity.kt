@@ -1,9 +1,12 @@
 package com.ssk.wanandroid.base
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -87,6 +90,10 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        doExitAnim()
+    }
+
+    open fun doExitAnim() {
         overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
     }
 
@@ -127,6 +134,31 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
     fun dismissLoadingDialog() {
         mLoadingDialog?.dismiss()
         mLoadingDialog = null
+    }
+
+    fun hideSoftKeyboard() {
+        try {
+            val view = currentFocus
+            if (view != null) {
+                val binder = view.windowToken
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(binder, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        } catch (e: Exception) {
+
+        }
+    }
+
+    fun showSoftKeyboard(editText: EditText?) {
+        try {
+            if (editText != null) {
+                editText.requestFocus()
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.showSoftInput(editText, 0)
+            }
+        } catch (e: Exception) {
+        }
+
     }
 
 }

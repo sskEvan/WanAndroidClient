@@ -33,12 +33,12 @@ class RevealActivityAnimation(private val mView: View, private val intent: Inten
                     override fun onGlobalLayout() {
                         val finalRadius = (Math.max(mView.width, mView.height) * 1.1).toFloat()
 
-                        // create the animator for this view (the start radius is zero)
+                        // create the animator for this view (the startCollectAnim radius is zero)
                         val circularReveal = ViewAnimationUtils.createCircularReveal(mView, revealX, revealY, 0f, finalRadius)
                         circularReveal.duration = duration.toLong()
                         circularReveal.interpolator = AccelerateInterpolator()
 
-                        // make the view visible and start the animation
+                        // make the view visible and startCollectAnim the animation
                         mView.visibility = View.VISIBLE
                         circularReveal.start()
                         mView.viewTreeObserver.removeOnGlobalLayoutListener(this)
