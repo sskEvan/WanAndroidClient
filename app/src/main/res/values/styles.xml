@@ -12,7 +12,7 @@
     </style>
 
     <style name="WanAndroid.SplashActivity">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
 
     <style name="WanAndroid.MainActivity">

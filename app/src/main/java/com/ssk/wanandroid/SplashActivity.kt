@@ -28,10 +28,6 @@ class SplashActivity : BaseActivity() {
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
 
-        if(AccountManager.currentUserJson.isNotEmpty()) {
-            AccountManager.currentUser = Gson().fromJson(AccountManager.currentUserJson, UserVo::class.java)
-        }
-
         App.uiHandler.postDelayed({ forwardMainActivity() }, 1500L)
     }
 
