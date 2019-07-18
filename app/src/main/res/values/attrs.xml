@@ -26,5 +26,11 @@
         <attr name="circle_text_size" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="SettingItemLayout">
+        <attr name="show_divider" format="boolean"/>
+        <attr name="logo" format="reference"/>
+        <attr name="name" format="string"/>
+    </declare-styleable>
+
 
 </resources>

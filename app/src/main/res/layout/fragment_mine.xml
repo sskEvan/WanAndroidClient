@@ -4,7 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/nsvRoot"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/gray_light">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -45,12 +46,65 @@
                 app:layout_constraintBottom_toBottomOf="@id/ivHeadPortraitBg"/>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.ssk.wanandroid.widget.SettingItemLayout
+                android:id="@+id/srlSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@id/ivHeadPortraitBg"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:name="日程安排"
+                app:logo="@mipmap/ic_schedule"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.ssk.wanandroid.widget.SettingItemLayout
+                android:id="@+id/srlCollect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/srlSchedule"
+                app:name="收藏"
+                app:logo="@mipmap/ic_collect"/>
+
+        <com.ssk.wanandroid.widget.SettingItemLayout
+                android:id="@+id/srlAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/srlCollect"
+                app:show_divider="true"
+                app:name="关于"
+                app:logo="@mipmap/ic_about"/>
+
+        <com.ssk.wanandroid.widget.SettingItemLayout
+                android:id="@+id/srlAppInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/srlAbout"
+                app:show_divider="true"
+                app:name="应用信息"
+                app:logo="@mipmap/ic_app_info"/>
+
+        <com.ssk.wanandroid.widget.SettingItemLayout
+                android:id="@+id/srlClearCache"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/srlAppInfo"
+                app:name="清除缓存"
+                app:logo="@mipmap/ic_clear_cache"/>
+
+        <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="30dp"
+                android:text="退出登陆"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:background="@drawable/bg_logout_button"
+                app:layout_constraintTop_toBottomOf="@id/srlClearCache"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>

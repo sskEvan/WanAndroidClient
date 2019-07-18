@@ -18,8 +18,8 @@
 
     <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:src="@mipmap/ic_splash_logo"
             android:layout_marginBottom="10dp"
             app:layout_constraintLeft_toLeftOf="parent"

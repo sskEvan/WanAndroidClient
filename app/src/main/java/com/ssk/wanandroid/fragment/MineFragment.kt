@@ -73,6 +73,12 @@ class MineFragment : BaseFragment() {
 
         ivHeadPortrait.setOnClickListener { onUserClick() }
         tvUserName.setOnClickListener { onUserClick() }
+        srlSchedule.setOnClickListener { showToast("日程安排") }
+        srlCollect.setOnClickListener { showToast("收藏") }
+        srlAbout.setOnClickListener { showToast("关于") }
+        srlAppInfo.setOnClickListener { showToast("应用信息") }
+        srlClearCache.setOnClickListener { showToast("清除缓存") }
+        btnLogout.setOnClickListener { showToast("退出登陆") }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -85,7 +91,7 @@ class MineFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        tvUserName.text = if(AccountManager.currentUser != null) AccountManager.currentUser!!.username else "点击登陆"
+        tvUserName.text = if (AccountManager.currentUser != null) AccountManager.currentUser!!.username else "点击登陆"
     }
 
     private fun startRecoverIvHeadPortraitBgAnim() {
@@ -99,9 +105,9 @@ class MineFragment : BaseFragment() {
     }
 
     private fun onUserClick() {
-        if(AccountManager.currentUser != null) {
+        if (AccountManager.currentUser != null) {
             showToast("更换头像...")
-        }else {
+        } else {
             startActivity(LoginActivity::class.java)
             mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
         }
