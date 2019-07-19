@@ -229,7 +229,6 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         bundle.putString("title", title)
         bundle.putString("url", url)
         startActivity(WanWebActivity::class.java, bundle)
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
     }
 
     private fun finishActivity() {

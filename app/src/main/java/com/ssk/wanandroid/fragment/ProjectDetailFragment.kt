@@ -190,8 +190,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
-        startActivity(WanWebActivity::class.java, bundle)
-        mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
+        startActivity(WanWebActivity::class.java, bundle, true)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -1,15 +1,17 @@
 package com.ssk.wanandroid.fragment
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.MotionEvent
-import android.view.View
 import com.ssk.wanandroid.LoginActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseFragment
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.service.AccountManager
+import com.ssk.wanandroid.utils.AppUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 /**
@@ -48,13 +50,13 @@ class MineFragment : BaseFragment() {
                         if (event.y - mLastTouchY > 5 && nsvRoot.scrollY == 0
                             && ivHeadPortraitBg.height <= mIvHeadPortraitBgOriginalHeight * 2
                         ) {  //向下滑动到顶了,并且背景图片高度不大于原始高度到2倍
-                            ivHeadPortraitBg.getLayoutParams().height =
+                            ivHeadPortraitBg.layoutParams.height =
                                 (ivHeadPortraitBg.height + (event.y - mLastTouchY) * mScrollDamping).toInt()
                             ivHeadPortraitBg.requestLayout()
                         } else if (event.y - mLastTouchY < -5
                             && ivHeadPortraitBg.height - mIvHeadPortraitBgOriginalHeight > 0
                         ) {  //向上滑动，并且头像背景大于原始高度
-                            ivHeadPortraitBg.getLayoutParams().height =
+                            ivHeadPortraitBg.layoutParams.height =
                                 (ivHeadPortraitBg.height + (event.y - mLastTouchY) * mScrollDamping).toInt()
                             ivHeadPortraitBg.requestLayout()
                         }
@@ -72,12 +74,25 @@ class MineFragment : BaseFragment() {
         }
 
         ivHeadPortrait.setOnClickListener { onUserClick() }
+
         tvUserName.setOnClickListener { onUserClick() }
+
         srlSchedule.setOnClickListener { showToast("日程安排") }
+
         srlCollect.setOnClickListener { showToast("收藏") }
+
         srlAbout.setOnClickListener { showToast("关于") }
-        srlAppInfo.setOnClickListener { showToast("应用信息") }
+
+        srlAppInfo.setOnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.parse("package:" + AppUtils.appPackage)
+            intent.data = uri
+            startActivity(intent)
+            mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
         srlClearCache.setOnClickListener { showToast("清除缓存") }
+
         btnLogout.setOnClickListener { showToast("退出登陆") }
     }
 
@@ -105,10 +120,8 @@ class MineFragment : BaseFragment() {
     }
 
     private fun onUserClick() {
-        if (AccountManager.currentUser != null) {
-            showToast("更换头像...")
-        } else {
-            startActivity(LoginActivity::class.java)
+        if (AccountManager.currentUser == null) {
+            startActivity(LoginActivity::class.java, false)
             mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
         }
     }

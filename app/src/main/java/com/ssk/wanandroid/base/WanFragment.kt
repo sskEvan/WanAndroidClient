@@ -67,12 +67,18 @@ abstract class WanFragment<VM: BaseViewModel> : Fragment() {
 
     open fun startObserve() {}
 
-    protected fun startActivity(clazz: Class<*>) {
+    protected fun startActivity(clazz: Class<*>, doCommonEnterAnim: Boolean) {
         startActivity(Intent(mActivity, clazz))
+        if(doCommonEnterAnim) {
+            doEnterAnim()
+        }
     }
 
-    protected fun startActivity(clazz: Class<*>, bundle: Bundle) {
+    protected fun startActivity(clazz: Class<*>, bundle: Bundle, doCommonEnterAnim: Boolean) {
         startActivity(Intent(mActivity, clazz).putExtras(bundle))
+        if(doCommonEnterAnim) {
+            doEnterAnim()
+        }
     }
 
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
@@ -92,6 +98,10 @@ abstract class WanFragment<VM: BaseViewModel> : Fragment() {
             t.scaleX = 0.8f
             t.animate().alpha(1f).scaleX(1f).setDuration(300)
         }
+    }
+
+    open fun doEnterAnim() {
+        mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
     /**

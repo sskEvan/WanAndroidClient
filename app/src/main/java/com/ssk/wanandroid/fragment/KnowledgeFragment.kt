@@ -201,8 +201,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
                         val bundle = Bundle()
                         bundle.putInt("knowledgeId", knowledgeSubTagVoList[position].id)
                         bundle.putString("title", knowledgeSubTagVoList[position].name)
-                        startActivity(KnowledgeDetailActivity::class.java, bundle)
-                        mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
+                        startActivity(KnowledgeDetailActivity::class.java, bundle, true)
                     }
                 }
             }

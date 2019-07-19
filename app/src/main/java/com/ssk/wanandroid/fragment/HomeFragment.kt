@@ -170,7 +170,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                             mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
                         }else {
                             showToast("请先登陆!")
-                            startActivity(LoginActivity::class.java)
+                            startActivity(LoginActivity::class.java, false)
                             mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
                         }
                     }
@@ -308,8 +308,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
-        startActivity(WanWebActivity::class.java, bundle)
-        mActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_none)
+        startActivity(WanWebActivity::class.java, bundle, true)
     }
 
 }

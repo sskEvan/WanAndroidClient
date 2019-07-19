@@ -48,16 +48,18 @@ class LoginActivity : WanActivity<LoginViewModel>() {
 
             R.id.menu_item_regist -> {
                 startActivity(RegistActivity::class.java)
-
-                finish()
-                overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
+                App.uiHandler.postDelayed({finish()}, 300)
             }
         }
         return true
     }
 
+    override fun doEnterAnim() {
+        overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+    }
+
     override fun doExitAnim() {
-        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
+        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out)
     }
 
     override fun startObserve() {
@@ -70,7 +72,7 @@ class LoginActivity : WanActivity<LoginViewModel>() {
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {
                         finish()
-                        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
+                        doExitAnim()
                     }
                 })
             })

@@ -47,16 +47,18 @@ class RegistActivity : WanActivity<LoginViewModel>() {
 
             R.id.menu_item_login -> {
                 startActivity(LoginActivity::class.java)
-
-                finish()
-                overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
+                App.uiHandler.postDelayed({finish()}, 300)
             }
         }
         return true
     }
 
+    override fun doEnterAnim() {
+        overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+    }
+
     override fun doExitAnim() {
-        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
+        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out)
     }
 
     override fun startObserve() {
@@ -78,7 +80,7 @@ class RegistActivity : WanActivity<LoginViewModel>() {
                         AccountManager.currentUserJson = Gson().toJson(it)
                         AccountManager.currentUser = it
                         finish()
-                        overridePendingTransition(R.anim.slide_bottom_none, R.anim.slide_bottom_out);
+                        doExitAnim()
                     }
                 })
             })

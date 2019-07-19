@@ -40,11 +40,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected fun startActivity(clazz: Class<*>) {
         startActivity(Intent(this, clazz))
+        doEnterAnim()
     }
 
     protected fun startActivity(clazz: Class<*>, bundle: Bundle) {
         startActivity(Intent(this, clazz).putExtras(bundle))
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_bottom_out)
+        doEnterAnim()
     }
 
     abstract fun getLayoutId(): Int
@@ -72,8 +73,12 @@ abstract class BaseActivity : AppCompatActivity() {
         doExitAnim()
     }
 
+    open fun doEnterAnim() {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
     open fun doExitAnim() {
-        overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
     /**

@@ -60,10 +60,12 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
 
     protected fun startActivity(clazz: Class<*>) {
         startActivity(Intent(this, clazz))
+        doEnterAnim()
     }
 
     protected fun startActivity(clazz: Class<*>, bundle: Bundle) {
         startActivity(Intent(this, clazz).putExtras(bundle))
+        doEnterAnim()
     }
 
     abstract fun getLayoutId(): Int
@@ -93,8 +95,12 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
         doExitAnim()
     }
 
+    open fun doEnterAnim() {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
     open fun doExitAnim() {
-        overridePendingTransition(R.anim.slide_right_none, R.anim.slide_right_out)
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
     /**
