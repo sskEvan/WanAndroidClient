@@ -6,9 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.MotionEvent
+import android.view.View
 import com.ssk.wanandroid.LoginActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseFragment
+import com.ssk.wanandroid.dialog.CommonConfirmDialog
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.utils.AppUtils
@@ -88,12 +90,24 @@ class MineFragment : BaseFragment() {
             val uri = Uri.parse("package:" + AppUtils.appPackage)
             intent.data = uri
             startActivity(intent)
-            mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
-        srlClearCache.setOnClickListener { showToast("清除缓存") }
+        srlClearCache.setOnClickListener {
+            showToast(
+                "清除缓" +
+                        "存"
+            )
+        }
 
-        btnLogout.setOnClickListener { showToast("退出登陆") }
+        btnLogout.setOnClickListener {
+            CommonConfirmDialog(mActivity, "您确定退出当前登陆?")
+                .setConfirmListener {
+                    AccountManager.logout()
+                    btnLogout.visibility = View.GONE
+                    tvUserName.text = "点击登陆"
+                }
+                .show()
+        }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -101,12 +115,15 @@ class MineFragment : BaseFragment() {
         if (isVisibleToUser) {
             animateToolbarTitle()
             immersiveStatusBar(R.color.translucent, false)
+
+            btnLogout.visibility = if (AccountManager.currentUser != null) View.VISIBLE else View.GONE
         }
     }
 
     override fun onResume() {
         super.onResume()
         tvUserName.text = if (AccountManager.currentUser != null) AccountManager.currentUser!!.username else "点击登陆"
+        btnLogout.visibility = if (AccountManager.currentUser != null) View.VISIBLE else View.GONE
     }
 
     private fun startRecoverIvHeadPortraitBgAnim() {

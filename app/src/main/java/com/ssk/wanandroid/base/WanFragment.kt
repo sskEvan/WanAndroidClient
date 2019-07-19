@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.ssk.wanandroid.LoadingDialog
+import com.ssk.wanandroid.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.service.EventManager
 import com.ssk.wanandroid.utils.AndroidVersion

@@ -1,10 +1,10 @@
-package com.ssk.wanandroid
+package com.ssk.wanandroid.dialog
 
 import android.content.Context
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import com.ssk.wanandroid.R
 import com.ssk.wanandroid.widget.LoadingView
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_loading.*
 import kotlinx.android.synthetic.main.dialog_loading.loadingView
 

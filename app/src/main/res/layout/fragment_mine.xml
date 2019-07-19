@@ -94,9 +94,11 @@
         <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="退出登陆"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
                 style="?android:attr/borderlessButtonStyle"
                 android:textColor="@color/red"
                 android:textSize="16sp"

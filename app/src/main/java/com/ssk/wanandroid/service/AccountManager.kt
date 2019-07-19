@@ -13,4 +13,9 @@ object AccountManager {
     var currentUserJson by pref("")
 
     var currentUser: UserVo? = null
+
+    fun logout() {
+        currentUserJson = ""
+        currentUser = null
+    }
 }

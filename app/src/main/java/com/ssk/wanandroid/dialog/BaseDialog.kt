@@ -1,10 +1,11 @@
-package com.ssk.wanandroid
+package com.ssk.wanandroid.dialog
 
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import com.ssk.wanandroid.R
 
 /**
  * Created by shisenkun on 2019-06-22.
