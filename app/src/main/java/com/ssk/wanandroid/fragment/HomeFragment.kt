@@ -22,7 +22,7 @@ import com.ssk.wanandroid.adapter.ArticleAdapter
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.utils.AndroidVersion
-import com.ssk.wanandroid.utils.GlideImageLoader
+import com.ssk.wanandroid.utils.BannerGlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
@@ -109,7 +109,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         bannerLayout = headerLayout.findViewById(R.id.bannerLayout) as Banner
         bannerLayout?.run {
             setBannerStyle(BannerConfig.NUM_INDICATOR)
-            setImageLoader(GlideImageLoader())
+            setImageLoader(BannerGlideImageLoader())
             setOnBannerListener {
                 forwardWanWebActivity(mBannerTitles[it], mBannerUrls[it])
             }
