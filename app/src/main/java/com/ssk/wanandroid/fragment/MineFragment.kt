@@ -13,10 +13,10 @@ import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.BaseFragment
 import com.ssk.wanandroid.dialog.CommonConfirmDialog
-import com.ssk.wanandroid.ext.logDebug
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.utils.BlurTransformation
 import com.ssk.wanandroid.utils.CropCircleTransformation
+import com.ssk.wanandroid.utils.GlideCacheUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 /**
@@ -98,9 +98,11 @@ class MineFragment : BaseFragment() {
         }
 
         srlClearCache.setOnClickListener {
-            showToast(
-                "清除缓存"
-            )
+            CommonConfirmDialog(mActivity, "您确定要清理${GlideCacheUtils.getCacheSize()}图片缓存吗?")
+                .setConfirmListener {
+                    GlideCacheUtils.clearDiskCache()
+                }
+                .show()
         }
 
         btnLogout.setOnClickListener {
