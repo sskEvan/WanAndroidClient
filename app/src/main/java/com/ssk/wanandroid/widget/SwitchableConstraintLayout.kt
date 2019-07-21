@@ -2,7 +2,6 @@ package com.ssk.wanandroid.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ssk.wanandroid.R
@@ -39,7 +38,6 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     fun switchSuccessLayout() {
         loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
             override fun onLoadingCancelAfterMinRotateDuration() {
-                Log.d("ssk", "switchSuccessLayout")
                 super.onLoadingCancelAfterMinRotateDuration()
                 for (i in 0..childCount - 1) {
                     if (getChildAt(i).id in mLoadingLayoutResIdArray) {

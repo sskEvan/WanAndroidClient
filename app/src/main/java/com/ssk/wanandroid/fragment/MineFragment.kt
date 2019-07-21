@@ -13,6 +13,7 @@ import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.BaseFragment
 import com.ssk.wanandroid.dialog.CommonConfirmDialog
+import com.ssk.wanandroid.ext.logDebug
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.utils.BlurTransformation
 import com.ssk.wanandroid.utils.CropCircleTransformation

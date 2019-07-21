@@ -15,6 +15,7 @@ import com.ssk.wanandroid.ext.pref
 object WanAndroid {
 
     lateinit var uiHandler: Handler
+    var isDebug = true
 
     var username by pref("")
     var password by pref("")

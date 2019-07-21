@@ -1,9 +1,6 @@
 package com.ssk.wanandroid.fragment
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +11,7 @@ import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.KnowledgeTabVo
 import com.ssk.wanandroid.adapter.KnowledgeSubTabAdapter
 import com.ssk.wanandroid.adapter.KnowledgeTagAdapter
+import com.ssk.wanandroid.ext.logDebug
 import com.ssk.wanandroid.viewmodel.KnowledgeViewModel
 import com.ssk.wanandroid.widget.SubProjectDecoration
 import kotlinx.android.synthetic.main.fragment_knowledge.*
@@ -75,7 +73,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    Log.d("ssk", "newState=$newState")
+                    logDebug("newState=$newState")
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {  //进行第二次滑动
                         if (!mIsScrolling) {
                             val firstPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()

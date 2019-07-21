@@ -53,7 +53,6 @@ class SubProjectDecoration(val context: Context, val datas: List<KnowledgeTabVo>
             }
             val position = parent.getChildAdapterPosition(view)
 
-            //Log.d("ssk", "i=$i,childCount=$childCount,position=$position")
             if (datas[position].children.isEmpty()) {
                 c.drawLine(
                     20F + mBmpTree.width / 2,

@@ -3,9 +3,7 @@ package com.ssk.wanandroid.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.scwang.smartrefresh.layout.api.RefreshFooter

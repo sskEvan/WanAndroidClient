@@ -3,7 +3,6 @@ package com.ssk.wanandroid.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -43,14 +42,12 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
 
     @SuppressLint("ResourceAsColor")
     override fun onInitialized(kernel: RefreshKernel, height: Int, maxDragHeight: Int) {
-        Log.d(TAG, "onInitialized")
         mRefreshKernel = kernel
         mRefreshKernel?.requestDrawBackgroundFor(this, mBackgroundColor)
         setBackgroundColor(mBackgroundColor)
     }
 
     override fun onStateChanged(refreshLayout: RefreshLayout, oldState: RefreshState, newState: RefreshState) {
-        Log.e(TAG, "onStateChanged newState=$newState")
         when (newState) {
             RefreshState.None, RefreshState.PullDownToRefresh -> {
                 isRefreshing = false
@@ -72,7 +69,6 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     override fun onFinish(refreshLayout: RefreshLayout, success: Boolean): Int {
-        Log.e(TAG, "onFinish success=$success")
         loadingView.stopAnim()
         if (success) {
             tvMessage.setText("刷新成功")
@@ -87,7 +83,6 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     override fun onReleased(refreshLayout: RefreshLayout, height: Int, maxDragHeight: Int) {
-        Log.e(TAG, "onReleased height=$height,maxDragHeight=$maxDragHeight")
     }
 
 
@@ -102,12 +97,10 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     override fun onStartAnimator(refreshLayout: RefreshLayout, height: Int, maxDragHeight: Int) {
-        Log.d(TAG, "onStartAnimator height=$height,maxDragHeight=$maxDragHeight")
     }
 
 
     override fun onMoving(isDragging: Boolean, percent: Float, offset: Int, height: Int, maxDragHeight: Int) {
-        Log.d(TAG, "onMoving isDragging=$isDragging,percent=$percent")
         if (!isRefreshing && percent <= 1.3) {
             loadingView.updateCurrentRotationRadius(percent)
         }
