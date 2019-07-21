@@ -17,15 +17,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
             android:paddingTop="10dp">
 
         <ImageView
                 android:id="@+id/imgProject"
                 android:layout_width="108dp"
-                android:layout_height="192dp"
+                android:layout_height="202dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintVertical_chainStyle="spread"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -42,6 +42,7 @@
         <TextView
                 android:id="@+id/tvAuthor"
                 android:layout_marginLeft="6dp"
+                android:layout_marginRight="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -56,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
                 android:gravity="left"
                 android:text="title"
                 android:textColor="@color/primary_text"
@@ -69,6 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
+                android:layout_marginRight="15dp"
                 android:textSize="13sp"
                 android:ellipsize="end"
                 android:gravity="left"
@@ -87,9 +90,18 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:text="time"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/third_text"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tvDescription"
                 app:layout_constraintTop_toBottomOf="@id/tvDescription"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.ssk.wanandroid.widget.CollectButton
+                android:id="@+id/collectButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_uncollect"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

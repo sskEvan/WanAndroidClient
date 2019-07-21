@@ -2,25 +2,24 @@ package com.ssk.wanandroid.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.base.WanFragment
-import com.ssk.wanandroid.bean.ArticleListVo
+import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
+import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.view.adapter.ProjectAdapter
 import com.ssk.wanandroid.util.EventManager
+import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.viewmodel.ProjectDetailViewModel
-import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
-import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
-import kotlinx.android.synthetic.main.fragment_project_detail.*
-import kotlinx.android.synthetic.main.fragment_project_detail.switchableConstraintLayout
+import com.ssk.wanandroid.widget.CollectButton
+import com.ssk.wanandroid.widget.CommonListPager
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -39,34 +38,45 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         }
     }
 
-    private var mIsRefreshing = false
-    private var mIsLoadingMore = false
     private val mProjectAdapter by lazy { ProjectAdapter() }
-    private var mCurrentPage = 0
-    private lateinit var rvLayoutManager: LinearLayoutManager
     private var mProjectId = 0
     private var mIsFabShown= false
     private var mIsFabUpward = true
+    private var mCollectPosition = 0
+    private lateinit var commonListPager: CommonListPager<ArticleVo>
 
     override fun getLayoutResId() = R.layout.fragment_project_detail
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
 
-        initRvArticle()
+        setupCommonListPager()
     }
 
-    private fun initRvArticle() {
-        rvLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    private fun setupCommonListPager() {
+        commonListPager = mContentView.findViewById(R.id.commonListPager)
+        commonListPager.hideFab()
+        commonListPager.setAdapter(mProjectAdapter)
+        commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
+            override fun retry() {
+                mViewModel.fetchProjectDetailList(0, mProjectId)
+            }
 
-        rvProject.run {
-            layoutManager = rvLayoutManager
-            adapter = mProjectAdapter
+            override fun refresh() {
+                mViewModel.fetchProjectDetailList(0, mProjectId)
+            }
+
+            override fun loadMore(page: Int) {
+                mViewModel.fetchProjectDetailList(page, mProjectId)
+            }
+        }
+
+        commonListPager.getRecyclerView().run {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 @SuppressLint("RestrictedApi")
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    val firstCompletelyVisibleIndex = commonListPager.getLayoutManager().findFirstCompletelyVisibleItemPosition()
                     if (firstCompletelyVisibleIndex == 0) {
                         if(mIsFabShown) {
                             mIsFabShown = false
@@ -78,7 +88,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                             EventManager.post(OnProjectFragmentFabVisiableControlEvent(true))
                         }
 
-                        val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
+                        val lastCompletelyVisibleIndex = commonListPager.getLayoutManager().findLastCompletelyVisibleItemPosition()
                         if (dy > 0) {  //向上滑动
                             if (firstCompletelyVisibleIndex > 0) {
                                 if(mIsFabUpward) {
@@ -105,85 +115,65 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(mProjectAdapter.data[position].title, mProjectAdapter.data[position].link)
                     }
+                    R.id.collectButton -> {
+                        if(WanAndroid.currentUser != null) {
+                            mCollectPosition = position
+                            if(mProjectAdapter.data[position].collect) {
+                                (view as CollectButton).startUncollectAnim()
+                                mViewModel.unCollectArticle(mProjectAdapter.data[position].id)
+                            }else {
+                                (view as CollectButton).startCollectAnim()
+                                mViewModel.collectArticle(mProjectAdapter.data[position].id)
+                            }
+                            mProjectAdapter.data[position].collect = !mProjectAdapter.data[position].collect
+                        }else {
+                            showToast("请先登陆!")
+                            startActivity(LoginActivity::class.java, false)
+                            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+                        }
+                    }
                 }
             }
-        }
-
-        val commonRefreshHeaderLayout = CommonRefreshHeaderLayout(mActivity)
-        commonRefreshHeaderLayout.setPrimaryColors(ContextCompat.getColor(mActivity, R.color.colorPrimary))
-        srfProject.setRefreshHeader(commonRefreshHeaderLayout)
-        srfProject.setRefreshFooter(CommonRefreshFooterLayout(mActivity))
-        srfProject.setOnRefreshListener {
-            mCurrentPage = 0
-            mIsRefreshing = true
-            mViewModel.fetchProjectDetailList(mCurrentPage, mProjectId)
-        }
-        srfProject.setOnLoadMoreListener {
-            ++mCurrentPage
-            mIsLoadingMore = true
-            mViewModel.fetchProjectDetailList(mCurrentPage, mProjectId)
-        }
-
-        switchableConstraintLayout.setRetryListener {
-            mViewModel.fetchProjectDetailList(mCurrentPage, mProjectId)
         }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
         mProjectId = arguments!!.getInt("projectId")
-        mViewModel.fetchProjectDetailList(mCurrentPage, mProjectId)
+        mViewModel.fetchProjectDetailList(0, mProjectId)
     }
 
     override fun startObserve() {
         super.startObserve()
         mViewModel.apply {
             mProjectDetailList.observe(this@ProjectDetailFragment, Observer {
-                if (mIsRefreshing) {
-                    srfProject.finishRefresh(true)
-                    mIsRefreshing = false
-                } else if (mIsLoadingMore) {
-                    srfProject.finishLoadMore(true)
-                    mIsLoadingMore = false
-                } else {
-                    switchableConstraintLayout.switchSuccessLayout()
-                    EventManager.post(OnProjectFragmentFabVisiableControlEvent(false))
-                }
-                if (it != null) {
-                    setProjectList(it)
-                }
+                commonListPager.addData(it.datas)
+                commonListPager.setNoMoreData(it.over)
             })
 
             mFetchProjectDetailListErrorMsg.observe(this@ProjectDetailFragment, Observer {
-                if (!mIsRefreshing && !mIsLoadingMore) {
-                    switchableConstraintLayout.switchFailedLayout(it)
-                }
-
-                if (mIsRefreshing) {
-                    srfProject.finishRefresh(false)
-                    mIsRefreshing = false
-                }
-                if (mIsLoadingMore) {
-                    srfProject.finishLoadMore(false)
-                    mIsLoadingMore = false
-                }
+                commonListPager.fetchDataError(it)
             })
-        }
-    }
 
-    private fun setProjectList(projectListVo: ArticleListVo) {
-        if(projectListVo.datas.size == 0) {
-            switchableConstraintLayout.switchEmptyLayout()
-        }else {
-            mProjectAdapter.run {
-                if (mCurrentPage == 0) {
-                    data.clear()
-                }
-                addData(projectListVo.datas)
+            mCollectArticleSuccess.observe(this@ProjectDetailFragment, Observer {
+                showSnackBar("收藏成功!")
+            })
 
+            mUnCollectArticleSuccess.observe(this@ProjectDetailFragment, Observer {
+                showSnackBar("取消收藏成功!")
+            })
 
-                srfProject.setNoMoreData(projectListVo.over)
-            }
+            mCollectArticleErrorMsg.observe(this@ProjectDetailFragment, Observer {
+                showSnackBar(it)
+                mProjectAdapter.data[mCollectPosition].collect = !mProjectAdapter.data[mCollectPosition].collect
+                mProjectAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
+
+            mUnCollectArticleErrorMsg.observe(this@ProjectDetailFragment, Observer {
+                showSnackBar(it)
+                mProjectAdapter.data[mCollectPosition].collect = !mProjectAdapter.data[mCollectPosition].collect
+                mProjectAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
         }
     }
 
@@ -197,9 +187,9 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnProjectFragmentFabClickResponseEvent) {
         if(event.isUpward) {
-            rvProject.smoothScrollToPosition(0)
+            commonListPager.getRecyclerView().smoothScrollToPosition(0)
         }else {
-            rvProject.smoothScrollToPosition(mProjectAdapter.data.size)
+            commonListPager.getRecyclerView().smoothScrollToPosition(mProjectAdapter.data.size)
         }
     }
 

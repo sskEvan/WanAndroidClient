@@ -20,6 +20,7 @@ class ProjectAdapter(layoutResId: Int = R.layout.item_project) : BaseQuickAdapte
             .setText(R.id.tvDescription, item.desc.fromHtml())
             .setText(R.id.tvTime, item.niceDate)
             .addOnClickListener(R.id.cvItemRoot)
+            .addOnClickListener(R.id.collectButton)
 
 
         Glide.with(mContext).load(item.envelopePic).placeholder(R.mipmap.ic_project_default).into(helper.getView(R.id.imgProject))

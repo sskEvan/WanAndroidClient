@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.pager_common_list.view.*
 
 /**
  * Created by shisenkun on 2019-07-21.
+ * 封装通用列表页面
  */
 class CommonListPager<T>
 @JvmOverloads
@@ -28,6 +30,7 @@ constructor(context: Context, attrs: AttributeSet? = null) :
     private var mCurrentPage = 0
     private lateinit var mAdapter: BaseQuickAdapter<T, out BaseViewHolder>
     private var fab: FloatingActionButton
+    private var mShowFab = true
 
     var commonListPagerListener: CommonListPagerListener? = null
 
@@ -47,43 +50,48 @@ constructor(context: Context, attrs: AttributeSet? = null) :
             layoutManager = rvLayoutManager
             adapter = mAdapter
 
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                @SuppressLint("RestrictedApi")
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
-                    if (firstCompletelyVisibleIndex == 0 && fab.isShown) {
-                        fab.hide()
-                    } else {
-                        if (!fab.isShown) {
-                            fab.show()
-                        }
-                        val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
-                        if (dy > 0) {  //向上滑动
-                            if (firstCompletelyVisibleIndex > 0) {
-                                if (mIsFabUpward) {
-                                    mIsFabUpward = false
-                                    fab.animate().rotation(180f).start()  //箭头向下动画
-                                }
+            if(mShowFab) {
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    @SuppressLint("RestrictedApi")
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+
+                        val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
+                        if (firstCompletelyVisibleIndex == 0 && fab.isShown) {
+                            fab.hide()
+                        } else {
+                            if (!fab.isShown) {
+                                fab.show()
                             }
-                        } else if (dy < 0) { //向下滑动
-                            if (lastCompletelyVisibleIndex < mAdapter.itemCount) {
-                                if (!mIsFabUpward) {
-                                    mIsFabUpward = true
-                                    fab.animate().rotation(0f).start()  //箭头向上动画
+                            val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
+                            if (dy > 0) {  //向上滑动
+                                if (firstCompletelyVisibleIndex > 0) {
+                                    if (mIsFabUpward) {
+                                        mIsFabUpward = false
+                                        fab.animate().rotation(180f).start()  //箭头向下动画
+                                    }
+                                }
+                            } else if (dy < 0) { //向下滑动
+                                if (lastCompletelyVisibleIndex < mAdapter.itemCount) {
+                                    if (!mIsFabUpward) {
+                                        mIsFabUpward = true
+                                        fab.animate().rotation(0f).start()  //箭头向上动画
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            })
-        }
+                })
+            }else {
+                fab.hide()
+            }
 
-        fab.setOnClickListener {
-            if (mIsFabUpward) {
-                recyclerView.smoothScrollToPosition(0)
-            } else {
-                recyclerView.smoothScrollToPosition(mAdapter.data.size)
+            fab.setOnClickListener {
+                if (mIsFabUpward) {
+                    recyclerView.smoothScrollToPosition(0)
+                } else {
+                    recyclerView.smoothScrollToPosition(mAdapter.data.size)
+                }
             }
         }
 
@@ -114,7 +122,6 @@ constructor(context: Context, attrs: AttributeSet? = null) :
         }
     }
 
-    //Collection<? extends T> newData
     fun addData(newData: Collection<T>) {
         if (mIsRefreshing) {
             smartRefreshLayout.finishRefresh(true)
@@ -159,8 +166,21 @@ constructor(context: Context, attrs: AttributeSet? = null) :
         switchLoadingLayout()
     }
 
+    fun hideFab() {
+        mShowFab = false
+        fab.hide()
+        val lp = fab.layoutParams
+        lp.width = 0
+        lp.height = 0
+        fab.requestLayout()
+    }
+
     fun getRecyclerView(): RecyclerView {
         return recyclerView
+    }
+
+    fun getLayoutManager(): LinearLayoutManager {
+        return rvLayoutManager
     }
 
     interface CommonListPagerListener {

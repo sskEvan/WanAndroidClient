@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ssk.wanandroid.widget.SwitchableConstraintLayout
+<com.ssk.wanandroid.widget.CommonListPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/switchableConstraintLayout"
+        android:id="@+id/commonListPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/srfProject"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProject"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"/>
-
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-</com.ssk.wanandroid.widget.SwitchableConstraintLayout>
+</com.ssk.wanandroid.widget.CommonListPager>

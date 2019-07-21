@@ -115,4 +115,5 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
             fab.animate().rotation(180f).start()  //箭头向下动画
         }
     }
+
 }
