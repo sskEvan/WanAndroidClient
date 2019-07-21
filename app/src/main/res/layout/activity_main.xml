@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".MainActivity">
+        tools:context=".view.activity.MainActivity">
 
     <com.ssk.wanandroid.widget.NoScrollViewPager
             android:id="@+id/viewPager"

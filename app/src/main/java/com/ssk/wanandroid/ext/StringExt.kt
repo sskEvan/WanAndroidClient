@@ -1,7 +1,7 @@
 package com.ssk.wanandroid.ext
 
 import android.text.Html
-import com.ssk.wanandroid.utils.AndroidVersion
+import com.ssk.wanandroid.util.AndroidVersion
 
 /**
  * Created by shisenkun on 2019-07-21.

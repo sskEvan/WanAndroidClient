@@ -7,8 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.bean.KnowledgeTabVo
-import com.ssk.wanandroid.utils.BitmapUtils
-import com.ssk.wanandroid.utils.dp2px
+import com.ssk.wanandroid.util.BitmapUtils
+import com.ssk.wanandroid.util.dp2px
 
 
 /**

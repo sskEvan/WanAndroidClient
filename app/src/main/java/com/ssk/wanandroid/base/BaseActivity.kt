@@ -8,11 +8,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.ssk.wanandroid.dialog.LoadingDialog
+import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.utils.EventManager
-import com.ssk.wanandroid.utils.AndroidVersion
-import com.ssk.wanandroid.utils.DeviceInfo
+import com.ssk.wanandroid.util.EventManager
+import com.ssk.wanandroid.util.AndroidVersion
+import com.ssk.wanandroid.util.DeviceInfo
 
 
 /**

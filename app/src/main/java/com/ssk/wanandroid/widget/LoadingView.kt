@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.utils.dp2px
+import com.ssk.wanandroid.util.dp2px
 import java.util.*
 import kotlin.collections.ArrayList
 

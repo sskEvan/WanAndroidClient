@@ -17,7 +17,7 @@
             android:usesCleartextTraffic="true"
             android:supportsRtl="true">
 
-        <activity android:name="com.ssk.wanandroid.SplashActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.SplashActivity"
                   android:theme="@style/WanAndroid.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,27 +27,27 @@
         </activity>
 
 
-        <activity android:name="com.ssk.wanandroid.MainActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.MainActivity"
                   android:label="首页"
                   android:theme="@style/WanAndroid.MainActivity"/>
 
-        <activity android:name="com.ssk.wanandroid.LoginActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.LoginActivity"
                   android:label="登陆"
                   android:theme="@style/WanAndroid.LoginActivity"/>
 
-        <activity android:name="com.ssk.wanandroid.RegistActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.RegistActivity"
                   android:label="注册"
                   android:theme="@style/WanAndroid.RegistActivity"/>
 
-        <activity android:name="com.ssk.wanandroid.SearchActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.SearchActivity"
                   android:label="搜索"
                   android:theme="@style/WanAndroid.SearchActivity"/>
 
-        <activity android:name="com.ssk.wanandroid.WanWebActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.WanWebActivity"
                   android:label="文章详情"
                   android:theme="@style/WanAndroid"/>
 
-        <activity android:name="com.ssk.wanandroid.KnowledgeDetailActivity"
+        <activity android:name="com.ssk.wanandroid.view.activity.KnowledgeDetailActivity"
                   android:label="知识体系列表"
                   android:theme="@style/WanAndroid"/>
     </application>
