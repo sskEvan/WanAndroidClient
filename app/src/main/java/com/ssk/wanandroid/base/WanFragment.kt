@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.ssk.wanandroid.dialog.LoadingDialog
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.service.EventManager
+import com.ssk.wanandroid.utils.EventManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.DeviceInfo
 import java.lang.reflect.ParameterizedType

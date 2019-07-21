@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ssk.wanandroid.dialog.LoadingDialog
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.service.EventManager
+import com.ssk.wanandroid.utils.EventManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.DeviceInfo
 

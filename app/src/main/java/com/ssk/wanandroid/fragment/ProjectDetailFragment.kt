@@ -15,7 +15,7 @@ import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
 import com.ssk.wanandroid.adapter.ProjectAdapter
-import com.ssk.wanandroid.service.EventManager
+import com.ssk.wanandroid.utils.EventManager
 import com.ssk.wanandroid.viewmodel.ProjectDetailViewModel
 import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
 import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout

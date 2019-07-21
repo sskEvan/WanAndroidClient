@@ -1,4 +1,4 @@
-package com.ssk.wanandroid.service
+package com.ssk.wanandroid.utils
 
 import org.greenrobot.eventbus.EventBus
 import java.lang.Exception
