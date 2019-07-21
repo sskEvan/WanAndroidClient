@@ -10,40 +10,35 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.view.adapter.ArticleAdapter
 import com.ssk.wanandroid.base.WanActivity
-import com.ssk.wanandroid.bean.ArticleListVo
+import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.bean.HotSearchVo
 import com.ssk.wanandroid.ext.fromHtml
+import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.AndroidVersion
 import com.ssk.wanandroid.util.TransitionUtil
 import com.ssk.wanandroid.viewmodel.SearchViewModel
-import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
-import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
+import com.ssk.wanandroid.widget.CollectButton
+import com.ssk.wanandroid.widget.CommonListPager
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.activity_search.rvArticle
-import kotlinx.android.synthetic.main.activity_search.srfArticle
 
 /**
  * Created by shisenkun on 2019-06-22.
  */
 class SearchActivity : WanActivity<SearchViewModel>() {
 
-    private var mCurrentPage = 0
-    private var mIsRefreshing = false
-    private var mIsLoadingMore = false
     private val mArticleAdapter by lazy { ArticleAdapter() }
-    private lateinit var rvLayoutManager: LinearLayoutManager
     private var mSearchKey: String? = null
     private lateinit var etSearch: EditText
+    private lateinit var commonListPager: CommonListPager<ArticleVo>
+    private var mCollectPosition = 0
 
     override fun getLayoutId() = R.layout.activity_search
 
@@ -51,7 +46,7 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         super.initView(savedInstanceState)
         immersiveStatusBar(R.color.colorPrimary, true)
         setupSearchView()
-        setupRvArticle()
+        setupCommonListPager()
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -68,44 +63,33 @@ class SearchActivity : WanActivity<SearchViewModel>() {
             })
 
             mSearchResult.observe(this@SearchActivity, Observer {
-                if (mIsRefreshing) {
-                    srfArticle.finishRefresh(true)
-                    mIsRefreshing = false
-                } else if (mIsLoadingMore) {
-                    srfArticle.finishLoadMore(true)
-                    mIsLoadingMore = false
-                } else {
-                    sclSearch.switchSuccessLayout()
-                }
-                if (it != null) {
-                    setArticles(it)
-                }
+                commonListPager.addData(it.datas)
+                commonListPager.setNoMoreData(it.over)
             })
 
             mSearchResultErrorMsg.observe(this@SearchActivity, Observer {
-                if (!mIsRefreshing && !mIsLoadingMore) {
-                    sclSearch.switchFailedLayout(it)
-                }
-
-                if (mIsRefreshing) {
-                    srfArticle.finishRefresh(false)
-                    mIsRefreshing = false
-                }
-                if (mIsLoadingMore) {
-                    srfArticle.finishLoadMore(false)
-                    mIsLoadingMore = false
-                }
+                commonListPager.fetchDataError(it)
             })
-        }
-    }
 
-    private fun setArticles(articleListVo: ArticleListVo) {
-        mArticleAdapter.run {
-            if (mCurrentPage == 0) {
-                data.clear()
-            }
-            addData(articleListVo.datas)
-            srfArticle.setNoMoreData(articleListVo.over)
+            mCollectArticleSuccess.observe(this@SearchActivity, Observer {
+                showSnackBar("收藏成功!")
+            })
+
+            mUnCollectArticleSuccess.observe(this@SearchActivity, Observer {
+                showSnackBar("取消收藏成功!")
+            })
+
+            mCollectArticleErrorMsg.observe(this@SearchActivity, Observer {
+                showSnackBar(it)
+                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
+                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
+
+            mUnCollectArticleErrorMsg.observe(this@SearchActivity, Observer {
+                showSnackBar(it)
+                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
+                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
         }
     }
 
@@ -121,16 +105,15 @@ class SearchActivity : WanActivity<SearchViewModel>() {
                 mSearchKey = query
                 tvHotSearchLabel.visibility = View.INVISIBLE
                 hotSearchTagLayout.visibility = View.INVISIBLE
-                sclSearch.visibility = View.VISIBLE
-                sclSearch.switchLoadingLayout()
-                mCurrentPage = 0
-                mViewModel.fetchSearchResult(mCurrentPage, mSearchKey!!)
+                commonListPager.visibility = View.VISIBLE
+                commonListPager.switchLoadingLayout()
+                mViewModel.fetchSearchResult(0, mSearchKey!!)
                 return true
             }
 
             override fun onQueryTextChange(query: String): Boolean {
                 if (TextUtils.isEmpty(query)) {
-                    srfArticle.visibility = View.INVISIBLE
+                    commonListPager.visibility = View.INVISIBLE
                     tvHotSearchLabel.visibility = View.VISIBLE
                     hotSearchTagLayout.visibility = View.VISIBLE
                 }
@@ -151,11 +134,23 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         }
     }
 
-    private fun setupRvArticle() {
-        rvLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvArticle.run {
-            layoutManager = rvLayoutManager
-            adapter = mArticleAdapter
+    private fun setupCommonListPager() {
+        commonListPager = findViewById(R.id.commonListPager)
+
+        commonListPager.setAdapter(mArticleAdapter)
+
+        commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
+            override fun retry() {
+                mViewModel.fetchSearchResult(0, mSearchKey!!)
+            }
+
+            override fun refresh() {
+                mViewModel.fetchSearchResult(0, mSearchKey!!)
+            }
+
+            override fun loadMore(page: Int) {
+                mViewModel.fetchSearchResult(page, mSearchKey!!)
+            }
         }
 
         mArticleAdapter.run {
@@ -164,27 +159,25 @@ class SearchActivity : WanActivity<SearchViewModel>() {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(mArticleAdapter.data[position].title.fromHtml(), mArticleAdapter.data[position].link)
                     }
+                    R.id.collectButton -> {
+                        if(WanAndroid.currentUser != null) {
+                            mCollectPosition = position
+                            if(mArticleAdapter.data[position].collect) {
+                                (view as CollectButton).startUncollectAnim()
+                                mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
+                            }else {
+                                (view as CollectButton).startCollectAnim()
+                                mViewModel.collectArticle(mArticleAdapter.data[position].id)
+                            }
+                            mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
+                        }else {
+                            showToast("请先登陆!")
+                            startActivity(LoginActivity::class.java)
+                            overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+                        }
+                    }
                 }
             }
-        }
-
-        val commonRefreshHeaderLayout = CommonRefreshHeaderLayout(this)
-        commonRefreshHeaderLayout.setPrimaryColors(ContextCompat.getColor(this, R.color.colorPrimary))
-        srfArticle.setRefreshHeader(commonRefreshHeaderLayout)
-        srfArticle.setRefreshFooter(CommonRefreshFooterLayout(this))
-        srfArticle.setOnRefreshListener {
-            mCurrentPage = 0
-            mIsRefreshing = true
-            mViewModel.fetchSearchResult(mCurrentPage, mSearchKey!!)
-        }
-        srfArticle.setOnLoadMoreListener {
-            ++mCurrentPage
-            mIsLoadingMore = true
-            mViewModel.fetchSearchResult(mCurrentPage, mSearchKey!!)
-        }
-
-        sclSearch.setRetryListener {
-            mViewModel.fetchSearchResult(mCurrentPage, mSearchKey!!)
         }
     }
 
@@ -213,10 +206,9 @@ class SearchActivity : WanActivity<SearchViewModel>() {
                     etSearch.setText(mSearchKey)
                     tvHotSearchLabel.visibility = View.INVISIBLE
                     hotSearchTagLayout.visibility = View.INVISIBLE
-                    sclSearch.visibility = View.VISIBLE
-                    sclSearch.switchLoadingLayout()
-                    mCurrentPage = 0
-                    mViewModel.fetchSearchResult(mCurrentPage, mSearchKey!!)
+                    commonListPager.visibility = View.VISIBLE
+                    commonListPager.showLoading()
+                    mViewModel.fetchSearchResult(0, mSearchKey!!)
                     true
                 }
             }

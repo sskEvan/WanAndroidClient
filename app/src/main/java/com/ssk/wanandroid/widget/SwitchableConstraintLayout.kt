@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.layout_switchable_constraint_layout_root.v
  * 可切换状态的约束布局
  * 主要封装了切换加载中布局,正常布局,失败布局的功能
  */
-class SwitchableConstraintLayout
+open class SwitchableConstraintLayout
 @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
 

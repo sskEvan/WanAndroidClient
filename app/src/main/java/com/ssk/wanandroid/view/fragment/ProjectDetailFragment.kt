@@ -181,6 +181,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                 }
                 addData(projectListVo.datas)
 
+
                 srfProject.setNoMoreData(projectListVo.over)
             }
         }

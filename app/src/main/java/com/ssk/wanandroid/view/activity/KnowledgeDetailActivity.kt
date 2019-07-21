@@ -1,20 +1,17 @@
 package com.ssk.wanandroid.view.activity
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.view.adapter.KnowledgeAdapter
 import com.ssk.wanandroid.base.WanActivity
-import com.ssk.wanandroid.bean.ArticleListVo
+import com.ssk.wanandroid.bean.ArticleVo
+import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.viewmodel.KnowledgeDetailViewModel
-import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
-import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
-import kotlinx.android.synthetic.main.activity_knowledge_detail.*
-import kotlinx.android.synthetic.main.activity_knowledge_detail.switchableConstraintLayout
+import com.ssk.wanandroid.widget.CollectButton
+import com.ssk.wanandroid.widget.CommonListPager
 
 /**
  * Created by shisenkun on 2019-07-08.
@@ -22,47 +19,34 @@ import kotlinx.android.synthetic.main.activity_knowledge_detail.switchableConstr
 class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
     override fun getLayoutId(): Int = R.layout.activity_knowledge_detail
-    private var mCurrentPage = 0
-    private var mIsRefreshing = false
-    private var mIsLoadingMore = false
-    private lateinit var rvLayoutManager: LinearLayoutManager
     private val mKnowledgeAdapter by lazy { KnowledgeAdapter() }
-
+    private lateinit var commonListPager: CommonListPager<ArticleVo>
+    private var mCollectPosition = 0
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         setupToolbar(true)
         immersiveStatusBar(R.color.colorPrimary, true)
 
-        initRvKnowledge()
+        setupCommonListPager()
     }
 
-    fun initRvKnowledge() {
-        rvLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    fun setupCommonListPager() {
+        commonListPager = findViewById(R.id.commonListPager)
+        commonListPager.setAdapter(mKnowledgeAdapter)
 
-        rvKnowledge.run {
-            layoutManager = rvLayoutManager
-            adapter = mKnowledgeAdapter
-        }
+        commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
+            override fun retry() {
+                mViewModel.fetchKnowledgeDetailList(0, intent.extras!!.getInt("knowledgeId"))
+            }
 
-        val commonRefreshHeaderLayout = CommonRefreshHeaderLayout(this)
-        commonRefreshHeaderLayout.setPrimaryColors(ContextCompat.getColor(this, R.color.colorPrimary))
-        srfKnowledge.setRefreshHeader(commonRefreshHeaderLayout)
-        srfKnowledge.setRefreshFooter(CommonRefreshFooterLayout(this))
+            override fun refresh() {
+                mViewModel.fetchKnowledgeDetailList(0, intent.extras!!.getInt("knowledgeId"))
+            }
 
-        srfKnowledge.setOnRefreshListener {
-            mCurrentPage = 0
-            mIsRefreshing = true
-            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
-        }
-        srfKnowledge.setOnLoadMoreListener {
-            ++mCurrentPage
-            mIsLoadingMore = true
-            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
-        }
-
-        switchableConstraintLayout.setRetryListener {
-            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
+            override fun loadMore(page: Int) {
+                mViewModel.fetchKnowledgeDetailList(page, intent.extras!!.getInt("knowledgeId"))
+            }
         }
 
         mKnowledgeAdapter.run {
@@ -70,6 +54,23 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
                 when (view.id) {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(mKnowledgeAdapter.data[position].title, mKnowledgeAdapter.data[position].link)
+                    }
+                    R.id.collectButton -> {
+                        if(WanAndroid.currentUser != null) {
+                            mCollectPosition = position
+                            if(mKnowledgeAdapter.data[position].collect) {
+                                (view as CollectButton).startUncollectAnim()
+                                mViewModel.unCollectArticle(mKnowledgeAdapter.data[position].id)
+                            }else {
+                                (view as CollectButton).startCollectAnim()
+                                mViewModel.collectArticle(mKnowledgeAdapter.data[position].id)
+                            }
+                            mKnowledgeAdapter.data[position].collect = !mKnowledgeAdapter.data[position].collect
+                        }else {
+                            showToast("请先登陆!")
+                            startActivity(LoginActivity::class.java)
+                            overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+                        }
                     }
                 }
             }
@@ -86,7 +87,7 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
-        mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
+        mViewModel.fetchKnowledgeDetailList(0, intent.extras!!.getInt("knowledgeId"))
     }
 
     override fun onResume() {
@@ -98,49 +99,33 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
         super.startObserve()
         mViewModel.apply {
             mKnowledgeDetailList.observe(this@KnowledgeDetailActivity, Observer {
-                if (mIsRefreshing) {
-                    srfKnowledge.finishRefresh(true)
-                    mIsRefreshing = false
-                } else if (mIsLoadingMore) {
-                    srfKnowledge.finishLoadMore(true)
-                    mIsLoadingMore = false
-                } else {
-                    switchableConstraintLayout.switchSuccessLayout()
-                }
-                if (it != null) {
-                    setKnowledgeList(it)
-                }
+                commonListPager.addData(it.datas)
+                commonListPager.setNoMoreData(it.over)
             })
 
             mFetchKnowledgeDetailListErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
-                if (!mIsRefreshing && !mIsLoadingMore) {
-                    switchableConstraintLayout.switchFailedLayout(it)
-                }
-
-                if (mIsRefreshing) {
-                    srfKnowledge.finishRefresh(false)
-                    mIsRefreshing = false
-                }
-                if (mIsLoadingMore) {
-                    srfKnowledge.finishLoadMore(false)
-                    mIsLoadingMore = false
-                }
+                commonListPager.fetchDataError(it)
             })
-        }
-    }
 
-    private fun setKnowledgeList(knowledgeListVo: ArticleListVo) {
-        if(knowledgeListVo.datas.size == 0) {
-            switchableConstraintLayout.switchEmptyLayout()
-        }else {
-            mKnowledgeAdapter.run {
-                if (mCurrentPage == 0) {
-                    data.clear()
-                }
-                addData(knowledgeListVo.datas)
+            mCollectArticleSuccess.observe(this@KnowledgeDetailActivity, Observer {
+                showSnackBar("收藏成功!")
+            })
 
-                srfKnowledge.setNoMoreData(knowledgeListVo.over)
-            }
+            mUnCollectArticleSuccess.observe(this@KnowledgeDetailActivity, Observer {
+                showSnackBar("取消收藏成功!")
+            })
+
+            mCollectArticleErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
+                showSnackBar(it)
+                mKnowledgeAdapter.data[mCollectPosition].collect = !mKnowledgeAdapter.data[mCollectPosition].collect
+                mKnowledgeAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
+
+            mUnCollectArticleErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
+                showSnackBar(it)
+                mKnowledgeAdapter.data[mCollectPosition].collect = !mKnowledgeAdapter.data[mCollectPosition].collect
+                mKnowledgeAdapter.notifyItemChanged(mCollectPosition + 1)
+            })
         }
     }
 

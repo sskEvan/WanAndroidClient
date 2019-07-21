@@ -83,7 +83,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     override fun setNoMoreData(noMoreData: Boolean): Boolean {
         mNoMoreData = noMoreData
         if (noMoreData) {
-            tvMessage.setText("没有更多数据了")
+            tvMessage.setText("——没有更多数据了——")
             loadingView.visibility = View.INVISIBLE
         }
         return true

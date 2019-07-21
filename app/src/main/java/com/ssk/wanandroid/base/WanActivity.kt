@@ -2,6 +2,7 @@ package com.ssk.wanandroid.base
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager
@@ -143,6 +145,12 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
         mLoadingDialog = null
     }
 
+    protected fun showSnackBar(msg: String) {
+        val snackBar = Snackbar.make(window.decorView, msg, Snackbar.LENGTH_SHORT)
+        (snackBar.getView().findViewById(R.id.snackbar_text) as TextView).setTextColor(Color.WHITE)
+        snackBar.show()
+    }
+
     fun hideSoftKeyboard() {
         try {
             val view = currentFocus
@@ -165,7 +173,6 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
             }
         } catch (e: Exception) {
         }
-
     }
 
 }

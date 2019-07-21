@@ -1,22 +1,16 @@
 package com.ssk.wanandroid.view.fragment
 
-import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.google.android.material.snackbar.Snackbar
 import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.view.activity.SearchActivity
 import com.ssk.wanandroid.base.WanFragment
-import com.ssk.wanandroid.bean.ArticleListVo
 import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.view.adapter.ArticleAdapter
 import com.ssk.wanandroid.ext.showToast
@@ -24,14 +18,12 @@ import com.ssk.wanandroid.util.AndroidVersion
 import com.ssk.wanandroid.util.BannerGlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
 import com.ssk.wanandroid.widget.CollectButton
-import com.ssk.wanandroid.widget.CommonRefreshFooterLayout
-import com.ssk.wanandroid.widget.CommonRefreshHeaderLayout
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
-import android.widget.TextView
-import android.graphics.Color
 import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.bean.ArticleVo
+import com.ssk.wanandroid.widget.CommonListPager
 
 
 /**
@@ -48,15 +40,12 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     private val mBannerImages = mutableListOf<String>()
     private val mBannerTitles = mutableListOf<String>()
     private val mBannerUrls = mutableListOf<String>()
-    private var mIsRefreshing = false
-    private var mIsLoadingMore = false
+
     private val mArticleAdapter by lazy { ArticleAdapter() }
-    private var mCurrentPage = 0
-    private lateinit var rvLayoutManager: LinearLayoutManager
-    private var mIsFabUpward = true
     private var mCollectPosition = 0
 
     private var bannerLayout: Banner? = null
+    private lateinit var commonListPager: CommonListPager<ArticleVo>
 
     override fun getLayoutResId() = R.layout.fragment_home
 
@@ -90,21 +79,13 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         }
         immersiveStatusBar(R.color.colorPrimary, true)
 
-        fab.setOnClickListener {
-            if(mIsFabUpward) {
-                rvArticle.smoothScrollToPosition(0)
-            }else {
-                rvArticle.smoothScrollToPosition(mArticleAdapter.data.size)
-            }
-        }
-
-        initRvArticle()
+        setupCommonListPager()
     }
 
-    private fun initRvArticle() {
-        rvLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    private fun setupCommonListPager() {
+        commonListPager = mContentView.findViewById(R.id.commonListPager)
         val headerLayout = layoutInflater.inflate(R.layout.layout_article_list_header,
-            rvArticle.parent as ViewGroup,
+            commonListPager.getRecyclerView().parent as ViewGroup,
             false)
         bannerLayout = headerLayout.findViewById(R.id.bannerLayout) as Banner
         bannerLayout?.run {
@@ -115,39 +96,20 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             }
         }
 
-        rvArticle.run {
-            layoutManager = rvLayoutManager
-            adapter = mArticleAdapter
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                @SuppressLint("RestrictedApi")
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
-                    if(firstCompletelyVisibleIndex == 0 && fab.isShown) {
-                        fab.hide()
-                    }else {
-                        if(!fab.isShown) {
-                            fab.show()
-                        }
-                        val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
-                        if(dy > 0) {  //向上滑动
-                            if(firstCompletelyVisibleIndex > 0) {
-                                if(mIsFabUpward) {
-                                    mIsFabUpward = false
-                                    fab.animate().rotation(180f).start()  //箭头向下动画
-                                }
-                            }
-                        }else if(dy < 0) { //向下滑动
-                            if(lastCompletelyVisibleIndex < adapter!!.itemCount) {
-                                if(!mIsFabUpward) {
-                                    mIsFabUpward = true
-                                    fab.animate().rotation(0f).start()  //箭头向上动画
-                                }
-                            }
-                        }
-                    }
-                }
-            })
+        commonListPager.setAdapter(mArticleAdapter)
+        commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
+            override fun retry() {
+                mViewModel.fetchBannerList()
+                mViewModel.fetchArticleList(0)
+            }
+
+            override fun refresh() {
+                mViewModel.fetchArticleList(0)
+            }
+
+            override fun loadMore(page: Int) {
+                mViewModel.fetchArticleList(page)
+            }
         }
 
         mArticleAdapter.run {
@@ -171,38 +133,18 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                         }else {
                             showToast("请先登陆!")
                             startActivity(LoginActivity::class.java, false)
-                            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none);
+                            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
                         }
                     }
                 }
             }
-        }
-
-        val commonRefreshHeaderLayout = CommonRefreshHeaderLayout(mActivity)
-        commonRefreshHeaderLayout.setPrimaryColors(ContextCompat.getColor(mActivity, R.color.colorPrimary))
-        srfArticle.setRefreshHeader(commonRefreshHeaderLayout)
-        srfArticle.setRefreshFooter(CommonRefreshFooterLayout(mActivity))
-        srfArticle.setOnRefreshListener {
-            mCurrentPage = 0
-            mIsRefreshing = true
-            mViewModel.fetchArticleList(mCurrentPage)
-        }
-        srfArticle.setOnLoadMoreListener {
-            ++mCurrentPage
-            mIsLoadingMore = true
-            mViewModel.fetchArticleList(mCurrentPage)
-        }
-
-        switchableConstraintLayout.setRetryListener {
-            mViewModel.fetchBannerList()
-            mViewModel.fetchArticleList(mCurrentPage)
         }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
         mViewModel.fetchBannerList()
-        mViewModel.fetchArticleList(mCurrentPage)
+        mViewModel.fetchArticleList(0)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -220,39 +162,17 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         mViewModel.apply {
             mBannerVoList.observe(this@HomeFragment, Observer { it ->
                 it?.let {
-                    setBanner(it)
+                    updateBanner(it)
                 }
             })
 
             mArticalListVo.observe(this@HomeFragment, Observer { it ->
-                if(mIsRefreshing) {
-                    srfArticle.finishRefresh(true)
-                    mIsRefreshing = false
-                }else if(mIsLoadingMore) {
-                    srfArticle.finishLoadMore(true)
-                    mIsLoadingMore = false
-                }else {
-                    switchableConstraintLayout.switchSuccessLayout()
-                    fab.hide()
-                }
-                if(it != null) {
-                    setArticles(it)
-                }
+                commonListPager.addData(it.datas)
+                commonListPager.setNoMoreData(it.over)
             })
 
             mFetchArticleListErrorMsg.observe(this@HomeFragment, Observer {
-                if(!mIsRefreshing && !mIsLoadingMore) {
-                    switchableConstraintLayout.switchFailedLayout(it)
-                }
-
-                if(mIsRefreshing) {
-                    srfArticle.finishRefresh(false)
-                    mIsRefreshing = false
-                }
-                if(mIsLoadingMore) {
-                    srfArticle.finishLoadMore(false)
-                    mIsLoadingMore = false
-                }
+                commonListPager.fetchDataError(it)
             })
 
             mCollectArticleSuccess.observe(this@HomeFragment, Observer {
@@ -277,13 +197,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         }
     }
 
-    private fun showSnackBar(msg: String) {
-        val snackBar = Snackbar.make(clRoot, msg, Snackbar.LENGTH_SHORT)
-        (snackBar.getView().findViewById(R.id.snackbar_text) as TextView).setTextColor(Color.WHITE)
-        snackBar.show()
-    }
-
-    private fun setBanner(bannerList: List<BannerVo>) {
+    private fun updateBanner(bannerList: List<BannerVo>) {
         mBannerImages.clear()
         mBannerUrls.clear()
         for (banner in bannerList) {
@@ -292,16 +206,6 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             mBannerTitles.add(banner.title)
         }
         bannerLayout!!.setImages(mBannerImages).setDelayTime(3000).start()
-    }
-
-    private fun setArticles(articleListVo: ArticleListVo) {
-        mArticleAdapter.run {
-            if(mCurrentPage == 0) {
-                data.clear()
-            }
-            addData(articleListVo.datas)
-            srfArticle.setNoMoreData(articleListVo.over)
-        }
     }
 
     private fun forwardWanWebActivity(title: String, url: String) {

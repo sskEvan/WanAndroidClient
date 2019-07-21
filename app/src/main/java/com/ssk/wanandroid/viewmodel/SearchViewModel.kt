@@ -15,7 +15,10 @@ class SearchViewModel : BaseViewModel() {
     val mHotSearchVoList: MutableLiveData<List<HotSearchVo>> = MutableLiveData()
     val mSearchResult: MutableLiveData<ArticleListVo> = MutableLiveData()
     val mSearchResultErrorMsg: MutableLiveData<String> = MutableLiveData()
-
+    val mCollectArticleSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val mUnCollectArticleSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val mCollectArticleErrorMsg: MutableLiveData<String> = MutableLiveData()
+    val mUnCollectArticleErrorMsg: MutableLiveData<String> = MutableLiveData()
 
     fun fetchHotSearch() {
         launchOnUI{
@@ -35,5 +38,22 @@ class SearchViewModel : BaseViewModel() {
         }
     }
 
+    fun collectArticle(articleId: Int) {
+        launchOnUI {
+            val result = mRepository.collectArticle(articleId)
+            handleResonseResult(result,
+                { mCollectArticleSuccess.value = true},
+                { mCollectArticleErrorMsg.value = "收藏失败:" + result.errorMsg})
+        }
+    }
+
+    fun unCollectArticle(articleId: Int) {
+        launchOnUI {
+            val result = mRepository.unCollectArticle(articleId)
+            handleResonseResult(result,
+                { mUnCollectArticleSuccess.value = true},
+                { mUnCollectArticleErrorMsg.value = "取消收藏失败:" + result.errorMsg})
+        }
+    }
 
 }
