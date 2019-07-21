@@ -6,9 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
+import com.ssk.wanandroid.app.App
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.ext.showToast
-import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_regist.*
 
@@ -47,7 +48,7 @@ class RegistActivity : WanActivity<LoginViewModel>() {
 
             R.id.menu_item_login -> {
                 startActivity(LoginActivity::class.java)
-                App.uiHandler.postDelayed({finish()}, 300)
+                WanAndroid.uiHandler.postDelayed({finish()}, 300)
             }
         }
         return true
@@ -77,8 +78,8 @@ class RegistActivity : WanActivity<LoginViewModel>() {
                 dismissLoadingDialogSuccess("登陆成功")
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {
-                        AccountManager.currentUserJson = Gson().toJson(it)
-                        AccountManager.currentUser = it
+                        WanAndroid.currentUserJson = Gson().toJson(it)
+                        WanAndroid.currentUser = it
                         finish()
                         doExitAnim()
                     }
@@ -114,15 +115,15 @@ class RegistActivity : WanActivity<LoginViewModel>() {
             showToast("前后密码不一致")
             return false
         }
-        AccountManager.username = userName
-        AccountManager.password = passWord
+        WanAndroid.username = userName
+        WanAndroid.password = passWord
 
         return true
     }
 
     private fun autoLogin() {
-        AccountManager.username = userName
-        AccountManager.password = passWord
+        WanAndroid.username = userName
+        WanAndroid.password = passWord
         showLoadingDialog("登陆中...")
         mViewModel.login(userName, passWord)
     }

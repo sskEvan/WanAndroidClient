@@ -1,6 +1,5 @@
 package com.ssk.wanandroid.widget
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.webkit.WebSettings
@@ -25,23 +24,25 @@ constructor(context: Context, attrs: AttributeSet? = null) : WebView(context, at
         setClickable(true)
     }
 
+    @Suppress("DEPRECATION")
     private fun initWebViewSettings() {
-        val webSetting = this.getSettings()
-        webSetting.setJavaScriptEnabled(true)
-        webSetting.setJavaScriptCanOpenWindowsAutomatically(true)
-        webSetting.setAllowFileAccess(true)
-        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS)
-        webSetting.setSupportZoom(true)
-        webSetting.setBuiltInZoomControls(true)
-        webSetting.setUseWideViewPort(true)
-        webSetting.setSupportMultipleWindows(true)
-        webSetting.setLoadWithOverviewMode(true)
-        webSetting.setAppCacheEnabled(true)
-        webSetting.setDomStorageEnabled(true)
-        webSetting.setGeolocationEnabled(true)
-        webSetting.setAppCacheMaxSize(java.lang.Long.MAX_VALUE)
-        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND)
-        webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE)
+        settings.apply {
+            setJavaScriptEnabled(true)
+            setJavaScriptCanOpenWindowsAutomatically(true)
+            setAllowFileAccess(true)
+            setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS)
+            setSupportZoom(true)
+            setBuiltInZoomControls(true)
+            setUseWideViewPort(true)
+            setSupportMultipleWindows(true)
+            setLoadWithOverviewMode(true)
+            setAppCacheEnabled(true)
+            setDomStorageEnabled(true)
+            setGeolocationEnabled(true)
+            setAppCacheMaxSize(java.lang.Long.MAX_VALUE)
+            pluginState = WebSettings.PluginState.ON_DEMAND
+            setCacheMode(WebSettings.LOAD_NO_CACHE)
+        }
     }
 
 }

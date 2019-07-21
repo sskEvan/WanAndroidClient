@@ -52,16 +52,16 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
         srfKnowledge.setOnRefreshListener {
             mCurrentPage = 0
             mIsRefreshing = true
-            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras.getInt("knowledgeId"))
+            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
         }
         srfKnowledge.setOnLoadMoreListener {
             ++mCurrentPage
             mIsLoadingMore = true
-            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras.getInt("knowledgeId"))
+            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
         }
 
         switchableConstraintLayout.setRetryListener {
-            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras.getInt("knowledgeId"))
+            mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
         }
 
         mKnowledgeAdapter.run {
@@ -85,7 +85,7 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
-        mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras.getInt("knowledgeId"))
+        mViewModel.fetchKnowledgeDetailList(mCurrentPage, intent.extras!!.getInt("knowledgeId"))
     }
 
     override fun onResume() {
@@ -129,7 +129,7 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
     }
 
     private fun setKnowledgeList(knowledgeListVo: ArticleListVo) {
-        if(knowledgeListVo.datas == null || knowledgeListVo.datas.size == 0) {
+        if(knowledgeListVo.datas.size == 0) {
             switchableConstraintLayout.switchEmptyLayout()
         }else {
             mKnowledgeAdapter.run {

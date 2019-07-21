@@ -64,6 +64,9 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
                     if (loadingView.visibility != View.VISIBLE) loadingView.visibility = View.VISIBLE
                     loadingView.startRotateAnim()
                 }
+                else -> {
+
+                }
             }
         }
     }

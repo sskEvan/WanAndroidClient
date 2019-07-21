@@ -1,12 +1,12 @@
 package com.ssk.wanandroid.adapter
 
-import android.text.Html
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.widget.CircleTextImageView
+import com.ssk.wanandroid.ext.fromHtml
 
 /**
  * Created by shisenkun on 2019-06-25.
@@ -17,7 +17,7 @@ class ProjectAdapter(layoutResId: Int = R.layout.item_project) : BaseQuickAdapte
 
         helper.setText(R.id.tvAuthor, item.author)
             .setText(R.id.tvTitle, item.title)
-            .setText(R.id.tvDescription, Html.fromHtml(item.desc))
+            .setText(R.id.tvDescription, item.desc.fromHtml())
             .setText(R.id.tvTime, item.niceDate)
             .addOnClickListener(R.id.cvItemRoot)
 

@@ -3,7 +3,8 @@ package com.ssk.wanandroid.ext
 import android.annotation.SuppressLint
 import android.os.Looper
 import android.widget.Toast
-import com.ssk.wanandroid.AppContext
+import com.ssk.wanandroid.app.AppContext
+import com.ssk.wanandroid.app.WanAndroid
 
 /**
  * Created by shisenkun on 2019-06-17.

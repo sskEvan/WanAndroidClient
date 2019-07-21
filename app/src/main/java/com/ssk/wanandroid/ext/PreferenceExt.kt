@@ -1,7 +1,6 @@
 package com.ssk.wanandroid.ext
 
 import android.content.Context
-import com.ssk.wanandroid.AppContext
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 

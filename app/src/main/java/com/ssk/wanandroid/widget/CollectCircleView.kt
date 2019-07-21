@@ -42,7 +42,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs
         super.onSizeChanged(w, h, oldw, oldh)
         mMaxCircleSize = w / 2
         mTempBitmap = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888)
-        mTempCanvas = Canvas(mTempBitmap)
+        mTempCanvas = Canvas(mTempBitmap!!)
     }
 
     override fun onDraw(canvas: Canvas) {

@@ -10,11 +10,10 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.ssk.wanandroid.LoginActivity
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.BaseFragment
 import com.ssk.wanandroid.dialog.CommonConfirmDialog
 import com.ssk.wanandroid.ext.showToast
-import com.ssk.wanandroid.service.AccountManager
-import com.ssk.wanandroid.utils.AppUtils
 import com.ssk.wanandroid.utils.BlurTransformation
 import com.ssk.wanandroid.utils.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_mine.*
@@ -45,7 +44,7 @@ class MineFragment : BaseFragment() {
             mIvHeadPortraitBgOriginalHeight = ivHeadPortraitBg.height
         }
 
-        nsvRoot.setOnTouchListener { v, event ->
+        nsvRoot.setOnTouchListener { _, event ->
             event?.let {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -92,7 +91,7 @@ class MineFragment : BaseFragment() {
 
         srlAppInfo.setOnClickListener {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.parse("package:" + AppUtils.appPackage)
+            val uri = Uri.parse("package:" + WanAndroid.appPackage)
             intent.data = uri
             startActivity(intent)
         }
@@ -106,7 +105,7 @@ class MineFragment : BaseFragment() {
         btnLogout.setOnClickListener {
             CommonConfirmDialog(mActivity, "您确定退出当前登陆?")
                 .setConfirmListener {
-                    AccountManager.logout()
+                    WanAndroid.logout()
                     updateAccountUi()
                 }
                 .show()
@@ -129,7 +128,7 @@ class MineFragment : BaseFragment() {
     }
 
     private fun updateAccountUi() {
-        if(AccountManager.currentUser != null) {
+        if(WanAndroid.currentUser != null) {
             Glide.with(mActivity)
                 .load(R.mipmap.ic_test_head_portrait)
                 .bitmapTransform(CropCircleTransformation(mActivity))
@@ -138,7 +137,7 @@ class MineFragment : BaseFragment() {
                 .load(R.mipmap.ic_test_head_portrait)
                 .bitmapTransform(BlurTransformation(mActivity))
                 .into(ivHeadPortraitBg)
-            tvUserName.text = AccountManager.currentUser!!.username
+            tvUserName.text = WanAndroid.currentUser!!.username
             btnLogout.visibility = View.VISIBLE
         }else {
             ivHeadPortrait.setImageResource(R.mipmap.ic_head_portrait_default)
@@ -160,7 +159,7 @@ class MineFragment : BaseFragment() {
     }
 
     private fun onUserClick() {
-        if (AccountManager.currentUser == null) {
+        if (WanAndroid.currentUser == null) {
             startActivity(LoginActivity::class.java, false)
             mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
         }

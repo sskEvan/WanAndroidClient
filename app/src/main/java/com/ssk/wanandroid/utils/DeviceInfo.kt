@@ -21,9 +21,8 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.view.ViewConfiguration
 import android.view.WindowManager
-
-import com.ssk.wanandroid.App
-import com.ssk.wanandroid.AppContext
+import com.ssk.wanandroid.app.AppContext
+import com.ssk.wanandroid.app.WanAndroid
 
 /**
  * 提供所有与设备相关的信息。

@@ -20,7 +20,7 @@ class ClickableImageView
     AppCompatImageView(context, attrs) {
 
     override fun setOnClickListener(l: OnClickListener?) {
-        setOnTouchListener { v, event ->
+        setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     setFilter()

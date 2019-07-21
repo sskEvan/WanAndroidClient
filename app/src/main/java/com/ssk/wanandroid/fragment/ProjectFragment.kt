@@ -13,6 +13,7 @@ import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
 import com.ssk.wanandroid.adapter.ProjectTagPagerAdapter
+import com.ssk.wanandroid.ext.fromHtml
 import com.ssk.wanandroid.viewmodel.ProjectViewModel
 import kotlinx.android.synthetic.main.fragment_project.*
 import kotlinx.android.synthetic.main.fragment_project.switchableConstraintLayout
@@ -81,7 +82,7 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
         tabLayout.setupWithViewPager(viewPager)
         mPagerAdapter = ProjectTagPagerAdapter(childFragmentManager)
         projectTagVoList.forEach {
-            mPagerAdapter.addFragment(ProjectDetailFragment.create(it.id), Html.fromHtml(it.name).toString())
+            mPagerAdapter.addFragment(ProjectDetailFragment.create(it.id), it.name.fromHtml())
         }
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {

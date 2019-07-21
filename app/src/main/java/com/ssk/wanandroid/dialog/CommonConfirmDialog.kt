@@ -17,7 +17,7 @@ class CommonConfirmDialog(context: Context, val message: String) : BaseDialog(co
     override fun initView() {
         super.initView()
 
-        window.setBackgroundDrawable(ColorDrawable())
+        window?.setBackgroundDrawable(ColorDrawable())
         tvMessage.text = message
 
         tvCancel.setOnClickListener {

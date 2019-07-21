@@ -21,6 +21,7 @@ import com.ssk.wanandroid.adapter.ArticleAdapter
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleListVo
 import com.ssk.wanandroid.bean.HotSearchVo
+import com.ssk.wanandroid.ext.fromHtml
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.TransitionUtils
@@ -163,7 +164,7 @@ class SearchActivity : WanActivity<SearchViewModel>() {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(Html.fromHtml(mArticleAdapter.data[position].title).toString(), mArticleAdapter.data[position].link)
+                        forwardWanWebActivity(mArticleAdapter.data[position].title.fromHtml(), mArticleAdapter.data[position].link)
                     }
                 }
             }

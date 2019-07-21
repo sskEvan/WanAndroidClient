@@ -4,12 +4,9 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
-import com.google.gson.Gson
+import com.ssk.wanandroid.app.App
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.BaseActivity
-import com.ssk.wanandroid.bean.UserVo
-import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.utils.RevealActivityAnimation
 import kotlinx.android.synthetic.main.activity_splash.*
 
@@ -28,7 +25,7 @@ class SplashActivity : BaseActivity() {
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
 
-        App.uiHandler.postDelayed({ forwardMainActivity() }, 1500L)
+        WanAndroid.uiHandler.postDelayed({ forwardMainActivity() }, 1500L)
     }
 
     fun forwardMainActivity() {
@@ -54,7 +51,7 @@ class SplashActivity : BaseActivity() {
             })
             .start()
 
-        App.uiHandler.postDelayed({ finish() }, 2000)
+        WanAndroid.uiHandler.postDelayed({ finish() }, 2500)
     }
 
 }

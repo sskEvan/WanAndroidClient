@@ -17,7 +17,6 @@ class KnowledgeSubTabAdapter(data: List<KnowledgeTabVo>) : BaseQuickAdapter<Know
     }
 
     init {
-        val size = data.size
         multiTypeDelegate = object : MultiTypeDelegate<KnowledgeTabVo>() {
             override fun getItemType(t: KnowledgeTabVo?): Int {
                 if (t?.children?.size == 0) return TYPE_SUB_TAB

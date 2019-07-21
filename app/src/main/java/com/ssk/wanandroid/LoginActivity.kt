@@ -6,9 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
+import com.ssk.wanandroid.app.App
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.ext.showToast
-import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -31,8 +32,8 @@ class LoginActivity : WanActivity<LoginViewModel>() {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        etUsername.setText(AccountManager.username)
-        etPassword.setText(AccountManager.password)
+        etUsername.setText(WanAndroid.username)
+        etPassword.setText(WanAndroid.password)
         btnLogin.setOnClickListener {
             login()
         }
@@ -48,7 +49,7 @@ class LoginActivity : WanActivity<LoginViewModel>() {
 
             R.id.menu_item_regist -> {
                 startActivity(RegistActivity::class.java)
-                App.uiHandler.postDelayed({finish()}, 300)
+                WanAndroid.uiHandler.postDelayed({finish()}, 300)
             }
         }
         return true
@@ -66,8 +67,8 @@ class LoginActivity : WanActivity<LoginViewModel>() {
         super.startObserve()
         mViewModel.apply {
             mLoginUser.observe(this@LoginActivity, Observer {
-                AccountManager.currentUser = it
-                AccountManager.currentUserJson = Gson().toJson(it)
+                WanAndroid.currentUser = it
+                WanAndroid.currentUserJson = Gson().toJson(it)
                 dismissLoadingDialogSuccess("登陆成功")
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {
@@ -102,8 +103,8 @@ class LoginActivity : WanActivity<LoginViewModel>() {
             showToast("请输入密码")
             return false
         }
-        AccountManager.username = userName
-        AccountManager.password = passWord
+        WanAndroid.username = userName
+        WanAndroid.password = passWord
 
         return true
     }

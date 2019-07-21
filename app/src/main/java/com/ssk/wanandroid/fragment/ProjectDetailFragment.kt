@@ -172,7 +172,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     }
 
     private fun setProjectList(projectListVo: ArticleListVo) {
-        if(projectListVo.datas == null || projectListVo.datas.size == 0) {
+        if(projectListVo.datas.size == 0) {
             switchableConstraintLayout.switchEmptyLayout()
         }else {
             mProjectAdapter.run {

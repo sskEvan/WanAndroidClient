@@ -1,6 +1,7 @@
 package com.ssk.wanandroid.utils
 
-import com.ssk.wanandroid.AppContext
+import com.ssk.wanandroid.app.AppContext
+import com.ssk.wanandroid.app.WanAndroid
 
 /**
  * Created by shisenkun on 2019-06-21.

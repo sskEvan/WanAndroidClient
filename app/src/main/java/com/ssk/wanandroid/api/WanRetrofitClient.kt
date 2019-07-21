@@ -3,7 +3,8 @@ package com.ssk.wanandroid.api
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.ssk.wanandroid.AppContext
+import com.ssk.wanandroid.app.AppContext
+import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.utils.NetWorkUtils
 import okhttp3.Cache
 import okhttp3.OkHttpClient

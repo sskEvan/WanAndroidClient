@@ -39,7 +39,7 @@ open class BaseRepository {
     }
 
     fun <T> handleCallException(e: Exception): BaseResponse<T> {
-        var exceptionResponse: BaseResponse<T>? = null
+        var exceptionResponse: BaseResponse<T>?
         when (e) {
             is JSONException,
             is JsonParseException,

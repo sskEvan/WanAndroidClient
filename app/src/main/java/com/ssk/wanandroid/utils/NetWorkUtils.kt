@@ -9,6 +9,7 @@ import android.net.ConnectivityManager
 class NetWorkUtils {
 
     companion object {
+        @Suppress("DEPRECATION")
         fun isNetworkAvailable(context: Context): Boolean {
             val manager = context.applicationContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE) as ConnectivityManager

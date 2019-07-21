@@ -20,7 +20,6 @@ import com.ssk.wanandroid.bean.ArticleListVo
 import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.adapter.ArticleAdapter
 import com.ssk.wanandroid.ext.showToast
-import com.ssk.wanandroid.service.AccountManager
 import com.ssk.wanandroid.utils.AndroidVersion
 import com.ssk.wanandroid.utils.BannerGlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
@@ -32,6 +31,7 @@ import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.widget.TextView
 import android.graphics.Color
+import com.ssk.wanandroid.app.WanAndroid
 
 
 /**
@@ -158,7 +158,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                         forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link)
                     }
                     R.id.collectButton -> {
-                        if(AccountManager.currentUser != null) {
+                        if(WanAndroid.currentUser != null) {
                             mCollectPosition = position
                             if(mArticleAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
