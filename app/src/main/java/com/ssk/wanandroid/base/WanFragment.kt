@@ -48,8 +48,17 @@ abstract class WanFragment<VM: BaseViewModel> : Fragment() {
         EventManager.register(this)
     }
 
-    override fun onDestroyView() {
+    override fun onResume() {
+        super.onResume()
+        EventManager.register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
         EventManager.unregister(this)
+    }
+
+    override fun onDestroyView() {
         mViewModel.let { lifecycle.removeObserver(it) }
         super.onDestroyView()
     }

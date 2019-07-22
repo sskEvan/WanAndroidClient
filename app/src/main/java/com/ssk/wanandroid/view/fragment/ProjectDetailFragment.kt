@@ -10,6 +10,7 @@ import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ArticleVo
+import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
@@ -42,7 +43,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     private var mProjectId = 0
     private var mIsFabShown= false
     private var mIsFabUpward = true
-    private var mCollectPosition = 0
+    private var mPosition = 0
     private lateinit var commonListPager: CommonListPager<ArticleVo>
 
     override fun getLayoutResId() = R.layout.fragment_project_detail
@@ -111,13 +112,14 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
         mProjectAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+                mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mProjectAdapter.data[position].title, mProjectAdapter.data[position].link)
+                        forwardWanWebActivity(mProjectAdapter.data[position].title, mProjectAdapter.data[position].link,
+                            mProjectAdapter.data[position].id, mProjectAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
                         if(WanAndroid.currentUser != null) {
-                            mCollectPosition = position
                             if(mProjectAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
                                 mViewModel.unCollectArticle(mProjectAdapter.data[position].id)
@@ -165,22 +167,24 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
             mCollectArticleErrorMsg.observe(this@ProjectDetailFragment, Observer {
                 showSnackBar(it)
-                mProjectAdapter.data[mCollectPosition].collect = !mProjectAdapter.data[mCollectPosition].collect
-                mProjectAdapter.notifyItemChanged(mCollectPosition + 1)
+                mProjectAdapter.data[mPosition].collect = !mProjectAdapter.data[mPosition].collect
+                mProjectAdapter.notifyItemChanged(mPosition + 1)
             })
 
             mUnCollectArticleErrorMsg.observe(this@ProjectDetailFragment, Observer {
                 showSnackBar(it)
-                mProjectAdapter.data[mCollectPosition].collect = !mProjectAdapter.data[mCollectPosition].collect
-                mProjectAdapter.notifyItemChanged(mCollectPosition + 1)
+                mProjectAdapter.data[mPosition].collect = !mProjectAdapter.data[mPosition].collect
+                mProjectAdapter.notifyItemChanged(mPosition + 1)
             })
         }
     }
 
-    private fun forwardWanWebActivity(title: String, url: String) {
+    private fun forwardWanWebActivity(title: String, url: String, id: Int, isCollected: Boolean) {
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
+        bundle.putInt("id", id)
+        bundle.putBoolean("isCollected", isCollected)
         startActivity(WanWebActivity::class.java, bundle, true)
     }
 
@@ -191,6 +195,16 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         }else {
             commonListPager.getRecyclerView().smoothScrollToPosition(mProjectAdapter.data.size)
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: OnCollectChangedEvent) {
+        if(event.isCollected != mProjectAdapter.data[mPosition].collect) {
+            mProjectAdapter.data[mPosition].collect = event.isCollected
+            mProjectAdapter.notifyItemChanged(mPosition)
+        }
+
+        EventManager.removeStickyEvent(event)
     }
 
 }

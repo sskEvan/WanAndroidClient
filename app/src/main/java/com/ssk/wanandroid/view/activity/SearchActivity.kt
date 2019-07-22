@@ -18,9 +18,11 @@ import com.ssk.wanandroid.view.adapter.ArticleAdapter
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.bean.HotSearchVo
+import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.ext.fromHtml
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.AndroidVersion
+import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.util.TransitionUtil
 import com.ssk.wanandroid.viewmodel.SearchViewModel
 import com.ssk.wanandroid.widget.CollectButton
@@ -28,6 +30,8 @@ import com.ssk.wanandroid.widget.CommonListPager
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import kotlinx.android.synthetic.main.activity_search.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * Created by shisenkun on 2019-06-22.
@@ -38,7 +42,7 @@ class SearchActivity : WanActivity<SearchViewModel>() {
     private var mSearchKey: String? = null
     private lateinit var etSearch: EditText
     private lateinit var commonListPager: CommonListPager<ArticleVo>
-    private var mCollectPosition = 0
+    private var mPosition = 0
 
     override fun getLayoutId() = R.layout.activity_search
 
@@ -81,14 +85,14 @@ class SearchActivity : WanActivity<SearchViewModel>() {
 
             mCollectArticleErrorMsg.observe(this@SearchActivity, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
-                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
+                mArticleAdapter.notifyItemChanged(mPosition + 1)
             })
 
             mUnCollectArticleErrorMsg.observe(this@SearchActivity, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
-                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
+                mArticleAdapter.notifyItemChanged(mPosition + 1)
             })
         }
     }
@@ -155,13 +159,15 @@ class SearchActivity : WanActivity<SearchViewModel>() {
 
         mArticleAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+                mPosition = position
+
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mArticleAdapter.data[position].title.fromHtml(), mArticleAdapter.data[position].link)
+                        forwardWanWebActivity(mArticleAdapter.data[position].title.fromHtml(), mArticleAdapter.data[position].link,
+                            mArticleAdapter.data[position].id, mArticleAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
                         if(WanAndroid.currentUser != null) {
-                            mCollectPosition = position
                             if(mArticleAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
                                 mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
@@ -215,10 +221,12 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         }
     }
 
-    private fun forwardWanWebActivity(title: String, url: String) {
+    private fun forwardWanWebActivity(title: String, url: String, id: Int, isCollected: Boolean) {
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
+        bundle.putInt("id", id)
+        bundle.putBoolean("isCollected", isCollected)
         startActivity(WanWebActivity::class.java, bundle)
     }
 
@@ -244,6 +252,16 @@ class SearchActivity : WanActivity<SearchViewModel>() {
     private fun hideKeyboard() {
         searchView.clearFocus()
         hideSoftKeyboard()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: OnCollectChangedEvent) {
+        if(event.isCollected != mArticleAdapter.data[mPosition].collect) {
+            mArticleAdapter.data[mPosition].collect = event.isCollected
+            mArticleAdapter.notifyItemChanged(mPosition)
+        }
+
+        EventManager.removeStickyEvent(event)
     }
 
 }

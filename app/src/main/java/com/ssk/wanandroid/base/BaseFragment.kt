@@ -41,9 +41,14 @@ abstract class BaseFragment : Fragment() {
         EventManager.register(this)
     }
 
-    override fun onDestroyView() {
+    override fun onResume() {
+        super.onResume()
+        EventManager.register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
         EventManager.unregister(this)
-        super.onDestroyView()
     }
 
     open fun initView(savedInstanceState: Bundle?) {}

@@ -8,10 +8,14 @@ import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.view.adapter.KnowledgeAdapter
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
+import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.ext.showToast
+import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.viewmodel.KnowledgeDetailViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonListPager
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * Created by shisenkun on 2019-07-08.
@@ -21,7 +25,7 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
     override fun getLayoutId(): Int = R.layout.activity_knowledge_detail
     private val mKnowledgeAdapter by lazy { KnowledgeAdapter() }
     private lateinit var commonListPager: CommonListPager<ArticleVo>
-    private var mCollectPosition = 0
+    private var mPosition = 0
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -51,13 +55,14 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
         mKnowledgeAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+                mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mKnowledgeAdapter.data[position].title, mKnowledgeAdapter.data[position].link)
+                        forwardWanWebActivity(mKnowledgeAdapter.data[position].title, mKnowledgeAdapter.data[position].link,
+                           mKnowledgeAdapter.data[position].id,  mKnowledgeAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
                         if(WanAndroid.currentUser != null) {
-                            mCollectPosition = position
                             if(mKnowledgeAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
                                 mViewModel.unCollectArticle(mKnowledgeAdapter.data[position].id)
@@ -77,10 +82,12 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
         }
     }
 
-    private fun forwardWanWebActivity(title: String, url: String) {
+    private fun forwardWanWebActivity(title: String, url: String, id: Int, isCollected: Boolean) {
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
+        bundle.putInt("id", id)
+        bundle.putBoolean("isCollected", isCollected)
         startActivity(WanWebActivity::class.java, bundle)
     }
 
@@ -117,16 +124,26 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
             mCollectArticleErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
                 showSnackBar(it)
-                mKnowledgeAdapter.data[mCollectPosition].collect = !mKnowledgeAdapter.data[mCollectPosition].collect
-                mKnowledgeAdapter.notifyItemChanged(mCollectPosition + 1)
+                mKnowledgeAdapter.data[mPosition].collect = !mKnowledgeAdapter.data[mPosition].collect
+                mKnowledgeAdapter.notifyItemChanged(mPosition + 1)
             })
 
             mUnCollectArticleErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
                 showSnackBar(it)
-                mKnowledgeAdapter.data[mCollectPosition].collect = !mKnowledgeAdapter.data[mCollectPosition].collect
-                mKnowledgeAdapter.notifyItemChanged(mCollectPosition + 1)
+                mKnowledgeAdapter.data[mPosition].collect = !mKnowledgeAdapter.data[mPosition].collect
+                mKnowledgeAdapter.notifyItemChanged(mPosition + 1)
             })
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: OnCollectChangedEvent) {
+        if(event.isCollected != mKnowledgeAdapter.data[mPosition].collect) {
+            mKnowledgeAdapter.data[mPosition].collect = event.isCollected
+            mKnowledgeAdapter.notifyItemChanged(mPosition)
+        }
+
+        EventManager.removeStickyEvent(event)
     }
 
 }

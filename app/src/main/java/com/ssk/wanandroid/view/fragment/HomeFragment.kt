@@ -20,10 +20,13 @@ import com.ssk.wanandroid.viewmodel.HomeViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
-import kotlinx.android.synthetic.main.fragment_home.*
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.bean.ArticleVo
+import com.ssk.wanandroid.event.OnCollectChangedEvent
+import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.widget.CommonListPager
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -42,7 +45,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     private val mBannerUrls = mutableListOf<String>()
 
     private val mArticleAdapter by lazy { ArticleAdapter() }
-    private var mCollectPosition = 0
+    private var mPosition = 0
 
     private var bannerLayout: Banner? = null
     private lateinit var commonListPager: CommonListPager<ArticleVo>
@@ -92,7 +95,8 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             setBannerStyle(BannerConfig.NUM_INDICATOR)
             setImageLoader(BannerGlideImageLoader())
             setOnBannerListener {
-                forwardWanWebActivity(mBannerTitles[it], mBannerUrls[it])
+                forwardWanWebActivity(mBannerTitles[it], mBannerUrls[it],
+                    mArticleAdapter.data[it].id, mArticleAdapter.data[it].collect)
             }
         }
 
@@ -115,13 +119,14 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         mArticleAdapter.run {
             addHeaderView(headerLayout)
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener{_, view, position ->
+                mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link)
+                        forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link,
+                            mArticleAdapter.data[position].id, mArticleAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
                         if(WanAndroid.currentUser != null) {
-                            mCollectPosition = position
                             if(mArticleAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
                                 mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
@@ -185,14 +190,14 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
             mCollectArticleErrorMsg.observe(this@HomeFragment, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
-                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
+                mArticleAdapter.notifyItemChanged(mPosition + 1)
             })
 
             mUnCollectArticleErrorMsg.observe(this@HomeFragment, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mCollectPosition].collect = !mArticleAdapter.data[mCollectPosition].collect
-                mArticleAdapter.notifyItemChanged(mCollectPosition + 1)
+                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
+                mArticleAdapter.notifyItemChanged(mPosition + 1)
             })
         }
     }
@@ -208,11 +213,23 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         bannerLayout!!.setImages(mBannerImages).setDelayTime(3000).start()
     }
 
-    private fun forwardWanWebActivity(title: String, url: String) {
+    private fun forwardWanWebActivity(title: String, url: String, id: Int, isCollected: Boolean) {
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
+        bundle.putInt("id", id)
+        bundle.putBoolean("isCollected", isCollected)
         startActivity(WanWebActivity::class.java, bundle, true)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: OnCollectChangedEvent) {
+        if(event.isCollected != mArticleAdapter.data[mPosition].collect) {
+            mArticleAdapter.data[mPosition].collect = event.isCollected
+            mArticleAdapter.notifyItemChanged(mPosition + 1)
+        }
+
+        EventManager.removeStickyEvent(event)
     }
 
 }
