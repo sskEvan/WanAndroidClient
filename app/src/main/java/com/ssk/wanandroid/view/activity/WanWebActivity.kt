@@ -103,14 +103,14 @@ class WanWebActivity : WanActivity<WanWebViewModel>() {
                 showSnackBar("收藏成功!")
                 mIsCollected = true
                 mItemCollect!!.setTitle("取消收藏")
-                EventManager.post(OnCollectChangedEvent(true))
+                EventManager.postSticky(OnCollectChangedEvent(true, mId))
             })
 
             mUnCollectArticleSuccess.observe(this@WanWebActivity, Observer {
                 showSnackBar("取消收藏成功!")
                 mIsCollected = false
                 mItemCollect!!.setTitle("收藏")
-                EventManager.post(OnCollectChangedEvent(false))
+                EventManager.postSticky(OnCollectChangedEvent(false, mId))
             })
 
             mCollectArticleErrorMsg.observe(this@WanWebActivity, Observer {

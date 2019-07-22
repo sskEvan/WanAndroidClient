@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.widget.CircleTextImageView
+import com.ssk.wanandroid.widget.CollectButton
 
 /**
  * Created by shisenkun on 2019-06-25.
@@ -30,6 +31,7 @@ class KnowledgeAdapter(layoutResId: Int = R.layout.item_knowledge) : BaseQuickAd
             .addOnClickListener(R.id.collectButton)
             .addOnClickListener(R.id.cvItemRoot)
 
+        helper.getView<CollectButton>(R.id.collectButton).setChecked(item.collect)
         helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)
     }
 }

@@ -41,7 +41,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
     private val mProjectAdapter by lazy { ProjectAdapter() }
     private var mProjectId = 0
-    private var mIsFabShown= false
+    private var mIsFabShown = false
     private var mIsFabUpward = true
     private var mPosition = 0
     private lateinit var commonListPager: CommonListPager<ArticleVo>
@@ -77,29 +77,31 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                 @SuppressLint("RestrictedApi")
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    val firstCompletelyVisibleIndex = commonListPager.getLayoutManager().findFirstCompletelyVisibleItemPosition()
+                    val firstCompletelyVisibleIndex =
+                        commonListPager.getLayoutManager().findFirstCompletelyVisibleItemPosition()
                     if (firstCompletelyVisibleIndex == 0) {
-                        if(mIsFabShown) {
+                        if (mIsFabShown) {
                             mIsFabShown = false
                             EventManager.post(OnProjectFragmentFabVisiableControlEvent(false))
                         }
                     } else {
-                        if(!mIsFabShown) {
+                        if (!mIsFabShown) {
                             mIsFabShown = true
                             EventManager.post(OnProjectFragmentFabVisiableControlEvent(true))
                         }
 
-                        val lastCompletelyVisibleIndex = commonListPager.getLayoutManager().findLastCompletelyVisibleItemPosition()
+                        val lastCompletelyVisibleIndex =
+                            commonListPager.getLayoutManager().findLastCompletelyVisibleItemPosition()
                         if (dy > 0) {  //向上滑动
                             if (firstCompletelyVisibleIndex > 0) {
-                                if(mIsFabUpward) {
+                                if (mIsFabUpward) {
                                     mIsFabUpward = false
                                     EventManager.post(OnProjectFragmentFabUpwardControlEvent(false))
                                 }
                             }
                         } else if (dy < 0) { //向下滑动
                             if (lastCompletelyVisibleIndex < adapter!!.itemCount) {
-                                if(!mIsFabUpward) {
+                                if (!mIsFabUpward) {
                                     mIsFabUpward = true
                                     EventManager.post(OnProjectFragmentFabUpwardControlEvent(true))
                                 }
@@ -115,20 +117,22 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                 mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mProjectAdapter.data[position].title, mProjectAdapter.data[position].link,
-                            mProjectAdapter.data[position].id, mProjectAdapter.data[position].collect)
+                        forwardWanWebActivity(
+                            mProjectAdapter.data[position].title, mProjectAdapter.data[position].link,
+                            mProjectAdapter.data[position].id, mProjectAdapter.data[position].collect
+                        )
                     }
                     R.id.collectButton -> {
-                        if(WanAndroid.currentUser != null) {
-                            if(mProjectAdapter.data[position].collect) {
+                        if (WanAndroid.currentUser != null) {
+                            if (mProjectAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
                                 mViewModel.unCollectArticle(mProjectAdapter.data[position].id)
-                            }else {
+                            } else {
                                 (view as CollectButton).startCollectAnim()
                                 mViewModel.collectArticle(mProjectAdapter.data[position].id)
                             }
                             mProjectAdapter.data[position].collect = !mProjectAdapter.data[position].collect
-                        }else {
+                        } else {
                             showToast("请先登陆!")
                             startActivity(LoginActivity::class.java, false)
                             mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
@@ -190,21 +194,20 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnProjectFragmentFabClickResponseEvent) {
-        if(event.isUpward) {
+        if (event.isUpward) {
             commonListPager.getRecyclerView().smoothScrollToPosition(0)
-        }else {
+        } else {
             commonListPager.getRecyclerView().smoothScrollToPosition(mProjectAdapter.data.size)
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onEvent(event: OnCollectChangedEvent) {
-        if(event.isCollected != mProjectAdapter.data[mPosition].collect) {
+        if (event.id == mProjectAdapter.data[mPosition].id) {
             mProjectAdapter.data[mPosition].collect = event.isCollected
             mProjectAdapter.notifyItemChanged(mPosition)
+            EventManager.removeStickyEvent(event)
         }
-
-        EventManager.removeStickyEvent(event)
     }
 
 }

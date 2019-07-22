@@ -7,6 +7,7 @@ import com.ssk.wanandroid.R
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.widget.CircleTextImageView
 import com.ssk.wanandroid.ext.fromHtml
+import com.ssk.wanandroid.widget.CollectButton
 
 /**
  * Created by shisenkun on 2019-06-25.
@@ -22,7 +23,7 @@ class ProjectAdapter(layoutResId: Int = R.layout.item_project) : BaseQuickAdapte
             .addOnClickListener(R.id.cvItemRoot)
             .addOnClickListener(R.id.collectButton)
 
-
+        helper.getView<CollectButton>(R.id.collectButton).setChecked(item.collect)
         Glide.with(mContext).load(item.envelopePic).placeholder(R.mipmap.ic_project_default).into(helper.getView(R.id.imgProject))
         helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)
     }

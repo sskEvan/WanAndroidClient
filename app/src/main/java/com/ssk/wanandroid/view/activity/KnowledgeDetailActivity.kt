@@ -58,20 +58,22 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
                 mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mKnowledgeAdapter.data[position].title, mKnowledgeAdapter.data[position].link,
-                           mKnowledgeAdapter.data[position].id,  mKnowledgeAdapter.data[position].collect)
+                        forwardWanWebActivity(
+                            mKnowledgeAdapter.data[position].title, mKnowledgeAdapter.data[position].link,
+                            mKnowledgeAdapter.data[position].id, mKnowledgeAdapter.data[position].collect
+                        )
                     }
                     R.id.collectButton -> {
-                        if(WanAndroid.currentUser != null) {
-                            if(mKnowledgeAdapter.data[position].collect) {
+                        if (WanAndroid.currentUser != null) {
+                            if (mKnowledgeAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
                                 mViewModel.unCollectArticle(mKnowledgeAdapter.data[position].id)
-                            }else {
+                            } else {
                                 (view as CollectButton).startCollectAnim()
                                 mViewModel.collectArticle(mKnowledgeAdapter.data[position].id)
                             }
                             mKnowledgeAdapter.data[position].collect = !mKnowledgeAdapter.data[position].collect
-                        }else {
+                        } else {
                             showToast("请先登陆!")
                             startActivity(LoginActivity::class.java)
                             overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
@@ -138,12 +140,11 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onEvent(event: OnCollectChangedEvent) {
-        if(event.isCollected != mKnowledgeAdapter.data[mPosition].collect) {
+        if (event.id == mKnowledgeAdapter.data[mPosition].id) {
             mKnowledgeAdapter.data[mPosition].collect = event.isCollected
             mKnowledgeAdapter.notifyItemChanged(mPosition)
+            EventManager.removeStickyEvent(event)
         }
-
-        EventManager.removeStickyEvent(event)
     }
 
 }

@@ -224,12 +224,11 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onEvent(event: OnCollectChangedEvent) {
-        if(event.isCollected != mArticleAdapter.data[mPosition].collect) {
+        if(event.id == mArticleAdapter.data[mPosition].id) {
             mArticleAdapter.data[mPosition].collect = event.isCollected
             mArticleAdapter.notifyItemChanged(mPosition + 1)
+            EventManager.removeStickyEvent(event)
         }
-
-        EventManager.removeStickyEvent(event)
     }
 
 }
