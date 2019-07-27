@@ -5,12 +5,11 @@ import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
-import com.ssk.wanandroid.view.adapter.KnowledgeAdapter
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.ext.showToast
-import com.ssk.wanandroid.util.EventManager
+import com.ssk.wanandroid.view.adapter.ArticleAdapter
 import com.ssk.wanandroid.viewmodel.KnowledgeDetailViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonListPager
@@ -23,7 +22,7 @@ import org.greenrobot.eventbus.ThreadMode
 class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
     override fun getLayoutId(): Int = R.layout.activity_knowledge_detail
-    private val mKnowledgeAdapter by lazy { KnowledgeAdapter() }
+    private val mAdapter by lazy { ArticleAdapter() }
     private lateinit var commonListPager: CommonListPager<ArticleVo>
     private var mPosition = 0
 
@@ -37,7 +36,7 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
     fun setupCommonListPager() {
         commonListPager = findViewById(R.id.commonListPager)
-        commonListPager.setAdapter(mKnowledgeAdapter)
+        commonListPager.setAdapter(mAdapter)
 
         commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
             override fun retry() {
@@ -53,26 +52,26 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
             }
         }
 
-        mKnowledgeAdapter.run {
+        mAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                 mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(
-                            mKnowledgeAdapter.data[position].title, mKnowledgeAdapter.data[position].link,
-                            mKnowledgeAdapter.data[position].id, mKnowledgeAdapter.data[position].collect
+                            mAdapter.data[position].title, mAdapter.data[position].link,
+                            mAdapter.data[position].id, mAdapter.data[position].collect
                         )
                     }
                     R.id.collectButton -> {
                         if (WanAndroid.currentUser != null) {
-                            if (mKnowledgeAdapter.data[position].collect) {
+                            if (mAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
-                                mViewModel.unCollectArticle(mKnowledgeAdapter.data[position].id)
+                                mViewModel.unCollectArticle(mAdapter.data[position].id)
                             } else {
                                 (view as CollectButton).startCollectAnim()
-                                mViewModel.collectArticle(mKnowledgeAdapter.data[position].id)
+                                mViewModel.collectArticle(mAdapter.data[position].id)
                             }
-                            mKnowledgeAdapter.data[position].collect = !mKnowledgeAdapter.data[position].collect
+                            mAdapter.data[position].collect = !mAdapter.data[position].collect
                         } else {
                             showToast("请先登陆!")
                             startActivity(LoginActivity::class.java)
@@ -126,23 +125,23 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
             mCollectArticleErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
                 showSnackBar(it)
-                mKnowledgeAdapter.data[mPosition].collect = !mKnowledgeAdapter.data[mPosition].collect
-                mKnowledgeAdapter.notifyItemChanged(mPosition + 1)
+                mAdapter.data[mPosition].collect = !mAdapter.data[mPosition].collect
+                mAdapter.notifyItemChanged(mPosition + 1)
             })
 
             mUnCollectArticleErrorMsg.observe(this@KnowledgeDetailActivity, Observer {
                 showSnackBar(it)
-                mKnowledgeAdapter.data[mPosition].collect = !mKnowledgeAdapter.data[mPosition].collect
-                mKnowledgeAdapter.notifyItemChanged(mPosition + 1)
+                mAdapter.data[mPosition].collect = !mAdapter.data[mPosition].collect
+                mAdapter.notifyItemChanged(mPosition + 1)
             })
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
-        if (event.id == mKnowledgeAdapter.data[mPosition].id) {
-            mKnowledgeAdapter.data[mPosition].collect = event.isCollected
-            mKnowledgeAdapter.notifyItemChanged(mPosition)
+        if (event.id == mAdapter.data[mPosition].id) {
+            mAdapter.data[mPosition].collect = event.isCollected
+            mAdapter.notifyItemChanged(mPosition)
         }
     }
 

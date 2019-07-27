@@ -13,7 +13,7 @@ import com.ssk.wanandroid.widget.CollectButton
 /**
  * Created by shisenkun on 2019-07-27.
  */
-class CollectAdapter(data: List<ArticleVo>) : BaseQuickAdapter<ArticleVo, BaseViewHolder>(data) {
+class SearchAdapter(data: List<ArticleVo>) : BaseQuickAdapter<ArticleVo, BaseViewHolder>(data) {
 
     companion object {
         private const val TYPE_COMMON = 1
@@ -62,7 +62,8 @@ class CollectAdapter(data: List<ArticleVo>) : BaseQuickAdapter<ArticleVo, BaseVi
                     .addOnClickListener(R.id.collectButton)
 
                 helper.getView<CollectButton>(R.id.collectButton).setChecked(item.collect)
-                Glide.with(mContext).load(item.envelopePic).placeholder(R.mipmap.ic_project_default).into(helper.getView(R.id.imgProject))
+                Glide.with(mContext).load(item.envelopePic).placeholder(R.mipmap.ic_project_default).into(helper.getView(
+                    R.id.imgProject))
                 helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)
             }
         }

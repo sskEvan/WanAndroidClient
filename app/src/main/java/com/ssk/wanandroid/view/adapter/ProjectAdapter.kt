@@ -17,7 +17,7 @@ class ProjectAdapter(layoutResId: Int = R.layout.item_project) : BaseQuickAdapte
     override fun convert(helper: BaseViewHolder, item: ArticleVo) {
 
         helper.setText(R.id.tvAuthor, item.author)
-            .setText(R.id.tvTitle, item.title)
+            .setText(R.id.tvTitle, item.title.fromHtml())
             .setText(R.id.tvDescription, item.desc.fromHtml())
             .setText(R.id.tvTime, item.niceDate)
             .addOnClickListener(R.id.cvItemRoot)

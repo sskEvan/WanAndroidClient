@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
-import com.ssk.wanandroid.view.adapter.ArticleAdapter
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.bean.HotSearchVo
@@ -22,8 +21,8 @@ import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.ext.fromHtml
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.AndroidVersion
-import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.util.TransitionUtil
+import com.ssk.wanandroid.view.adapter.SearchAdapter
 import com.ssk.wanandroid.viewmodel.SearchViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonListPager
@@ -38,7 +37,7 @@ import org.greenrobot.eventbus.ThreadMode
  */
 class SearchActivity : WanActivity<SearchViewModel>() {
 
-    private val mArticleAdapter by lazy { ArticleAdapter() }
+    private lateinit var mSearchAdapter: SearchAdapter
     private var mSearchKey: String? = null
     private lateinit var etSearch: EditText
     private lateinit var commonListPager: CommonListPager<ArticleVo>
@@ -85,14 +84,14 @@ class SearchActivity : WanActivity<SearchViewModel>() {
 
             mCollectArticleErrorMsg.observe(this@SearchActivity, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
-                mArticleAdapter.notifyItemChanged(mPosition + 1)
+                mSearchAdapter.data[mPosition].collect = !mSearchAdapter.data[mPosition].collect
+                mSearchAdapter.notifyItemChanged(mPosition + 1)
             })
 
             mUnCollectArticleErrorMsg.observe(this@SearchActivity, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
-                mArticleAdapter.notifyItemChanged(mPosition + 1)
+                mSearchAdapter.data[mPosition].collect = !mSearchAdapter.data[mPosition].collect
+                mSearchAdapter.notifyItemChanged(mPosition + 1)
             })
         }
     }
@@ -141,7 +140,8 @@ class SearchActivity : WanActivity<SearchViewModel>() {
     private fun setupCommonListPager() {
         commonListPager = findViewById(R.id.commonListPager)
 
-        commonListPager.setAdapter(mArticleAdapter)
+        mSearchAdapter = SearchAdapter(mutableListOf())
+        commonListPager.setAdapter(mSearchAdapter)
 
         commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
             override fun retry() {
@@ -157,25 +157,25 @@ class SearchActivity : WanActivity<SearchViewModel>() {
             }
         }
 
-        mArticleAdapter.run {
+        mSearchAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                 mPosition = position
 
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mArticleAdapter.data[position].title.fromHtml(), mArticleAdapter.data[position].link,
-                            mArticleAdapter.data[position].id, mArticleAdapter.data[position].collect)
+                        forwardWanWebActivity(mSearchAdapter.data[position].title.fromHtml(), mSearchAdapter.data[position].link,
+                            mSearchAdapter.data[position].id, mSearchAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
                         if(WanAndroid.currentUser != null) {
-                            if(mArticleAdapter.data[position].collect) {
+                            if(mSearchAdapter.data[position].collect) {
                                 (view as CollectButton).startUncollectAnim()
-                                mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
+                                mViewModel.unCollectArticle(mSearchAdapter.data[position].id)
                             }else {
                                 (view as CollectButton).startCollectAnim()
-                                mViewModel.collectArticle(mArticleAdapter.data[position].id)
+                                mViewModel.collectArticle(mSearchAdapter.data[position].id)
                             }
-                            mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
+                            mSearchAdapter.data[position].collect = !mSearchAdapter.data[position].collect
                         }else {
                             showToast("请先登陆!")
                             startActivity(LoginActivity::class.java)
@@ -256,9 +256,9 @@ class SearchActivity : WanActivity<SearchViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
-        if (event.id == mArticleAdapter.data[mPosition].id) {
-            mArticleAdapter.data[mPosition].collect = event.isCollected
-            mArticleAdapter.notifyItemChanged(mPosition)
+        if (event.id == mSearchAdapter.data[mPosition].id) {
+            mSearchAdapter.data[mPosition].collect = event.isCollected
+            mSearchAdapter.notifyItemChanged(mPosition)
         }
     }
 

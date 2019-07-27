@@ -147,10 +147,6 @@ constructor(context: Context, attrs: AttributeSet? = null) :
 
         mAdapter.addData(newData)
 
-        newData.forEach {
-            logDebug("new data item=" + it.toString())
-        }
-
         if(mAdapter.data.size == 0) {
             switchEmptyLayout()
         }

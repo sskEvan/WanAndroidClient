@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.util.MultiTypeDelegate
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.bean.KnowledgeTabVo
+import com.ssk.wanandroid.ext.fromHtml
 
 /**
  * Created by shisenkun on 2019-06-25.
@@ -31,10 +32,10 @@ class KnowledgeSubTabAdapter(data: List<KnowledgeTabVo>) : BaseQuickAdapter<Know
     override fun convert(helper: BaseViewHolder, item: KnowledgeTabVo) {
         when(helper.itemViewType) {
             TYPE_HEADER -> {
-                helper.setText(R.id.tvSubProjectHeader, item.name)
+                helper.setText(R.id.tvSubProjectHeader, item.name.fromHtml())
             }
             TYPE_SUB_TAB -> {
-                helper.setText(R.id.tvSubProject, item.name)
+                helper.setText(R.id.tvSubProject, item.name.fromHtml())
                     .addOnClickListener(R.id.clKnowledgeSubTag)
             }
         }

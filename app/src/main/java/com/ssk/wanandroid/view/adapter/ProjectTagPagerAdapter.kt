@@ -3,6 +3,7 @@ package com.ssk.wanandroid.view.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.ssk.wanandroid.ext.fromHtml
 import java.util.ArrayList
 
 /**
@@ -14,7 +15,7 @@ class ProjectTagPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm
 
     fun addFragment(fragment: Fragment, title: String) {
         mFragments.add(fragment)
-        mFragmentTitles.add(title)
+        mFragmentTitles.add(title.fromHtml())
     }
 
     override fun getItem(position: Int): Fragment {
