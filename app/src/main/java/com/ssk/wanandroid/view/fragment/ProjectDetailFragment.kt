@@ -42,6 +42,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     private var mIsFabShown = false
     private var mIsFabUpward = true
     private var mPosition = 0
+    private var mNoMoreData = false
     private lateinit var commonListPager: CommonListPager<ArticleVo>
 
     override fun getLayoutResId() = R.layout.fragment_project_detail
@@ -90,18 +91,22 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
                         val lastCompletelyVisibleIndex =
                             commonListPager.getLayoutManager().findLastCompletelyVisibleItemPosition()
-                        if (dy > 0) {  //向上滑动
-                            if (firstCompletelyVisibleIndex > 0) {
-                                if (mIsFabUpward) {
-                                    mIsFabUpward = false
-                                    EventManager.post(OnProjectFragmentFabUpwardControlEvent(false))
+                        if(lastCompletelyVisibleIndex == mProjectAdapter.data.size - 1 && mNoMoreData) {
+                            EventManager.post(OnProjectFragmentFabVisiableControlEvent(false))
+                        }else {
+                            if (dy > 0) {  //向上滑动
+                                if (firstCompletelyVisibleIndex > 0) {
+                                    if (mIsFabUpward) {
+                                        mIsFabUpward = false
+                                        EventManager.post(OnProjectFragmentFabUpwardControlEvent(false))
+                                    }
                                 }
-                            }
-                        } else if (dy < 0) { //向下滑动
-                            if (lastCompletelyVisibleIndex < adapter!!.itemCount) {
-                                if (!mIsFabUpward) {
-                                    mIsFabUpward = true
-                                    EventManager.post(OnProjectFragmentFabUpwardControlEvent(true))
+                            } else if (dy < 0) { //向下滑动
+                                if (lastCompletelyVisibleIndex < adapter!!.itemCount) {
+                                    if (!mIsFabUpward) {
+                                        mIsFabUpward = true
+                                        EventManager.post(OnProjectFragmentFabUpwardControlEvent(true))
+                                    }
                                 }
                             }
                         }
@@ -153,6 +158,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
             mProjectDetailList.observe(this@ProjectDetailFragment, Observer {
                 commonListPager.addData(it.datas)
                 commonListPager.setNoMoreData(it.over)
+                mNoMoreData = it.over
             })
 
             mFetchProjectDetailListErrorMsg.observe(this@ProjectDetailFragment, Observer {

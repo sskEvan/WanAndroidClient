@@ -31,6 +31,7 @@ constructor(context: Context, attrs: AttributeSet? = null) :
     private lateinit var mAdapter: BaseQuickAdapter<T, out BaseViewHolder>
     private var fab: FloatingActionButton
     private var mShowFab = true
+    private var mNoMoreData = false
 
     var commonListPagerListener: CommonListPagerListener? = null
 
@@ -65,18 +66,22 @@ constructor(context: Context, attrs: AttributeSet? = null) :
                                 fab.show()
                             }
                             val lastCompletelyVisibleIndex = rvLayoutManager.findLastCompletelyVisibleItemPosition()
-                            if (dy > 0) {  //向上滑动
-                                if (firstCompletelyVisibleIndex > 0) {
-                                    if (mIsFabUpward) {
-                                        mIsFabUpward = false
-                                        fab.animate().rotation(180f).start()  //箭头向下动画
+                            if(lastCompletelyVisibleIndex == mAdapter.data.size + mAdapter.headerLayoutCount - 1 && mNoMoreData) {
+                                fab.hide()
+                            }else {
+                                if (dy > 0) {  //向上滑动
+                                    if (firstCompletelyVisibleIndex > 0) {
+                                        if (mIsFabUpward) {
+                                            mIsFabUpward = false
+                                            fab.animate().rotation(180f).start()  //箭头向下动画
+                                        }
                                     }
-                                }
-                            } else if (dy < 0) { //向下滑动
-                                if (lastCompletelyVisibleIndex < mAdapter.itemCount) {
-                                    if (!mIsFabUpward) {
-                                        mIsFabUpward = true
-                                        fab.animate().rotation(0f).start()  //箭头向上动画
+                                } else if (dy < 0) { //向下滑动
+                                    if (lastCompletelyVisibleIndex < mAdapter.itemCount) {
+                                        if (!mIsFabUpward) {
+                                            mIsFabUpward = true
+                                            fab.animate().rotation(0f).start()  //箭头向上动画
+                                        }
                                     }
                                 }
                             }
@@ -156,7 +161,6 @@ constructor(context: Context, attrs: AttributeSet? = null) :
         }
     }
 
-
     fun fetchDataError(errorMessage: String) {
         if (!mIsRefreshing && !mIsLoadingMore) {
             switchFailedLayout(errorMessage)
@@ -173,7 +177,8 @@ constructor(context: Context, attrs: AttributeSet? = null) :
     }
 
     fun setNoMoreData(noMoreData: Boolean) {
-        smartRefreshLayout.setNoMoreData(noMoreData)
+        mNoMoreData = noMoreData
+        smartRefreshLayout.setNoMoreData(mNoMoreData)
     }
 
     fun showLoading() {
