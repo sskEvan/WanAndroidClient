@@ -7,10 +7,9 @@ import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
-import com.ssk.wanandroid.ext.logDebug
-import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.EventManager
-import com.ssk.wanandroid.view.adapter.ArticleAdapter
+import com.ssk.wanandroid.view.adapter.CollectAdapter
+import com.ssk.wanandroid.view.adapter.KnowledgeSubTabAdapter
 import com.ssk.wanandroid.viewmodel.MyCollectViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonListPager
@@ -23,7 +22,7 @@ import org.greenrobot.eventbus.ThreadMode
 class MyCollectActivity : WanActivity<MyCollectViewModel>() {
 
     private lateinit var commonListPager: CommonListPager<ArticleVo>
-    private val mArticleAdapter by lazy { ArticleAdapter() }
+    private lateinit var mCollectAdapter: CollectAdapter
     private var mPosition = 0
 
     override fun getLayoutId() = R.layout.activity_my_collect
@@ -55,21 +54,21 @@ class MyCollectActivity : WanActivity<MyCollectViewModel>() {
 
             mUnCollectArticleSuccess.observe(this@MyCollectActivity, Observer {
                 showSnackBar("取消收藏成功!")
-                EventManager.post(OnCollectChangedEvent(false, mArticleAdapter.data[mPosition].originId))
+                EventManager.post(OnCollectChangedEvent(false, mCollectAdapter.data[mPosition].originId))
             })
 
             mUnCollectArticleErrorMsg.observe(this@MyCollectActivity, Observer {
                 showSnackBar(it)
-                mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
-                mArticleAdapter.notifyItemChanged(mPosition)
+                mCollectAdapter.data[mPosition].collect = !mCollectAdapter.data[mPosition].collect
+                mCollectAdapter.notifyItemChanged(mPosition)
             })
         }
     }
 
     private fun setupCommonListPager() {
         commonListPager = findViewById(R.id.commonListPager)
-
-        commonListPager.setAdapter(mArticleAdapter)
+        mCollectAdapter = CollectAdapter(mutableListOf())
+        commonListPager.setAdapter(mCollectAdapter)
         commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
             override fun retry() {
                 mViewModel.fetchCollectArticleList(0)
@@ -84,18 +83,18 @@ class MyCollectActivity : WanActivity<MyCollectViewModel>() {
             }
         }
 
-        mArticleAdapter.run {
+        mCollectAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener{ _, view, position ->
                 mPosition = position
                 when (view.id) {
                     R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link,
-                            mArticleAdapter.data[position].originId, mArticleAdapter.data[position].collect)
+                        forwardWanWebActivity(mCollectAdapter.data[position].title, mCollectAdapter.data[position].link,
+                            mCollectAdapter.data[position].originId, mCollectAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
                         (view as CollectButton).startUncollectAnim()
-                        mViewModel.unCollectArticle(mArticleAdapter.data[position].originId)
-                        mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
+                        mViewModel.unCollectArticle(mCollectAdapter.data[position].originId)
+                        mCollectAdapter.data[position].collect = !mCollectAdapter.data[position].collect
                     }
                 }
             }
@@ -113,7 +112,7 @@ class MyCollectActivity : WanActivity<MyCollectViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
-        if(event.id == mArticleAdapter.data[mPosition].originId && !event.isCollected) {
+        if(event.id == mCollectAdapter.data[mPosition].originId && !event.isCollected) {
             commonListPager.removeItem(mPosition)
         }
     }

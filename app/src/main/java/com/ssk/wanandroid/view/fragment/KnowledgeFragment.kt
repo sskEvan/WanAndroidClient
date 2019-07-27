@@ -121,7 +121,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
             })
 
             mKnowledgeSubTabVoList.observe(this@KnowledgeFragment, Observer {
-                setKnowledgeSubTabs(it)
+                setupKnowledgeSubTabs(it)
             })
 
             mFetchKnowledgeTabListErrorMsg.observe(this@KnowledgeFragment, Observer {
@@ -189,7 +189,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
         }
     }
 
-    private fun setKnowledgeSubTabs(knowledgeSubTagVoList: List<KnowledgeTabVo>) {
+    private fun setupKnowledgeSubTabs(knowledgeSubTagVoList: List<KnowledgeTabVo>) {
         mKnowledgeSubTagVoList = knowledgeSubTagVoList
         mKnowledgeSubTabAdapter = KnowledgeSubTabAdapter(mKnowledgeSubTagVoList)
         mKnowledgeSubTabAdapter!!.onItemChildClickListener =

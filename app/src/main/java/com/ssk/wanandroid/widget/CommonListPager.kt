@@ -57,7 +57,6 @@ constructor(context: Context, attrs: AttributeSet? = null) :
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
                         val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
-                        logDebug("onScrolled firstCompletelyVisibleIndex=" + firstCompletelyVisibleIndex + ",fab.isShown=" + fab.isShown)
 
                         if (firstCompletelyVisibleIndex == 0 && fab.isShown) {
                             fab.hide()
@@ -147,6 +146,10 @@ constructor(context: Context, attrs: AttributeSet? = null) :
         }
 
         mAdapter.addData(newData)
+
+        newData.forEach {
+            logDebug("new data item=" + it.toString())
+        }
 
         if(mAdapter.data.size == 0) {
             switchEmptyLayout()

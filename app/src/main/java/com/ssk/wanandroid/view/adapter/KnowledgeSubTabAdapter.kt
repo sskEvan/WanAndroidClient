@@ -12,8 +12,8 @@ import com.ssk.wanandroid.bean.KnowledgeTabVo
 class KnowledgeSubTabAdapter(data: List<KnowledgeTabVo>) : BaseQuickAdapter<KnowledgeTabVo, BaseViewHolder>(data) {
 
     companion object {
-        const val TYPE_HEADER = 1
-        const val TYPE_SUB_TAB = 2
+        private const val TYPE_HEADER = 1
+        private const val TYPE_SUB_TAB = 2
     }
 
     init {
