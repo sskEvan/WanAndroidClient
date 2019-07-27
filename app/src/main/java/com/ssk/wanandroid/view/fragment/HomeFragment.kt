@@ -222,12 +222,14 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         startActivity(WanWebActivity::class.java, bundle, true)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
-        if(event.id == mArticleAdapter.data[mPosition].id) {
-            mArticleAdapter.data[mPosition].collect = event.isCollected
-            mArticleAdapter.notifyItemChanged(mPosition + 1)
-            EventManager.removeStickyEvent(event)
+        mArticleAdapter.data.forEach {
+            if(event.id == it.id) {
+                it.collect = event.isCollected
+                mArticleAdapter.notifyItemChanged(mArticleAdapter.data.indexOf(it) + 1)
+                return
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.ext.logDebug
 import kotlinx.android.synthetic.main.pager_common_list.view.*
 
 /**
@@ -54,11 +55,12 @@ constructor(context: Context, attrs: AttributeSet? = null) :
                     @SuppressLint("RestrictedApi")
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
-
                         val firstCompletelyVisibleIndex = rvLayoutManager.findFirstCompletelyVisibleItemPosition()
+                        logDebug("onScrolled firstCompletelyVisibleIndex=" + firstCompletelyVisibleIndex + ",fab.isShown=" + fab.isShown)
+
                         if (firstCompletelyVisibleIndex == 0 && fab.isShown) {
                             fab.hide()
-                        } else {
+                        } else if(firstCompletelyVisibleIndex > 0) {
                             if (!fab.isShown) {
                                 fab.show()
                             }
@@ -145,6 +147,15 @@ constructor(context: Context, attrs: AttributeSet? = null) :
             switchEmptyLayout()
         }
     }
+
+    fun removeItem(position: Int) {
+        mAdapter.data.removeAt(position)
+        mAdapter.notifyItemRemoved(position)
+        if(mAdapter.data.size == 0) {
+            switchEmptyLayout()
+        }
+    }
+
 
     fun fetchDataError(errorMessage: String) {
         if (!mIsRefreshing && !mIsLoadingMore) {

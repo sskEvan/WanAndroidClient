@@ -31,14 +31,9 @@ abstract class BaseActivity : AppCompatActivity() {
         EventManager.register(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        EventManager.register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
         EventManager.unregister(this)
+        super.onDestroy()
     }
 
     open fun initView(savedInstanceState: Bundle?) {}

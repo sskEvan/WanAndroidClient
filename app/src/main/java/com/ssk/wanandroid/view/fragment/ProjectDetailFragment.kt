@@ -30,12 +30,10 @@ import org.greenrobot.eventbus.ThreadMode
 class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
     companion object {
-        fun create(projectId: Int): ProjectDetailFragment {
-            val fragment = ProjectDetailFragment()
+        fun create(projectId: Int): ProjectDetailFragment = ProjectDetailFragment().apply {
             val bundle = Bundle()
             bundle.putInt("projectId", projectId)
-            fragment.arguments = bundle
-            return fragment
+            arguments = bundle
         }
     }
 
@@ -201,12 +199,14 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
-        if (event.id == mProjectAdapter.data[mPosition].id) {
-            mProjectAdapter.data[mPosition].collect = event.isCollected
-            mProjectAdapter.notifyItemChanged(mPosition)
-            EventManager.removeStickyEvent(event)
+        mProjectAdapter.data.forEach {
+            if(event.id == it.id) {
+                it.collect = event.isCollected
+                mProjectAdapter.notifyItemChanged(mProjectAdapter.data.indexOf(it))
+                return
+            }
         }
     }
 

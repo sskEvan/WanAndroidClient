@@ -24,7 +24,7 @@ open class BaseRepository {
         const val EXCEPTION_MSG_NOTWORK_ERROR = "网络错误,请检测网络连接"
         const val EXCEPTION_MSG_NOTWORK_POOR = "网络不给力,请检测网络连接"
         const val EXCEPTION_MSG_PARSE_ERROR = "解析错误"
-        const val EXCEPTION_MSG_UNKOWN_ERROR = "位置错误"
+        const val EXCEPTION_MSG_UNKOWN_ERROR = "未知错误"
     }
 
     suspend fun <T> apiCall(call: suspend () -> BaseResponse<T>): BaseResponse<T> {

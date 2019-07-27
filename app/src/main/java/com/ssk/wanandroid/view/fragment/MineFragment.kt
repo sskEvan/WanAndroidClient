@@ -17,6 +17,7 @@ import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.BlurTransformation
 import com.ssk.wanandroid.util.CropCircleTransformation
 import com.ssk.wanandroid.util.GlideCacheUtil
+import com.ssk.wanandroid.view.activity.MyCollectActivity
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 /**
@@ -86,7 +87,15 @@ class MineFragment : BaseFragment() {
 
         srlSchedule.setOnClickListener { showToast("日程安排") }
 
-        srlCollect.setOnClickListener { showToast("收藏") }
+        srlCollect.setOnClickListener {
+            if(WanAndroid.currentUser != null) {
+                startActivity(MyCollectActivity::class.java, true)
+            }else {
+                showToast("请先登陆!")
+                startActivity(LoginActivity::class.java, false)
+                mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+            }
+        }
 
         srlAbout.setOnClickListener { showToast("关于") }
 

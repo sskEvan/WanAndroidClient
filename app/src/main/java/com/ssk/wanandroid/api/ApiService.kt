@@ -53,4 +53,7 @@ interface ApiService {
     @POST("/lg/uncollect_originId/{id}/json")
     fun unCollectArticle(@Path("id") id: Int): Deferred<BaseResponse<ArticleListVo>>
 
+    @GET("/lg/collect/list/{page}/json")
+    fun getCollectedArticleList(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
+
 }

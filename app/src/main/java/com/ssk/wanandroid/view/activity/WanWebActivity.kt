@@ -12,7 +12,6 @@ import androidx.annotation.RequiresApi
 import com.ssk.wanandroid.R
 import kotlinx.android.synthetic.main.activity_web.*
 import android.net.Uri
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
@@ -103,14 +102,14 @@ class WanWebActivity : WanActivity<WanWebViewModel>() {
                 showSnackBar("收藏成功!")
                 mIsCollected = true
                 mItemCollect!!.setTitle("取消收藏")
-                EventManager.postSticky(OnCollectChangedEvent(true, mId))
+                EventManager.post(OnCollectChangedEvent(true, mId))
             })
 
             mUnCollectArticleSuccess.observe(this@WanWebActivity, Observer {
                 showSnackBar("取消收藏成功!")
                 mIsCollected = false
                 mItemCollect!!.setTitle("收藏")
-                EventManager.postSticky(OnCollectChangedEvent(false, mId))
+                EventManager.post(OnCollectChangedEvent(false, mId))
             })
 
             mCollectArticleErrorMsg.observe(this@WanWebActivity, Observer {

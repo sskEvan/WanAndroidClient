@@ -16,10 +16,18 @@ open class SwitchableConstraintLayout
 @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
 
+    companion object {
+        private const val STATUS_LOADING = 0
+        private const val STATUS_EMPTY = 1
+        private const val STATUS_SUCCESS = 2
+        private const val STATUS_FAILED = 3
+    }
+
     private val mLoadingLayoutResIdArray = intArrayOf(R.id.loadingView)
     private val mFailedLayoutResIdArray = intArrayOf(R.id.ivFailed, R.id.tvFailedMsg, R.id.btnRetry)
     private val mEmptyLayoutResIdArray = intArrayOf(R.id.ivEmpty, R.id.tvEmpty)
     private lateinit var mRetryListener: () -> Unit?
+    private var mStatus: Int = -1
 
     init {
         View.inflate(context, R.layout.layout_switchable_constraint_layout_root, this)
@@ -36,24 +44,34 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     fun switchSuccessLayout() {
-        loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
-            override fun onLoadingCancelAfterMinRotateDuration() {
-                super.onLoadingCancelAfterMinRotateDuration()
-                for (i in 0..childCount - 1) {
-                    if (getChildAt(i).id in mLoadingLayoutResIdArray) {
-                        getChildAt(i).visibility = View.INVISIBLE
-                    } else if (getChildAt(i).id in mFailedLayoutResIdArray) {
-                        getChildAt(i).visibility = View.INVISIBLE
-                    } else if (getChildAt(i).id in mEmptyLayoutResIdArray) {
-                        getChildAt(i).visibility = View.INVISIBLE
-                    } else {
-                        getChildAt(i).visibility = View.VISIBLE
+        if (mStatus != STATUS_SUCCESS) {
+            if (mStatus == STATUS_LOADING) {
+                loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
+                    override fun onLoadingCancelAfterMinRotateDuration() {
+                        super.onLoadingCancelAfterMinRotateDuration()
+                        showSuccessLayout()
                     }
                 }
+                loadingView.stopAnimAfterMinRotateDuration()
+            } else {
+                showSuccessLayout()
             }
         }
-        loadingView.stopAnimAfterMinRotateDuration()
+    }
 
+    private fun showSuccessLayout() {
+        mStatus = STATUS_SUCCESS
+        for (i in 0..childCount - 1) {
+            if (getChildAt(i).id in mLoadingLayoutResIdArray) {
+                getChildAt(i).visibility = View.INVISIBLE
+            } else if (getChildAt(i).id in mFailedLayoutResIdArray) {
+                getChildAt(i).visibility = View.INVISIBLE
+            } else if (getChildAt(i).id in mEmptyLayoutResIdArray) {
+                getChildAt(i).visibility = View.INVISIBLE
+            } else {
+                getChildAt(i).visibility = View.VISIBLE
+            }
+        }
     }
 
     fun switchFailedLayout() {
@@ -61,48 +79,73 @@ constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(co
     }
 
     fun switchFailedLayout(failedMsg: String) {
-        if (failedMsg.isNotEmpty()) {
-            tvFailedMsg.setText(failedMsg)
-        }
-        loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
-            override fun onLoadingCancelAfterMinRotateDuration() {
-                loadingView.stopAnim()
-                for (i in 0..childCount - 1) {
-                    if (getChildAt(i).id in mFailedLayoutResIdArray) {
-                        getChildAt(i).visibility = View.VISIBLE
-                    } else {
-                        getChildAt(i).visibility = View.INVISIBLE
-                    }
-                }
+        if (mStatus != STATUS_FAILED) {
+            if (failedMsg.isNotEmpty()) {
+                tvFailedMsg.setText(failedMsg)
             }
-        }
-        loadingView.stopAnimAfterMinRotateDuration()
-    }
-
-    fun switchEmptyLayout() {
-        loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
-            override fun onLoadingCancelAfterMinRotateDuration() {
-                super.onLoadingCancelAfterMinRotateDuration()
-                for (i in 0..childCount - 1) {
-                    if (getChildAt(i).id in mEmptyLayoutResIdArray) {
-                        getChildAt(i).visibility = View.VISIBLE
-                    } else {
-                        getChildAt(i).visibility = View.INVISIBLE
+            if (mStatus == STATUS_LOADING) {
+                loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
+                    override fun onLoadingCancelAfterMinRotateDuration() {
+                        loadingView.stopAnim()
+                        showFailedLayout()
                     }
                 }
+                loadingView.stopAnimAfterMinRotateDuration()
+            } else {
+                showFailedLayout()
             }
         }
     }
 
-    fun switchLoadingLayout() {
+    private fun showFailedLayout() {
+        mStatus = STATUS_FAILED
         for (i in 0..childCount - 1) {
-            if (getChildAt(i).id in mLoadingLayoutResIdArray) {
+            if (getChildAt(i).id in mFailedLayoutResIdArray) {
                 getChildAt(i).visibility = View.VISIBLE
             } else {
                 getChildAt(i).visibility = View.INVISIBLE
             }
         }
-        loadingView.startRotateAnim()
+    }
+
+    fun switchEmptyLayout() {
+        if(mStatus != STATUS_EMPTY) {
+            if (mStatus == STATUS_LOADING) {
+                loadingView.mLoadingAnimListener = object : LoadingView.LoadingAnimListenerAdapter() {
+                    override fun onLoadingCancelAfterMinRotateDuration() {
+                        super.onLoadingCancelAfterMinRotateDuration()
+                        showEmptyLayout()
+                    }
+                }
+            } else {
+                showEmptyLayout()
+            }
+        }
+    }
+
+    private fun showEmptyLayout() {
+        mStatus = STATUS_EMPTY
+        for (i in 0..childCount - 1) {
+            if (getChildAt(i).id in mEmptyLayoutResIdArray) {
+                getChildAt(i).visibility = View.VISIBLE
+            } else {
+                getChildAt(i).visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    fun switchLoadingLayout() {
+        if(mStatus != STATUS_LOADING) {
+            mStatus = STATUS_LOADING
+            for (i in 0..childCount - 1) {
+                if (getChildAt(i).id in mLoadingLayoutResIdArray) {
+                    getChildAt(i).visibility = View.VISIBLE
+                } else {
+                    getChildAt(i).visibility = View.INVISIBLE
+                }
+            }
+            loadingView.startRotateAnim()
+        }
     }
 
     fun setRetryListener(listener: () -> Unit) {

@@ -254,12 +254,11 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         hideSoftKeyboard()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
         if (event.id == mArticleAdapter.data[mPosition].id) {
             mArticleAdapter.data[mPosition].collect = event.isCollected
             mArticleAdapter.notifyItemChanged(mPosition)
-            EventManager.removeStickyEvent(event)
         }
     }
 

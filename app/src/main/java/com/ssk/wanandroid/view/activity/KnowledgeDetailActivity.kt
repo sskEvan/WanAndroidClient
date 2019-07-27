@@ -138,12 +138,11 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
         if (event.id == mKnowledgeAdapter.data[mPosition].id) {
             mKnowledgeAdapter.data[mPosition].collect = event.isCollected
             mKnowledgeAdapter.notifyItemChanged(mPosition)
-            EventManager.removeStickyEvent(event)
         }
     }
 

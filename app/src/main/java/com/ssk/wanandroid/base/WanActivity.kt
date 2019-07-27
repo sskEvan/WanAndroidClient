@@ -34,23 +34,15 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
+        EventManager.register(this)
         initVM()
         initView(savedInstanceState)
         initData(savedInstanceState)
         startObserve()
     }
 
-    override fun onResume() {
-        super.onResume()
-        EventManager.register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventManager.unregister(this)
-    }
-
     override fun onDestroy() {
+        EventManager.unregister(this)
         mViewModel.let { lifecycle.removeObserver(it) }
         super.onDestroy()
     }
