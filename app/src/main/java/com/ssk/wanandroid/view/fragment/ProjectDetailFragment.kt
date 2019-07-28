@@ -55,7 +55,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
     private fun setupCommonListPager() {
         commonListPager = mContentView.findViewById(R.id.commonListPager)
-        commonListPager.hideFab()
+        //commonListPager.hideFab()
         commonListPager.setAdapter(mProjectAdapter)
         commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
             override fun retry() {

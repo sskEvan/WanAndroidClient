@@ -4,5 +4,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/commonListPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:add_common_fab="false">
 </com.ssk.wanandroid.widget.CommonListPager>

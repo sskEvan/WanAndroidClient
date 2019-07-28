@@ -32,5 +32,11 @@
         <attr name="name" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="CommonListPager">
+        <attr name="add_common_fab" format="boolean"/>
+        <attr name="add_common_header" format="boolean"/>
+        <attr name="add_common_footer" format="boolean"/>
+    </declare-styleable>
+
 
 </resources>
