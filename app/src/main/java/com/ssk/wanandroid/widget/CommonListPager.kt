@@ -47,9 +47,6 @@ constructor(context: Context, attrs: AttributeSet? = null) :
 
     private fun initView(context: Context, attrs: AttributeSet?) {
         mRootView = View.inflate(context, R.layout.pager_common_list, this)
-        //FloatingActionButton在此处通过kotlin-android-extensions方式找到的话，会包NPE,这里通过findViewById查找
-        // mCommonfab = rootView.findViewById(R.id.floatingActionButton)
-
         attrs?.let {
             val a = context.obtainStyledAttributes(it, R.styleable.CommonListPager)
             mAddCommonFab = a.getBoolean(R.styleable.CommonListPager_add_common_fab, true)

@@ -2,6 +2,7 @@ package com.ssk.wanandroid.api
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.ssk.wanandroid.BuildConfig
+import com.ssk.wanandroid.ext.logDebug
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,14 +21,19 @@ abstract class BaseRetrofitClient {
     private val client: OkHttpClient
         get() {
             val builder = OkHttpClient.Builder()
-            val logging = HttpLoggingInterceptor()
-            if (BuildConfig.DEBUG) {
-                logging.level = HttpLoggingInterceptor.Level.BODY
-            } else {
-                logging.level = HttpLoggingInterceptor.Level.BASIC
-            }
 
-            builder.addInterceptor(logging)
+            //新建log拦截器
+            val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
+                logDebug("OkHttp====Message:$message")
+            })
+            /**if (BuildConfig.DEBUG) {
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            } else {
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+            }*/
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+            builder.addInterceptor(loggingInterceptor)
                 .connectTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
 
             handleBuilder(builder)

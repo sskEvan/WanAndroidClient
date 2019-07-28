@@ -13,6 +13,11 @@ fun dp2px(dp: Float): Int {
     return (dp * scale + 0.5f).toInt()
 }
 
+fun sp2px(sp: Float): Int {
+    val scale = AppContext.resources.displayMetrics.scaledDensity
+    return (sp * scale + 0.5f).toInt()
+}
+
 /**
  * 根据手机的分辨率将px转成dp
  */

@@ -85,7 +85,13 @@ class MineFragment : BaseFragment() {
         tvUserName.setOnClickListener { onUserClick() }
 
         srlSchedule.setOnClickListener {
-            startActivity(ScheduleActivity::class.java, true)
+            if(WanAndroid.currentUser != null) {
+                startActivity(ScheduleActivity::class.java, true)
+            }else {
+                showToast("请先登陆!")
+                startActivity(LoginActivity::class.java, false)
+                mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+            }
         }
 
         srlCollect.setOnClickListener {

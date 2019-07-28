@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<com.ssk.wanandroid.widget.CommonListPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/commonListPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+        android:layout_height="match_parent"
+        app:add_common_fab="false"/>

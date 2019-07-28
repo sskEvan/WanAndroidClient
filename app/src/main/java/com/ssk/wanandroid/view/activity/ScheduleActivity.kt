@@ -1,15 +1,18 @@
 package com.ssk.wanandroid.view.activity
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseActivity
+import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.view.adapter.SchedulePagerAdapter
-import com.ssk.wanandroid.view.fragment.ScheduleFragment
-import com.ssk.wanandroid.view.fragment.ScheduleFragment.Companion.TYPE_UNRESTRICTED
-import com.ssk.wanandroid.view.fragment.ScheduleFragment.Companion.TYPE_WORK
-import com.ssk.wanandroid.view.fragment.ScheduleFragment.Companion.TYPE_STUDY
-import com.ssk.wanandroid.view.fragment.ScheduleFragment.Companion.TYPE_LIFE
+import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment
+import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_UNRESTRICTED
+import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_WORK
+import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_STUDY
+import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_LIFE
 import kotlinx.android.synthetic.main.activity_shedule.tabLayout
 import kotlinx.android.synthetic.main.activity_shedule.viewPager
 
@@ -18,10 +21,10 @@ import kotlinx.android.synthetic.main.activity_shedule.viewPager
  */
 class ScheduleActivity : BaseActivity() {
 
-    private val mUnrestrictedFragment by lazy { ScheduleFragment.create(TYPE_UNRESTRICTED) }
-    private val mWorkFragment by lazy { ScheduleFragment.create(TYPE_WORK) }
-    private val mStudyFragment by lazy { ScheduleFragment.create(TYPE_STUDY) }
-    private val mLifeFragment by lazy { ScheduleFragment.create(TYPE_LIFE) }
+    private val mUnrestrictedFragment by lazy { ScheduleTodoFragment.create(TYPE_UNRESTRICTED) }
+    private val mWorkFragment by lazy { ScheduleTodoFragment.create(TYPE_WORK) }
+    private val mStudyFragment by lazy { ScheduleTodoFragment.create(TYPE_STUDY) }
+    private val mLifeFragment by lazy { ScheduleTodoFragment.create(TYPE_LIFE) }
 
     private lateinit var mPagerAdapter: SchedulePagerAdapter
     private var mCurrentPagerPosition = 0
@@ -38,6 +41,7 @@ class ScheduleActivity : BaseActivity() {
     }
 
     fun setupViewPager() {
+
         tabLayout.setupWithViewPager(viewPager)
         mPagerAdapter = SchedulePagerAdapter(supportFragmentManager).apply {
             addFragment(mUnrestrictedFragment, "全部")
@@ -64,6 +68,20 @@ class ScheduleActivity : BaseActivity() {
             currentItem = mCurrentPagerPosition
             offscreenPageLimit = mPagerAdapter.count
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_schedule, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_item_schedule_completed -> {
+                showToast("已完成")
+            }
+        }
+        return true
     }
 
 }

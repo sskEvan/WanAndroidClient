@@ -56,4 +56,7 @@ interface ApiService {
     @GET("/lg/collect/list/{page}/json")
     fun getCollectedArticleList(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
 
+    @GET("/lg/todo/v2/list/{page}/json?status=0")
+    fun getTodoList(@Path("page") page: Int, @Query("type") type: Int): Deferred<BaseResponse<TodoListVo>>
+
 }
