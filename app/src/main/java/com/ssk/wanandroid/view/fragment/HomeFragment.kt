@@ -35,9 +35,7 @@ import org.greenrobot.eventbus.ThreadMode
 class HomeFragment : WanFragment<HomeViewModel>() {
 
     companion object {
-        fun create(): HomeFragment {
-            return HomeFragment()
-        }
+        fun create() = HomeFragment()
     }
 
     private val mBannerImages = mutableListOf<String>()

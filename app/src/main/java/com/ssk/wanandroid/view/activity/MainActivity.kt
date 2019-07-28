@@ -44,10 +44,10 @@ class MainActivity : BaseActivity() {
             RevealActivityAnimation(clRoot, intent, this).revealActivity()
         }
 
-        initViewPager()
+        setupViewPager()
     }
 
-    fun initViewPager() {
+    fun setupViewPager() {
         mFragmentList.add(mHomeFragment)
         mFragmentList.add(mKnowledgeFragment)
         mFragmentList.add(mProjectFragment)

@@ -24,9 +24,7 @@ import kotlinx.android.synthetic.main.fragment_knowledge.*
 class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
 
     companion object {
-        fun create(): KnowledgeFragment {
-            return KnowledgeFragment()
-        }
+        fun create() = KnowledgeFragment()
     }
 
     private val mKnowledgeTabAdapter by lazy { KnowledgeTagAdapter() }

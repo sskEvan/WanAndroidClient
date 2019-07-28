@@ -18,6 +18,7 @@ import com.ssk.wanandroid.util.BlurTransformation
 import com.ssk.wanandroid.util.CropCircleTransformation
 import com.ssk.wanandroid.util.GlideCacheUtil
 import com.ssk.wanandroid.view.activity.MyCollectActivity
+import com.ssk.wanandroid.view.activity.ScheduleActivity
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 /**
@@ -27,9 +28,7 @@ import kotlinx.android.synthetic.main.fragment_mine.*
 class MineFragment : BaseFragment() {
 
     companion object {
-        fun create(): MineFragment {
-            return MineFragment()
-        }
+        fun create() = MineFragment()
     }
 
     private var mLastTouchY = -1
@@ -85,7 +84,9 @@ class MineFragment : BaseFragment() {
 
         tvUserName.setOnClickListener { onUserClick() }
 
-        srlSchedule.setOnClickListener { showToast("日程安排") }
+        srlSchedule.setOnClickListener {
+            startActivity(ScheduleActivity::class.java, true)
+        }
 
         srlCollect.setOnClickListener {
             if(WanAndroid.currentUser != null) {

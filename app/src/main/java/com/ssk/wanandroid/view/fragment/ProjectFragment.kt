@@ -97,7 +97,7 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
 
         })
         viewPager.adapter = mPagerAdapter
-        viewPager.currentItem = mCurrentPagerPosition;
+        viewPager.currentItem = mCurrentPagerPosition
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
