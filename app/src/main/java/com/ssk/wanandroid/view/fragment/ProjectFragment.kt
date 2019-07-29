@@ -41,6 +41,7 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
         super.setUserVisibleHint(isVisibleToUser)
         if(isVisibleToUser) {
             immersiveStatusBar(R.color.colorPrimary, true)
+            toolbar?.title = "项目"
             animateToolbarTitle()
         }
     }

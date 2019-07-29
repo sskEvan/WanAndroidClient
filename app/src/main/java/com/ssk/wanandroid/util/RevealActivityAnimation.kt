@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
+import com.ssk.wanandroid.ext.logDebug
 
 class RevealActivityAnimation(private val mView: View, private val intent: Intent, private val mActivity: Activity) {
 
@@ -31,7 +32,7 @@ class RevealActivityAnimation(private val mView: View, private val intent: Inten
             if (viewTreeObserver.isAlive) {
                 viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
-                        val finalRadius = (Math.max(mView.width, mView.height) * 1.1).toFloat()
+                        val finalRadius = (Math.max(mView.width, mView.height) * 1.0).toFloat()
 
                         // create the animator for this view (the startCollectAnim radius is zero)
                         val circularReveal = ViewAnimationUtils.createCircularReveal(mView, revealX, revealY, 0f, finalRadius)
@@ -46,17 +47,19 @@ class RevealActivityAnimation(private val mView: View, private val intent: Inten
                 })
             }
         } else {
-
             //if you are below android 5 it jist shows the activity
             mView.visibility = View.VISIBLE
         }
     }
 
     fun unRevealActivity() {
+        logDebug("unRevealActivity done")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            logDebug("unRevealActivity done 1")
             mActivity.finish()
         } else {
-            val finalRadius = (Math.max(mView.width, mView.height) * 1.1).toFloat()
+            val finalRadius = (Math.max(mView.width, mView.height) * 1.0).toFloat()
+            logDebug("unRevealActivity done 2 finalRadius=" + finalRadius)
             val circularReveal = ViewAnimationUtils.createCircularReveal(
                 mView, revealX, revealY, finalRadius, 0f
             )
@@ -64,6 +67,7 @@ class RevealActivityAnimation(private val mView: View, private val intent: Inten
             circularReveal.duration = duration.toLong()
             circularReveal.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
+                    logDebug("unRevealActivity done finish anim ")
                     mView.visibility = View.INVISIBLE
                     mActivity.finish()
                     mActivity.overridePendingTransition(0, 0)

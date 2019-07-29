@@ -6,10 +6,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.TodoVo
+import com.ssk.wanandroid.event.OnAddScheduleSuccessEvent
 import com.ssk.wanandroid.view.adapter.ScheduleTodoAdapter
 import com.ssk.wanandroid.viewmodel.ScheduleTodoViewModel
 import com.ssk.wanandroid.widget.CommonListPager
 import com.ssk.wanandroid.widget.ScheduleDecoration
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * Created by shisenkun on 2019-07-28.
@@ -87,6 +90,11 @@ class ScheduleTodoFragment : WanFragment<ScheduleTodoViewModel>() {
                 commonListPager.fetchDataError(it)
             })
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: OnAddScheduleSuccessEvent) {
+        commonListPager.autoRefresh()
     }
 
 }

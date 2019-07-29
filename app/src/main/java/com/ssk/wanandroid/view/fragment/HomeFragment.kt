@@ -154,6 +154,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             immersiveStatusBar(R.color.colorPrimary, true)
+            toolbar?.title = "首页"
             animateToolbarTitle()
             bannerLayout?.startAutoPlay()
         }else {

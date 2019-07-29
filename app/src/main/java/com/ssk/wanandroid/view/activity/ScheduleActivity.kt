@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -7,14 +8,14 @@ import androidx.viewpager.widget.ViewPager
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseActivity
 import com.ssk.wanandroid.ext.showToast
+import com.ssk.wanandroid.util.RevealActivityAnimation
 import com.ssk.wanandroid.view.adapter.SchedulePagerAdapter
 import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment
 import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_UNRESTRICTED
 import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_WORK
 import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_STUDY
 import com.ssk.wanandroid.view.fragment.ScheduleTodoFragment.Companion.TYPE_LIFE
-import kotlinx.android.synthetic.main.activity_shedule.tabLayout
-import kotlinx.android.synthetic.main.activity_shedule.viewPager
+import kotlinx.android.synthetic.main.activity_shedule.*
 
 /**
  * Created by shisenkun on 2019-07-28.
@@ -38,6 +39,18 @@ class ScheduleActivity : BaseActivity() {
         immersiveStatusBar(R.color.colorPrimary, true)
 
         setupViewPager()
+
+        fab.setOnClickListener {
+            val revealX = (fab.x + fab.width / 2).toInt()
+            val revealY = (fab.y + fab.height / 2).toInt()
+            val intent = Intent(this@ScheduleActivity, AddScheduleActivity::class.java)
+            intent.putExtra(RevealActivityAnimation.EXTRA_ACTIVITY_REVEAL_X, revealX)
+            intent.putExtra(RevealActivityAnimation.EXTRA_ACTIVITY_REVEAL_Y, revealY)
+            intent.putExtra(RevealActivityAnimation.EXTRA_ACTIVITY_REVEAL_DURATION, 600)
+            intent.putExtra("scheduleType", mCurrentPagerPosition)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+        }
     }
 
     fun setupViewPager() {

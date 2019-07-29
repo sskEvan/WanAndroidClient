@@ -218,6 +218,10 @@ constructor(context: Context, attrs: AttributeSet? = null) :
         switchLoadingLayout()
     }
 
+    fun autoRefresh() {
+        smartRefreshLayout.autoRefresh()
+    }
+
     fun getRecyclerView(): RecyclerView {
         return recyclerView
     }

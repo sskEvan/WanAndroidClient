@@ -47,6 +47,7 @@ class SplashActivity : BaseActivity() {
                     intent.putExtra(RevealActivityAnimation.EXTRA_ACTIVITY_REVEAL_Y, revealY)
                     intent.putExtra(RevealActivityAnimation.EXTRA_ACTIVITY_REVEAL_DURATION, 1000)
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                 }
             })
             .start()

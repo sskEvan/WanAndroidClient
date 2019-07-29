@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/clRoot"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:id="@+id/tvTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:text="标题:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+    <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/primary_text"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:hint="*必填"
+            app:layout_constraintLeft_toRightOf="@id/tvTitleLabel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+    <View
+            android:id="@+id/dividerTitle"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:background="@color/gray_dark"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etTitle"/>
+
+    <TextView
+            android:id="@+id/tvContentLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="详情:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerTitle"/>
+
+    <EditText
+            android:id="@+id/etContent"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:textSize="17sp"
+            android:gravity="left|top"
+            android:textColor="@color/primary_text"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:hint="选填"
+            app:layout_constraintLeft_toRightOf="@id/tvContentLabel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerTitle"/>
+
+    <View
+            android:id="@+id/dividerContent"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:background="@color/gray_dark"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etContent"/>
+
+    <TextView
+            android:id="@+id/tvPriorityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="优先级:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerContent"/>
+
+    <RadioGroup
+            android:id="@+id/rgPriority"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toRightOf="@id/tvPriorityLabel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerContent">
+
+        <RadioButton
+                android:id="@+id/rb_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="一般"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/primary_text"
+                android:checked="true"/>
+
+        <RadioButton
+                android:id="@+id/rb_important"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重要"
+                android:textColor="@color/primary_text"/>
+    </RadioGroup>
+
+    <View
+            android:id="@+id/dividerPriority"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:background="@color/gray_dark"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rgPriority"/>
+
+    <TextView
+            android:id="@+id/tvTypeLable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="类型:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerPriority"/>
+
+    <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/typeTabLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            app:max_select="1"
+            app:layout_constraintLeft_toRightOf="@id/tvTypeLable"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerPriority"/>
+
+    <View
+            android:id="@+id/dividerType"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:background="@color/gray_dark"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/typeTabLayout"/>
+
+    <TextView
+            android:id="@+id/tvDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:text="日期:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerType"/>
+
+    <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@drawable/selector_schedule_date_text_color"
+            android:textSize="17sp"
+            app:layout_constraintLeft_toRightOf="@id/tvDateLabel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerType"/>
+
+    <View
+            android:id="@+id/dividerDate"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:background="@color/gray_dark"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@mipmap/ic_ok"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom|right"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

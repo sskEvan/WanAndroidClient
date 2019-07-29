@@ -28,7 +28,7 @@
             android:paddingBottom="10dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:textColor="@drawable/selector_knowledge_tag_text_bg"
+            android:textColor="@drawable/selector_knowledge_tag_text_color"
             android:textSize="15sp"
             android:textStyle="bold"
             android:singleLine="true"

@@ -42,6 +42,7 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             immersiveStatusBar(R.color.colorPrimary, true)
+            toolbar?.title = "知识体系"
             animateToolbarTitle()
         }
     }
