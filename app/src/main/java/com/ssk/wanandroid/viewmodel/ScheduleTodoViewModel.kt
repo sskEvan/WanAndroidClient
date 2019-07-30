@@ -18,6 +18,11 @@ class ScheduleTodoViewModel : BaseViewModel() {
 
     val mTodoListVo: MutableLiveData<TodoListVo> = MutableLiveData()
     val mFetchTodoListErrorMsg: MutableLiveData<String> = MutableLiveData()
+    val mCompleteTodoSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val mCompleteTodoErrorMsg: MutableLiveData<String> = MutableLiveData()
+    val mDeleteTodoSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val mDeleteTodoErrorMsg: MutableLiveData<String> = MutableLiveData()
+
 
     fun fetchTodoList(page: Int, type: Int) {
         launchOnUI {
@@ -27,7 +32,7 @@ class ScheduleTodoViewModel : BaseViewModel() {
                     val newTodoVoList = mutableListOf<TodoVo>()
                     var date = 0L
                     result.data!!.datas.forEach {
-                        if(date != it.date) {
+                        if (date != it.date) {
                             date = it.date
                             newTodoVoList.add(TodoVo(date, sdf.format(Date(date))))
                         }
@@ -40,5 +45,22 @@ class ScheduleTodoViewModel : BaseViewModel() {
         }
     }
 
+    fun completeTodo(id: Int, status: Int) {
+        launchOnUI {
+            val result = mRepository.completeTodo(id, status)
+            handleResonseResult(result,
+                { mCompleteTodoSuccess.value = true },
+                { mCompleteTodoErrorMsg.value = result.errorMsg })
+        }
+    }
+
+    fun deleteTodo(id: Int) {
+        launchOnUI {
+            val result = mRepository.deleteTodo(id)
+            handleResonseResult(result,
+                { mDeleteTodoSuccess.value = true },
+                { mDeleteTodoErrorMsg.value = result.errorMsg })
+        }
+    }
 
 }

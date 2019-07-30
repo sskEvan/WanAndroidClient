@@ -11,11 +11,11 @@ import androidx.annotation.RequiresApi
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ScheduleTypeVo
+import com.ssk.wanandroid.bean.TodoVo
 import com.ssk.wanandroid.event.OnAutoRefreshTodoListEvent
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.EventManager
-import com.ssk.wanandroid.util.RevealActivityAnimation
-import com.ssk.wanandroid.viewmodel.AddScheduleViewModel
+import com.ssk.wanandroid.viewmodel.EditScheduleViewModel
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import kotlinx.android.synthetic.main.activity_add_schedule.*
@@ -25,9 +25,9 @@ import java.util.*
 /**
  * Created by shisenkun on 2019-07-29.
  */
-class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
+class EditScheduleActivity : WanActivity<EditScheduleViewModel>() {
 
-    override fun getLayoutId() = R.layout.activity_add_schedule
+    override fun getLayoutId() = R.layout.activity_edit_schedule
 
     private val mScheduleTypeVoList = mutableListOf<ScheduleTypeVo>(
         ScheduleTypeVo(1, "工作"),
@@ -40,27 +40,33 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
     private val mSdfDay = SimpleDateFormat("dd")
 
     private var mType = 0
-    private var mPriority = 2  //默认一般
-
-    private val mRevealActivityAnimation by lazy {
-        RevealActivityAnimation(clRoot, intent, this)
-    }
+    private var mPriority = 0
+    private lateinit var todoVo: TodoVo
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            mRevealActivityAnimation.revealActivity()
-        }
-
         setupToolbar(true)
         immersiveStatusBar(R.color.colorPrimary, true)
 
+        todoVo = intent!!.extras.getSerializable("todoVo") as TodoVo
+        mType = todoVo.type
+
+        etContent.setText(todoVo.content)
+        etTitle.setText(todoVo.title)
+        tvDate.text = todoVo.dateStr
+        if(todoVo.priority == 1) {
+            rgPriority.check(R.id.rb_important)
+        }else {
+            rgPriority.check(R.id.rb_normal)
+        }
+
         setupTypeTabLayout()
-        tvDate.text = mSdf.format(Date().time)
+
+        tvTitleLabel
         tvDate.setOnClickListener {
-            val currentDate = Date()
+            val currentDate = Date(todoVo.date)
             DatePickerDialog(
                 this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
                     tvDate.text = "${year}-${month + 1}-${day}"
@@ -83,7 +89,8 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
                 showToast("标题不能为空!")
             } else {
                 showLoadingDialog("保存中...")
-                mViewModel.addSchedule(
+                mViewModel.editSchedule(
+                    todoVo.id,
                     etTitle.text.toString(),
                     etContent.text.toString(),
                     tvDate.text.toString(),
@@ -111,11 +118,10 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
             }
 
             setOnTagClickListener { _, position, _ ->
-                mType = mScheduleTypeVoList[0].type
+                mType = mScheduleTypeVoList[position].type
                 true
             }
 
-            mType = intent.getIntExtra("scheduleType", 0)
             if (mType != 0) {
                 adapter.setSelectedList(mType - 1)
                 adapter.notifyDataChanged()
@@ -126,7 +132,7 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
     override fun initData(savedInstanceState: Bundle?) {
         super.initData(savedInstanceState)
         mViewModel.apply {
-            mAddScheduleSuccess.observe(this@AddScheduleActivity, androidx.lifecycle.Observer {
+            mEditScheduleSuccess.observe(this@EditScheduleActivity, androidx.lifecycle.Observer {
                 dismissLoadingDialogSuccess("保存成功")
                 mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
                     override fun onDismiss(dialog: DialogInterface?) {
@@ -136,14 +142,10 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
                 })
             })
 
-            mAddScheduleErrorMsg.observe(this@AddScheduleActivity, androidx.lifecycle.Observer {
+            mEditScheduleErrorMsg.observe(this@EditScheduleActivity, androidx.lifecycle.Observer {
                 dismissLoadingDialogFailed(it ?: "保存失败")
             })
         }
-    }
-
-    override fun onBackPressed() {
-        mRevealActivityAnimation.unRevealActivity()
     }
 
 }

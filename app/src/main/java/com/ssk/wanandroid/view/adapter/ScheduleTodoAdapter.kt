@@ -68,6 +68,10 @@ class ScheduleTodoAdapter (data: List<TodoVo>) : BaseQuickAdapter<TodoVo, BaseVi
                 tvContent.setText(item.content)
             }
 
+            helper.addOnClickListener(R.id.cvItemRoot)
+            helper.addOnClickListener(R.id.ivEdit)
+            helper.addOnLongClickListener(R.id.cvItemRoot)
+
         }else {
             helper.setText(R.id.tvTodoHeader, item.dateStr)
         }

@@ -28,26 +28,25 @@ class ScheduleDecoration(val context: Context, val datas: List<TodoVo>) : Recycl
         mStickyHeaderPaint.isFakeBoldText = true
         mStickyHeaderPaint.textSize = sp2px(16F).toFloat()
         mStickyHeaderPaint.isAntiAlias = true
-        mCurStickyHeaderTabVo = datas[0]
     }
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
-        val childCount = parent.childCount
-        for (i in 0 until childCount) {
-            val view = parent.getChildAt(i)
-            if (mIsFirst && i == 0) {
-                mStickyHeaderLayoutHeight = view.height
-                mStickyHeaderLayoutPaddingLeft = view.paddingLeft
-                mIsFirst = false
-                return
-            }
+        if(datas.size == 0) return
+        val view = parent.getChildAt(0)
+        if (mIsFirst) {
+            mCurStickyHeaderTabVo = datas[0]
+            mStickyHeaderLayoutHeight = view.height
+            mStickyHeaderLayoutPaddingLeft = view.paddingLeft
+            mIsFirst = false
+            return
         }
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
-
+        logDebug("datas.size=" + datas.size + ",mStickyHeaderLayoutHeight=" + mStickyHeaderLayoutHeight)
+        if(datas.size == 0) return
         c.save()
         //取出第一个子view
         val view = parent.getChildAt(0)

@@ -1,13 +1,17 @@
 package com.ssk.wanandroid.view.fragment
 
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.TodoVo
-import com.ssk.wanandroid.event.OnAddScheduleSuccessEvent
+import com.ssk.wanandroid.event.OnAutoRefreshTodoListEvent
+import com.ssk.wanandroid.util.EventManager
+import com.ssk.wanandroid.view.activity.EditScheduleActivity
 import com.ssk.wanandroid.view.adapter.ScheduleTodoAdapter
+import com.ssk.wanandroid.view.dialog.ScheduleOperationDialog
 import com.ssk.wanandroid.viewmodel.ScheduleTodoViewModel
 import com.ssk.wanandroid.widget.CommonListPager
 import com.ssk.wanandroid.widget.ScheduleDecoration
@@ -52,6 +56,7 @@ class ScheduleTodoFragment : WanFragment<ScheduleTodoViewModel>() {
     private fun setupCommonListPager() {
         commonListPager = mContentView.findViewById(R.id.commonListPager)
         commonListPager.setAdapter(mAdapter)
+        commonListPager.getRecyclerView().addItemDecoration(ScheduleDecoration(mActivity, mAdapter.data))
         commonListPager.commonListPagerListener = object : CommonListPager.CommonListPagerListener {
             override fun retry() {
                 mViewModel.fetchTodoList(1, mType)
@@ -62,15 +67,39 @@ class ScheduleTodoFragment : WanFragment<ScheduleTodoViewModel>() {
             }
 
             override fun loadMore(page: Int) {
-                mViewModel.fetchTodoList(page, mType)
+                mViewModel.fetchTodoList(page + 2, mType)
             }
         }
 
         mAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener{ _, view, position ->
                 when (view.id) {
-
+                    R.id.cvItemRoot, R.id.ivEdit -> {
+                        val todoVo = mAdapter.data[position]
+                        var bundle = Bundle()
+                        bundle.putSerializable("todoVo", todoVo)
+                        startActivity(EditScheduleActivity::class.java, bundle, true)
+                    }
                 }
+            }
+
+            onItemChildLongClickListener = BaseQuickAdapter.OnItemChildLongClickListener() { _, _, position ->
+                val dialog = ScheduleOperationDialog(mActivity, mAdapter.data[position])
+                dialog.mSheduleLister = object : ScheduleOperationDialog.ScheduleOperationListener {
+                    override fun onComplete(todoVo: TodoVo) {
+                        showLoadingDialog("保存中...")
+                        mViewModel.completeTodo(todoVo.id, 1)
+                        dialog.dismiss()
+                    }
+
+                    override fun onDelete(todoVo: TodoVo) {
+                        showLoadingDialog("删除中...")
+                        mViewModel.deleteTodo(todoVo.id)
+                        dialog.dismiss()
+                    }
+                }
+                dialog.show()
+                true
             }
         }
 
@@ -83,17 +112,42 @@ class ScheduleTodoFragment : WanFragment<ScheduleTodoViewModel>() {
             mTodoListVo.observe(this@ScheduleTodoFragment, Observer {
                 commonListPager.addData(it.datas)
                 commonListPager.setNoMoreData(it.over)
-                commonListPager.getRecyclerView().addItemDecoration(ScheduleDecoration(mActivity, mAdapter.data))
             })
 
             mFetchTodoListErrorMsg.observe(this@ScheduleTodoFragment, Observer {
                 commonListPager.fetchDataError(it)
             })
+
+            mCompleteTodoSuccess.observe(this@ScheduleTodoFragment, Observer {
+                dismissLoadingDialogSuccess("保存成功")
+                mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
+                    override fun onDismiss(dialog: DialogInterface?) {
+                        EventManager.post(OnAutoRefreshTodoListEvent())
+                    }
+                })
+            })
+
+            mCompleteTodoErrorMsg.observe(this@ScheduleTodoFragment, Observer {
+                dismissLoadingDialogFailed("保存失败")
+            })
+
+            mDeleteTodoSuccess.observe(this@ScheduleTodoFragment, Observer {
+                dismissLoadingDialogSuccess("删除成功")
+                mLoadingDialog!!.setOnDismissListener(object : DialogInterface.OnDismissListener {
+                    override fun onDismiss(dialog: DialogInterface?) {
+                        EventManager.post(OnAutoRefreshTodoListEvent())
+                    }
+                })
+            })
+
+            mDeleteTodoErrorMsg.observe(this@ScheduleTodoFragment, Observer {
+                dismissLoadingDialogFailed("删除失败")
+            })
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onEvent(event: OnAddScheduleSuccessEvent) {
+    fun onEvent(event: OnAutoRefreshTodoListEvent) {
         commonListPager.autoRefresh()
     }
 

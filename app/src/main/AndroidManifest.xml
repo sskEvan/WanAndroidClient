@@ -63,6 +63,10 @@
                   android:label="新建日程"
                   android:theme="@style/WanAndroid.AddScheduleActivity"/>
 
+        <activity android:name="com.ssk.wanandroid.view.activity.EditScheduleActivity"
+                  android:label="编辑日程"
+                  android:theme="@style/WanAndroid"/>
+
     </application>
 
 </manifest>
