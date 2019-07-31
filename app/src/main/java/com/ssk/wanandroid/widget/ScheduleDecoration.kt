@@ -5,24 +5,22 @@ import android.graphics.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.bean.KnowledgeTabVo
-import com.ssk.wanandroid.bean.TodoVo
+import com.ssk.wanandroid.bean.ScheduleVo
 import com.ssk.wanandroid.ext.logDebug
-import com.ssk.wanandroid.util.dp2px
 import com.ssk.wanandroid.util.sp2px
 
 /**
  * Created by shisenkun on 2019-07-28.
  */
-class ScheduleDecoration(val context: Context, val datas: List<TodoVo>) : RecyclerView.ItemDecoration() {
+class ScheduleDecoration(val context: Context, val datas: List<ScheduleVo>) : RecyclerView.ItemDecoration() {
 
     private val mStickyHeaderPaint by lazy { Paint() }
 
-    private var mCurStickyHeaderTabVo: TodoVo? = null
+    private var mCurStickyHeaderTabVo: ScheduleVo? = null
     private var mStickyHeaderLayoutHeight = 0
     private var mStickyHeaderLayoutPaddingLeft = 0
     private var mIsFirst = true
-    private var mCurrentHeaderTodoVo: TodoVo? = null
+    private var mCurrentHeaderTodoVo: ScheduleVo? = null
 
     init {
         mStickyHeaderPaint.isFakeBoldText = true
@@ -119,7 +117,7 @@ class ScheduleDecoration(val context: Context, val datas: List<TodoVo>) : Recycl
         }
     }
 
-    private fun findHeaderTodoVo(date: Long): TodoVo? {
+    private fun findHeaderTodoVo(date: Long): ScheduleVo? {
         for (i in 0 until datas.size) {
             if (datas[i].date == date && datas[i].title.isEmpty()) {
                 return datas[i]

@@ -19,6 +19,7 @@ import com.ssk.wanandroid.util.CropCircleTransformation
 import com.ssk.wanandroid.util.GlideCacheUtil
 import com.ssk.wanandroid.view.activity.MyCollectActivity
 import com.ssk.wanandroid.view.activity.ScheduleActivity
+import com.ssk.wanandroid.view.activity.ScheduleActivity.Companion.STATUS_NOT_COMPLETED
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 /**
@@ -86,7 +87,9 @@ class MineFragment : BaseFragment() {
 
         srlSchedule.setOnClickListener {
             if(WanAndroid.currentUser != null) {
-                startActivity(ScheduleActivity::class.java, true)
+                val bundle = Bundle()
+                bundle.putInt("status", STATUS_NOT_COMPLETED)
+                startActivity(ScheduleActivity::class.java, bundle, true)
             }else {
                 showToast("请先登陆!")
                 startActivity(LoginActivity::class.java, false)

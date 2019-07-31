@@ -2,7 +2,6 @@ package com.ssk.wanandroid.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.ssk.wanandroid.base.BaseViewModel
-import com.ssk.wanandroid.bean.TodoVo
 import com.ssk.wanandroid.repository.AddScheduleRepository
 
 /**

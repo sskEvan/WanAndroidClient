@@ -3,13 +3,13 @@ package com.ssk.wanandroid.view.dialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.bean.TodoVo
+import com.ssk.wanandroid.bean.ScheduleVo
 import kotlinx.android.synthetic.main.dialog_schedule_operation.*
 
 /**
  * Created by shisenkun on 2019-07-30.
  */
-class ScheduleOperationDialog(context: Context, val todoVo: TodoVo) : BaseDialog(context) {
+class ScheduleOperationDialog(context: Context, val scheduleVo: ScheduleVo) : BaseDialog(context) {
 
     var mSheduleLister: ScheduleOperationListener? = null
 
@@ -18,13 +18,19 @@ class ScheduleOperationDialog(context: Context, val todoVo: TodoVo) : BaseDialog
     override fun initView() {
         super.initView()
 
+        tvComplete.text = if(scheduleVo.status == 1) {  //原来已完成->未完成
+            "未完成"
+        } else {
+            "完成"
+        }
+
         window?.setBackgroundDrawable(ColorDrawable())
 
         tvComplete.setOnClickListener {
-            mSheduleLister?.onComplete(todoVo)
+            mSheduleLister?.onComplete(scheduleVo)
         }
         tvDelete.setOnClickListener {
-            mSheduleLister?.onDelete(todoVo)
+            mSheduleLister?.onDelete(scheduleVo)
         }
 
         tvCancel.setOnClickListener {
@@ -33,8 +39,8 @@ class ScheduleOperationDialog(context: Context, val todoVo: TodoVo) : BaseDialog
     }
 
     interface ScheduleOperationListener {
-        fun onComplete(todoVo: TodoVo)
-        fun onDelete(todoVo: TodoVo)
+        fun onComplete(scheduleVo: ScheduleVo)
+        fun onDelete(scheduleVo: ScheduleVo)
     }
 
 }

@@ -121,7 +121,7 @@
             app:layout_constraintTop_toBottomOf="@id/dividerContent">
 
         <RadioButton
-                android:id="@+id/rb_normal"
+                android:id="@+id/rbNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="一般"
@@ -130,7 +130,7 @@
                 android:checked="true"/>
 
         <RadioButton
-                android:id="@+id/rb_important"
+                android:id="@+id/rbImportant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="重要"

@@ -7,12 +7,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.util.MultiTypeDelegate
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.bean.TodoVo
+import com.ssk.wanandroid.bean.ScheduleVo
 
 /**
  * Created by shisenkun on 2019-07-28.
  */
-class ScheduleTodoAdapter (data: List<TodoVo>) : BaseQuickAdapter<TodoVo, BaseViewHolder>(data) {
+class ScheduleAdapter (data: List<ScheduleVo>) : BaseQuickAdapter<ScheduleVo, BaseViewHolder>(data) {
 
     companion object {
         private const val TYPE_HEADER = 1
@@ -20,19 +20,19 @@ class ScheduleTodoAdapter (data: List<TodoVo>) : BaseQuickAdapter<TodoVo, BaseVi
     }
 
     init {
-        multiTypeDelegate = object : MultiTypeDelegate<TodoVo>() {
-            override fun getItemType(t: TodoVo?): Int {
+        multiTypeDelegate = object : MultiTypeDelegate<ScheduleVo>() {
+            override fun getItemType(t: ScheduleVo?): Int {
                 if (t!!.title.isEmpty()) return TYPE_HEADER
                 else return TYPE_COMMON
             }
         }
 
-        multiTypeDelegate.registerItemType(TYPE_HEADER, R.layout.item_schedule_todo_header)
-            .registerItemType(TYPE_COMMON, R.layout.item_schedule_todo)
+        multiTypeDelegate.registerItemType(TYPE_HEADER, R.layout.item_schedule_header)
+            .registerItemType(TYPE_COMMON, R.layout.item_schedule)
     }
 
 
-    override fun convert(helper: BaseViewHolder, item: TodoVo) {
+    override fun convert(helper: BaseViewHolder, item: ScheduleVo) {
         if(helper.itemViewType == TYPE_COMMON) {
             helper.setText(R.id.tvTitle, item.title)
             val ivImportantLogo = helper.getView<ImageView>(R.id.ivImportantLogo)
@@ -70,8 +70,14 @@ class ScheduleTodoAdapter (data: List<TodoVo>) : BaseQuickAdapter<TodoVo, BaseVi
 
             helper.addOnClickListener(R.id.cvItemRoot)
             helper.addOnClickListener(R.id.ivEdit)
-            helper.addOnLongClickListener(R.id.cvItemRoot)
 
+            val tvCompletedDate = helper.getView<TextView>(R.id.tvCompletedDate)
+            if(item.status == 1) {  //已完成
+                tvCompletedDate.visibility = View.VISIBLE
+                tvCompletedDate.text = "完成日期: ${item.completeDateStr}"
+            }else {
+                tvCompletedDate.visibility = View.GONE
+            }
         }else {
             helper.setText(R.id.tvTodoHeader, item.dateStr)
         }

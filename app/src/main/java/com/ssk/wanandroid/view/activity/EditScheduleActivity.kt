@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ScheduleTypeVo
-import com.ssk.wanandroid.bean.TodoVo
+import com.ssk.wanandroid.bean.ScheduleVo
 import com.ssk.wanandroid.event.OnAutoRefreshTodoListEvent
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.EventManager
@@ -34,14 +34,13 @@ class EditScheduleActivity : WanActivity<EditScheduleViewModel>() {
         ScheduleTypeVo(2, "学习"),
         ScheduleTypeVo(3, "生活")
     )
-    private val mSdf = SimpleDateFormat("yyyy-MM-dd")
     private val mSdfYear = SimpleDateFormat("yyyy")
     private val mSdfMonth = SimpleDateFormat("MM")
     private val mSdfDay = SimpleDateFormat("dd")
 
     private var mType = 0
     private var mPriority = 0
-    private lateinit var todoVo: TodoVo
+    private lateinit var scheduleVo: ScheduleVo
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView(savedInstanceState: Bundle?) {
@@ -50,23 +49,22 @@ class EditScheduleActivity : WanActivity<EditScheduleViewModel>() {
         setupToolbar(true)
         immersiveStatusBar(R.color.colorPrimary, true)
 
-        todoVo = intent!!.extras.getSerializable("todoVo") as TodoVo
-        mType = todoVo.type
+        scheduleVo = intent.extras.getSerializable("scheduleVo") as ScheduleVo
+        mType = scheduleVo.type
 
-        etContent.setText(todoVo.content)
-        etTitle.setText(todoVo.title)
-        tvDate.text = todoVo.dateStr
-        if(todoVo.priority == 1) {
-            rgPriority.check(R.id.rb_important)
+        etContent.setText(scheduleVo.content)
+        etTitle.setText(scheduleVo.title)
+        tvDate.text = scheduleVo.dateStr
+        if(scheduleVo.priority == 1) {
+            rgPriority.check(R.id.rbImportant)
         }else {
-            rgPriority.check(R.id.rb_normal)
+            rgPriority.check(R.id.rbNormal)
         }
 
         setupTypeTabLayout()
 
-        tvTitleLabel
         tvDate.setOnClickListener {
-            val currentDate = Date(todoVo.date)
+            val currentDate = Date(scheduleVo.date)
             DatePickerDialog(
                 this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
                     tvDate.text = "${year}-${month + 1}-${day}"
@@ -79,8 +77,8 @@ class EditScheduleActivity : WanActivity<EditScheduleViewModel>() {
         rgPriority.setOnCheckedChangeListener { _, checkedId
             ->
             when (checkedId) {
-                R.id.rb_important -> mPriority = 1
-                R.id.rb_normal -> mPriority = 2
+                R.id.rbImportant -> mPriority = 1
+                R.id.rbNormal -> mPriority = 2
             }
         }
 
@@ -90,7 +88,7 @@ class EditScheduleActivity : WanActivity<EditScheduleViewModel>() {
             } else {
                 showLoadingDialog("保存中...")
                 mViewModel.editSchedule(
-                    todoVo.id,
+                    scheduleVo.id,
                     etTitle.text.toString(),
                     etContent.text.toString(),
                     tvDate.text.toString(),

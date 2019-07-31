@@ -28,8 +28,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
-    <EditText
-            android:id="@+id/etTitle"
+    <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="17sp"
@@ -54,7 +54,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etTitle"/>
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"/>
 
     <TextView
             android:id="@+id/tvContentLabel"
@@ -68,8 +68,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerTitle"/>
 
-    <EditText
-            android:id="@+id/etContent"
+    <TextView
+            android:id="@+id/tvContent"
             android:layout_width="0dp"
             android:layout_height="140dp"
             android:textSize="17sp"
@@ -95,7 +95,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etContent"/>
+            app:layout_constraintTop_toBottomOf="@id/tvContent"/>
 
     <TextView
             android:id="@+id/tvPriorityLabel"
@@ -121,20 +121,13 @@
             app:layout_constraintTop_toBottomOf="@id/dividerContent">
 
         <RadioButton
-                android:id="@+id/rbNormal"
+                android:id="@+id/rbPriority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="一般"
                 android:layout_marginRight="10dp"
                 android:textColor="@color/primary_text"
                 android:checked="true"/>
-
-        <RadioButton
-                android:id="@+id/rbImportant"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:textColor="@color/primary_text"/>
     </RadioGroup>
 
     <View
@@ -161,17 +154,19 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerPriority"/>
 
-    <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/typeTabLayout"
-            android:layout_width="0dp"
+    <TextView
+            android:id="@+id/tvType"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
-            app:max_select="1"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/bg_schedule_type_tag_selected"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintLeft_toRightOf="@id/tvTypeLable"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dividerPriority"/>
+            app:layout_constraintTop_toBottomOf="@id/dividerPriority">
+
+    </TextView>
 
     <View
             android:id="@+id/dividerType"
@@ -183,7 +178,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/typeTabLayout"/>
+            app:layout_constraintTop_toBottomOf="@id/tvType"/>
 
     <TextView
             android:id="@+id/tvDateLabel"
@@ -221,16 +216,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDate"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:src="@mipmap/ic_ok"
-            android:layout_margin="16dp"
-            android:layout_gravity="bottom|right"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

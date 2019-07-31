@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by shisenkun on 2019-07-28.
  */
-data class TodoVo(
+data class ScheduleVo(
     var completeDate: Long,
     var completeDateStr: String,
     var content: String,

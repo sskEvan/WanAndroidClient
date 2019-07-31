@@ -73,8 +73,8 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
         rgPriority.setOnCheckedChangeListener { _, checkedId
             ->
             when (checkedId) {
-                R.id.rb_important -> mPriority = 1
-                R.id.rb_normal -> mPriority = 2
+                R.id.rbImportant -> mPriority = 1
+                R.id.rbNormal -> mPriority = 2
             }
         }
 
@@ -111,7 +111,7 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
             }
 
             setOnTagClickListener { _, position, _ ->
-                mType = mScheduleTypeVoList[0].type
+                mType = mScheduleTypeVoList[position].type
                 true
             }
 

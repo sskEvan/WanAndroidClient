@@ -219,7 +219,15 @@ constructor(context: Context, attrs: AttributeSet? = null) :
     }
 
     fun autoRefresh() {
-        smartRefreshLayout.autoRefresh()
+        if(mStatus == STATUS_SUCCESS) {
+            smartRefreshLayout.autoRefresh()
+        }else {
+            switchLoadingLayout();
+            mCurrentPage = 0
+            mIsRefreshing = false
+            mIsLoadingMore = false
+            commonListPagerListener?.retry()
+        }
     }
 
     fun getRecyclerView(): RecyclerView {

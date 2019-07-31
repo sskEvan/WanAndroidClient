@@ -17,17 +17,17 @@ open class SwitchableConstraintLayout
 constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
 
     companion object {
-        private const val STATUS_LOADING = 0
-        private const val STATUS_EMPTY = 1
-        private const val STATUS_SUCCESS = 2
-        private const val STATUS_FAILED = 3
+        const val STATUS_LOADING = 0
+        const val STATUS_EMPTY = 1
+        const val STATUS_SUCCESS = 2
+        const val STATUS_FAILED = 3
     }
 
     private val mLoadingLayoutResIdArray = intArrayOf(R.id.loadingView)
     private val mFailedLayoutResIdArray = intArrayOf(R.id.ivFailed, R.id.tvFailedMsg, R.id.btnRetry)
     private val mEmptyLayoutResIdArray = intArrayOf(R.id.ivEmpty, R.id.tvEmpty)
     private lateinit var mRetryListener: () -> Unit?
-    private var mStatus: Int = -1
+    protected var mStatus: Int = -1
 
     init {
         View.inflate(context, R.layout.layout_switchable_constraint_layout_root, this)

@@ -72,11 +72,12 @@ interface ApiService {
     @GET("/lg/collect/list/{page}/json")
     fun getCollectedArticleList(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
 
-    @GET("/lg/todo/v2/list/{page}/json?status=0")
-    fun getTodoList(
+    @GET("/lg/todo/v2/list/{page}/json")
+    fun getScheduleList(
         @Path("page") page: Int,
-        @Query("type") type: Int
-    ): Deferred<BaseResponse<TodoListVo>>
+        @Query("type") type: Int,
+        @Query("status") status: Int
+    ): Deferred<BaseResponse<ScheduleListVo>>
 
     @POST("/lg/todo/add/json")
     fun addSchedule(
@@ -85,7 +86,7 @@ interface ApiService {
         @Query("date") date: String,
         @Query("type") type: Int,
         @Query("priority") priority: Int
-    ): Deferred<BaseResponse<TodoVo>>
+    ): Deferred<BaseResponse<ScheduleVo>>
 
     @POST("/lg/todo/update/{id}/json")
     fun editSchedule(
@@ -95,17 +96,17 @@ interface ApiService {
         @Query("date") date: String,
         @Query("type") type: Int,
         @Query("priority") priority: Int
-    ): Deferred<BaseResponse<TodoVo>>
+    ): Deferred<BaseResponse<ScheduleVo>>
 
     @POST("/lg/todo/done/{id}/json")
-    fun completeTodo(
+    fun completeSchedule(
         @Path("id") id: Int,
         @Query("status") status: Int
-    ): Deferred<BaseResponse<TodoVo>>
+    ): Deferred<BaseResponse<ScheduleVo>>
 
     @POST("/lg/todo/delete/{id}/json")
-    fun deleteTodo(
+    fun deleteSchedule(
         @Path("id") id: Int
-    ): Deferred<BaseResponse<TodoVo>>
+    ): Deferred<BaseResponse<ScheduleVo>>
 
 }
