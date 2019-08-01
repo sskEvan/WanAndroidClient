@@ -27,5 +27,5 @@ Wanandroid 是鸿洋大佬的安卓开源知识网站，包含最新博文、最
 * [FlowLayout](https://github.com/hongyangAndroid/FlowLayout)
 
 # 最后
-*  [点击下载体验版apk](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/WanAndroidClient.apk)
+*  [前往下载apk](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/WanAndroidClient.apk)
 *  谢谢鸿洋大佬!
