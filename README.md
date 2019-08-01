@@ -9,8 +9,6 @@ Wanandroid 是鸿洋大佬的安卓开源知识网站，包含最新博文、最
  ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/3.gif)
  ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/4.gif)
  ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/5.gif)
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/6.gif)
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/7.gif)
 
 # 主要开源框架
 
