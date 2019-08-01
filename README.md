@@ -4,11 +4,11 @@ Wanandroid 是鸿洋大佬的安卓开源知识网站，包含最新博文、最
 自己也试着撸一个出来,现基本功能已经开发完成。客户端使用Kotlin+MVVM+LiveData+Coroutines,代码结构清晰,UI风格力求统一小清新。这里特别感谢[lulululbj大神](https://github.com/TzuChiangLi/WanAndroid),项目中MVVM的基础封装很多参考自他之前开源的Wanandroid客户端！本项目会持续更新维护,同时也欢迎大家提升问题和建议,使项目更加完善。
 
 # 效果图
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/1.gif)
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/2.gif)
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/3.gif)
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/4.gif)
- ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/screenshot/5.gif)
+ ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/1.gif)
+ ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/2.gif)
+ ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/3.gif)
+ ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/4.gif)
+ ![img](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/5.gif)
 
 # 主要开源框架
 
@@ -27,4 +27,5 @@ Wanandroid 是鸿洋大佬的安卓开源知识网站，包含最新博文、最
 * [FlowLayout](https://github.com/hongyangAndroid/FlowLayout)
 
 # 最后
-谢谢鸿洋大佬!
+*  [点击下载体验版apk](https://github.com/sskEvan/WanAndroidClient/blob/master/introduce/WanAndroidClient.apk)
+*  谢谢鸿洋大佬!
