@@ -26,12 +26,11 @@ abstract class BaseRetrofitClient {
             val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
                 logDebug("OkHttp====Message:$message")
             })
-            /**if (BuildConfig.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             } else {
                 loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
-            }*/
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            }
 
             builder.addInterceptor(loggingInterceptor)
                 .connectTimeout(TIME_OUT.toLong(), TimeUnit.SECONDS)
@@ -51,4 +50,5 @@ abstract class BaseRetrofitClient {
             .baseUrl(baseUrl)
             .build().create(serviceClass)
     }
+
 }

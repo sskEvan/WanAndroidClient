@@ -55,11 +55,9 @@ class RevealActivityAnimation(private val mView: View, private val intent: Inten
     fun unRevealActivity() {
         logDebug("unRevealActivity done")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            logDebug("unRevealActivity done 1")
             mActivity.finish()
         } else {
             val finalRadius = (Math.max(mView.width, mView.height) * 1.0).toFloat()
-            logDebug("unRevealActivity done 2 finalRadius=" + finalRadius)
             val circularReveal = ViewAnimationUtils.createCircularReveal(
                 mView, revealX, revealY, finalRadius, 0f
             )

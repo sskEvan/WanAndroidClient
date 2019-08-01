@@ -6,6 +6,7 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.ssk.wanandroid.app.AppContext
 import com.ssk.wanandroid.util.NetWorkUtil
 import okhttp3.Cache
+import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import java.io.File
 
@@ -27,11 +28,11 @@ object WanRetrofitClient : BaseRetrofitClient() {
             .cookieJar(cookieJar)
             .addInterceptor { chain ->
                 var request = chain.request()
-//                if (!NetWorkUtil.isNetworkAvailable(AppContext)) {
-//                    request = request.newBuilder()
-//                        .cacheControl(CacheControl.FORCE_CACHE)
-//                        .build()
-//                }
+                if (!NetWorkUtil.isNetworkAvailable(AppContext)) {
+                    request = request.newBuilder()
+                        .cacheControl(CacheControl.FORCE_CACHE)
+                        .build()
+                }
                 val response = chain.proceed(request)
                 if (!NetWorkUtil.isNetworkAvailable(AppContext)) {
                     val maxAge = 60 * 60

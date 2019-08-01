@@ -9,10 +9,14 @@ import com.youth.banner.loader.ImageLoader
 /**
  * Created by shisenkun on 2019-06-24.
  */
-class BannerGlideImageLoader: ImageLoader() {
+class BannerGlideImageLoader : ImageLoader() {
 
     override fun displayImage(context: Context, path: Any, imageView: ImageView) {
-        Glide.with(context).load(path).placeholder(R.mipmap.ic_banner_default).error(R.mipmap.ic_banner_default).into(imageView)
+        Glide.with(context)
+            .load(path)
+            .placeholder(R.mipmap.ic_banner_default)
+            .error(R.mipmap.ic_banner_default)
+            .into(imageView)
     }
 
 }

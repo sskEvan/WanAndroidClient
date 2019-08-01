@@ -67,6 +67,6 @@ class SearchAdapter(data: List<ArticleVo>) : BaseQuickAdapter<ArticleVo, BaseVie
                 helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)
             }
         }
-
     }
+
 }

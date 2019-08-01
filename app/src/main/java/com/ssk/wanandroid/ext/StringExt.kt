@@ -11,9 +11,9 @@ import com.ssk.wanandroid.util.AndroidVersion
 fun String.fromHtml(): String {
 
     if (AndroidVersion.hasNougat()) {
-        return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString();
+        return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString()
     } else {
-        return Html.fromHtml(this).toString();
+        return Html.fromHtml(this).toString()
     }
 
 }

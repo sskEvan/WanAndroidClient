@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.ext.logWarn
 import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.util.AndroidVersion
 import com.ssk.wanandroid.util.DeviceInfo

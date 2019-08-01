@@ -60,5 +60,4 @@ object EventManager {
         EventBus.getDefault().cancelEventDelivery(event)
     }
 
-
 }

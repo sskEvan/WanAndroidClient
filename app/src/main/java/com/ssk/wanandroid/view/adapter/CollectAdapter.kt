@@ -66,6 +66,6 @@ class CollectAdapter(data: List<ArticleVo>) : BaseQuickAdapter<ArticleVo, BaseVi
                 helper.getView<CircleTextImageView>(R.id.ivAuthor).setText4CircleImage(item.author)
             }
         }
-
     }
+
 }

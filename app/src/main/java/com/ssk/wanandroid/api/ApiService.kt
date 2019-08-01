@@ -33,7 +33,9 @@ interface ApiService {
     fun getBanner(): Deferred<BaseResponse<List<BannerVo>>>
 
     @GET("/article/list/{page}/json")
-    fun getHomeArticleList(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
+    fun getHomeArticleList(
+        @Path("page") page: Int
+    ): Deferred<BaseResponse<ArticleListVo>>
 
     @GET("/project/tree/json")
     fun getProjectTagList(): Deferred<BaseResponse<List<ProjectTagVo>>>
@@ -64,13 +66,19 @@ interface ApiService {
     ): Deferred<BaseResponse<ArticleListVo>>
 
     @POST("/lg/collect/{id}/json")
-    fun collectArticle(@Path("id") id: Int): Deferred<BaseResponse<ArticleListVo>>
+    fun collectArticle(
+        @Path("id") id: Int
+    ): Deferred<BaseResponse<ArticleListVo>>
 
     @POST("/lg/uncollect_originId/{id}/json")
-    fun unCollectArticle(@Path("id") id: Int): Deferred<BaseResponse<ArticleListVo>>
+    fun unCollectArticle(
+        @Path("id") id: Int
+    ): Deferred<BaseResponse<ArticleListVo>>
 
     @GET("/lg/collect/list/{page}/json")
-    fun getCollectedArticleList(@Path("page") page: Int): Deferred<BaseResponse<ArticleListVo>>
+    fun getCollectedArticleList(
+        @Path("page") page: Int
+    ): Deferred<BaseResponse<ArticleListVo>>
 
     @GET("/lg/todo/v2/list/{page}/json")
     fun getScheduleList(

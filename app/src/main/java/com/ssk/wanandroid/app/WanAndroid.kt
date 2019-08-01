@@ -1,7 +1,6 @@
 package com.ssk.wanandroid.app
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.google.gson.Gson

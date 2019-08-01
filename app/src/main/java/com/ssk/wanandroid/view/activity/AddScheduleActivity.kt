@@ -29,11 +29,12 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
 
     override fun getLayoutId() = R.layout.activity_add_schedule
 
-    private val mScheduleTypeVoList = mutableListOf<ScheduleTypeVo>(
+    private val mScheduleTypeVoList = mutableListOf(
         ScheduleTypeVo(1, "工作"),
         ScheduleTypeVo(2, "学习"),
         ScheduleTypeVo(3, "生活")
     )
+
     private val mSdf = SimpleDateFormat("yyyy-MM-dd")
     private val mSdfYear = SimpleDateFormat("yyyy")
     private val mSdfMonth = SimpleDateFormat("MM")
@@ -70,8 +71,7 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
             ).show()
         }
 
-        rgPriority.setOnCheckedChangeListener { _, checkedId
-            ->
+        rgPriority.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbImportant -> mPriority = 1
                 R.id.rbNormal -> mPriority = 2
@@ -89,7 +89,7 @@ class AddScheduleActivity : WanActivity<AddScheduleViewModel>() {
                     tvDate.text.toString(),
                     mType,
                     mPriority
-                    )
+                )
             }
         }
     }

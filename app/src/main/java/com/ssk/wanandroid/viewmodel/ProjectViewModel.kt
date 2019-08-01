@@ -24,6 +24,4 @@ class ProjectViewModel : BaseViewModel() {
                 { mFetchProjectTagListErrorMsg.value = result.errorMsg })
         }
     }
-
-
 }
