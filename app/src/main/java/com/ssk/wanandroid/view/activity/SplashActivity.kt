@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.BaseActivity
@@ -13,9 +14,8 @@ import kotlinx.android.synthetic.main.activity_splash.*
 /**
  * Created by shisenkun on 2019-06-23.
  */
+@BindContentView(R.layout.activity_splash)
 class SplashActivity : BaseActivity() {
-
-    override fun getLayoutId() = R.layout.activity_splash
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

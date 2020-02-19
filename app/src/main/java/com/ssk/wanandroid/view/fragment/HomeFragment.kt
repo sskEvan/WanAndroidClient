@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.R
@@ -32,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-06-23.
  */
+@BindContentView(R.layout.fragment_home)
 class HomeFragment : WanFragment<HomeViewModel>() {
 
     companion object {
@@ -47,8 +49,6 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
     private var bannerLayout: Banner? = null
     private lateinit var commonListPager: CommonListPager<ArticleVo>
-
-    override fun getLayoutResId() = R.layout.fragment_home
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

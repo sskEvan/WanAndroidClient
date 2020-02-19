@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
@@ -16,15 +17,12 @@ import kotlinx.android.synthetic.main.activity_regist.*
 /**
  * Created by shisenkun on 2019-06-17.
  */
+@BindContentView(R.layout.activity_regist)
 class RegistActivity : WanActivity<LoginViewModel>() {
 
     private lateinit var userName: String
     private lateinit var passWord: String
     private lateinit var confirmPassword : String
-
-    override fun getLayoutId(): Int {
-        return R.layout.activity_regist
-    }
 
     override fun initView(savedInstanceState: Bundle?) {
         setupToolbar(true)

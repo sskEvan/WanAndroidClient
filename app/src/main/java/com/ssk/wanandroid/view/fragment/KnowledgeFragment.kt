@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.view.activity.KnowledgeDetailActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_knowledge.*
 /**
  * Created by shisenkun on 2019-06-23.
  */
-
+@BindContentView(R.layout.fragment_knowledge)
 class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
 
     companion object {
@@ -35,8 +36,6 @@ class KnowledgeFragment : WanFragment<KnowledgeViewModel>() {
     private lateinit var mKnowledgeSubTagVoList: List<KnowledgeTabVo>
     private var mScrollingPosition = 0
     private var mIsScrolling = false
-
-    override fun getLayoutResId() = R.layout.fragment_knowledge
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

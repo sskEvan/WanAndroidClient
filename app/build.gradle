@@ -27,6 +27,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation rootProject.ext.dependencies["kotlin"]
+
     testImplementation rootProject.ext.dependencies["junit"]
     androidTestImplementation rootProject.ext.dependencies["testRunner"]
     androidTestImplementation rootProject.ext.dependencies["testEspresso"]
@@ -55,5 +57,8 @@ dependencies {
     implementation rootProject.ext.dependencies["smartRefreshLayout"]
     implementation rootProject.ext.dependencies["smartRefreshHeader"]
     implementation rootProject.ext.dependencies["flowLayout"]
+
+    implementation project(':lib_annotation')
+
 
 }

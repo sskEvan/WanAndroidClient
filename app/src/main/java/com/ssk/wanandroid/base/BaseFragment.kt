@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.ssk.lib_annotation.base.ViewBinder
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager
@@ -18,7 +19,7 @@ import com.ssk.wanandroid.util.DeviceInfo
 /**
  * Created by shisenkun on 2019-06-23.
  */
-abstract class BaseFragment : Fragment() {
+open class BaseFragment : Fragment() {
 
     lateinit var mContentView: View
     lateinit var mActivity: BaseActivity
@@ -28,7 +29,7 @@ abstract class BaseFragment : Fragment() {
     var mIsActivityCreate = false;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mContentView = inflater.inflate(getLayoutResId(), container, false)
+        mContentView = ViewBinder.injectFragment(this, inflater, container)
         return mContentView
     }
 
@@ -48,8 +49,6 @@ abstract class BaseFragment : Fragment() {
 
     open fun initView(savedInstanceState: Bundle?) {}
     open fun initData(savedInstanceState: Bundle?) {}
-
-    abstract fun getLayoutResId(): Int
 
     protected fun startActivity(clazz: Class<*>, doCommonEnterAnim: Boolean) {
         startActivity(Intent(mActivity, clazz))

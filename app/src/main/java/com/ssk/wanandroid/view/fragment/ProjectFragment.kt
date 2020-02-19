@@ -3,6 +3,7 @@ package com.ssk.wanandroid.view.fragment
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ProjectTagVo
@@ -23,6 +24,7 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-06-23.
  */
+@BindContentView(R.layout.fragment_project)
 class ProjectFragment : WanFragment<ProjectViewModel>() {
 
     companion object {
@@ -34,8 +36,6 @@ class ProjectFragment : WanFragment<ProjectViewModel>() {
     private lateinit var mPagerAdapter: ProjectTagPagerAdapter
     private var mCurrentPagerPosition = 0
     private var mIsFabUpward = true
-
-    override fun getLayoutResId() = R.layout.fragment_project
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

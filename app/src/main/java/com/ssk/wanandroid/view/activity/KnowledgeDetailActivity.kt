@@ -3,6 +3,7 @@ package com.ssk.wanandroid.view.activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
@@ -19,9 +20,9 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-07-08.
  */
+@BindContentView(R.layout.activity_knowledge_detail)
 class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
-    override fun getLayoutId(): Int = R.layout.activity_knowledge_detail
     private val mAdapter by lazy { ArticleAdapter() }
     private lateinit var commonListPager: CommonListPager<ArticleVo>
     private var mPosition = 0

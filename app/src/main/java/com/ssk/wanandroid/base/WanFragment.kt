@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import com.ssk.lib_annotation.base.ViewBinder
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager
@@ -22,7 +23,7 @@ import java.lang.reflect.ParameterizedType
 /**
  * Created by shisenkun on 2019-06-24.
  */
-abstract class WanFragment<VM: BaseViewModel> : Fragment() {
+open class WanFragment<VM: BaseViewModel> : Fragment() {
 
     lateinit var mContentView: View
     lateinit var mActivity: BaseActivity
@@ -33,7 +34,7 @@ abstract class WanFragment<VM: BaseViewModel> : Fragment() {
     var mIsActivityCreate = false;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mContentView = inflater.inflate(getLayoutResId(), container, false)
+        mContentView = ViewBinder.injectFragment(this, inflater, container)
         return mContentView
     }
 
@@ -56,8 +57,6 @@ abstract class WanFragment<VM: BaseViewModel> : Fragment() {
 
     open fun initView(savedInstanceState: Bundle?) {}
     open fun initData(savedInstanceState: Bundle?) {}
-
-    abstract fun getLayoutResId(): Int
 
     private fun initVM() {
         provideVMClass2()?.let {

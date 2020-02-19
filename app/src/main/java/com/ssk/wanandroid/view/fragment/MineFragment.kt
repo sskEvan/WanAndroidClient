@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
 import com.bumptech.glide.Glide
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
@@ -25,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_mine.*
 /**
  * Created by shisenkun on 2019-06-23.
  */
-
+@BindContentView(R.layout.fragment_mine)
 class MineFragment : BaseFragment() {
 
     companion object {
@@ -36,8 +37,6 @@ class MineFragment : BaseFragment() {
     private var mIvHeadPortraitBgOriginalHeight = 0
     private var mRecoverIvHeadPortraitBgAnim: ValueAnimator? = null
     private val mScrollDamping = 0.25f
-
-    override fun getLayoutResId() = R.layout.fragment_mine
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

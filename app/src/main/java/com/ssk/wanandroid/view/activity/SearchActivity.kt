@@ -12,6 +12,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
@@ -35,6 +36,7 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-06-22.
  */
+@BindContentView(R.layout.activity_search)
 class SearchActivity : WanActivity<SearchViewModel>() {
 
     private lateinit var mSearchAdapter: SearchAdapter
@@ -42,8 +44,6 @@ class SearchActivity : WanActivity<SearchViewModel>() {
     private lateinit var etSearch: EditText
     private lateinit var commonListPager: CommonListPager<ArticleVo>
     private var mPosition = 0
-
-    override fun getLayoutId() = R.layout.activity_search
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

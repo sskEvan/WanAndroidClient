@@ -4,6 +4,7 @@ apply from: "config.gradle"
 buildscript {
 
     repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
         google()
         maven { url 'https://dl.bintray.com/linkedme2016/lkme-deeplinks'}
@@ -19,6 +20,7 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
         maven { url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/' }
         maven { url "https://jitpack.io" }

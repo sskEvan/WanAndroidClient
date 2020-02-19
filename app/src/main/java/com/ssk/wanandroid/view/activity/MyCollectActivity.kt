@@ -3,6 +3,7 @@ package com.ssk.wanandroid.view.activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
@@ -19,13 +20,12 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-07-22.
  */
+@BindContentView(R.layout.activity_my_collect)
 class MyCollectActivity : WanActivity<MyCollectViewModel>() {
 
     private lateinit var commonListPager: CommonListPager<ArticleVo>
     private lateinit var mCollectAdapter: CollectAdapter
     private var mPosition = 0
-
-    override fun getLayoutId() = R.layout.activity_my_collect
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

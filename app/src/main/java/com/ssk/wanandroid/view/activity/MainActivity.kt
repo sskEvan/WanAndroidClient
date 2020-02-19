@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseActivity
 import com.ssk.wanandroid.ext.showToast
@@ -14,6 +15,7 @@ import com.ssk.wanandroid.view.fragment.ProjectFragment
 import com.ssk.wanandroid.util.RevealActivityAnimation
 import kotlinx.android.synthetic.main.activity_main.*
 
+@BindContentView(R.layout.activity_main)
 class MainActivity : BaseActivity() {
 
     private var mBackPressTime = 0L
@@ -23,8 +25,6 @@ class MainActivity : BaseActivity() {
     private val mKnowledgeFragment by lazy { KnowledgeFragment.create() }
     private val mProjectFragment by lazy { ProjectFragment.create() }
     private val mMineFragment by lazy { MineFragment.create() }
-
-    override fun getLayoutId() = R.layout.activity_main
 
     override fun initView(savedInstanceState: Bundle?) {
         bottomNavigationView.setOnNavigationItemSelectedListener(object :

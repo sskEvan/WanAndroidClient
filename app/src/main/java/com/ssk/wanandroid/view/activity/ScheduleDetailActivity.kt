@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseActivity
 import com.ssk.wanandroid.bean.ScheduleTypeVo
@@ -17,9 +18,8 @@ import kotlinx.android.synthetic.main.activity_schedule_detail.*
 /**
  * Created by shisenkun on 2019-07-29.
  */
+@BindContentView(R.layout.activity_schedule_detail)
 class ScheduleDetailActivity : BaseActivity() {
-
-    override fun getLayoutId() = R.layout.activity_schedule_detail
 
     private lateinit var scheduleVo: ScheduleVo
 

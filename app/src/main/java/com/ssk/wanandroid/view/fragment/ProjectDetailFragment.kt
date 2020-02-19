@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.view.activity.WanWebActivity
@@ -27,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-07-03.
  */
+@BindContentView(R.layout.fragment_project_detail)
 class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
     companion object {
@@ -44,8 +46,6 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     private var mPosition = 0
     private var mNoMoreData = false
     private lateinit var commonListPager: CommonListPager<ArticleVo>
-
-    override fun getLayoutResId() = R.layout.fragment_project_detail
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

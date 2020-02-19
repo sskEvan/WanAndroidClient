@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.base
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import com.ssk.lib_annotation.base.ViewBinder
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager
@@ -25,7 +27,8 @@ import java.lang.reflect.ParameterizedType
 /**
  * Created by shisenkun on 2019-06-18.
  */
-abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
+@SuppressLint("Registered")
+open class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
 
     var mLoadingDialog: LoadingDialog? = null
     var toolbar: Toolbar? = null
@@ -33,7 +36,7 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
+        ViewBinder.injectActivity(this)
         EventManager.register(this)
         initVM()
         initView(savedInstanceState)
@@ -70,8 +73,6 @@ abstract class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
         startActivity(Intent(this, clazz).putExtras(bundle))
         doEnterAnim()
     }
-
-    abstract fun getLayoutId(): Int
 
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
         toolbar = findViewById(R.id.toolbar)

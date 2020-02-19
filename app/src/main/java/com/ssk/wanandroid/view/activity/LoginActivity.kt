@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
@@ -16,14 +17,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 /**
  * Created by shisenkun on 2019-06-17.
  */
+@BindContentView(R.layout.activity_login)
 class LoginActivity : WanActivity<LoginViewModel>() {
 
     private lateinit var userName: String
     private lateinit var passWord: String
-
-    override fun getLayoutId(): Int {
-        return R.layout.activity_login
-    }
 
     override fun initView(savedInstanceState: Bundle?) {
         setupToolbar(true)

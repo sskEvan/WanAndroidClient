@@ -13,6 +13,7 @@ import com.ssk.wanandroid.R
 import kotlinx.android.synthetic.main.activity_web.*
 import android.net.Uri
 import androidx.lifecycle.Observer
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.event.OnCollectChangedEvent
@@ -24,6 +25,7 @@ import com.ssk.wanandroid.viewmodel.WanWebViewModel
 /**
  * Created by shisenkun on 2019-06-29.
  */
+@BindContentView(R.layout.activity_web)
 class WanWebActivity : WanActivity<WanWebViewModel>() {
 
     private var mIsNetworkError = true
@@ -32,8 +34,6 @@ class WanWebActivity : WanActivity<WanWebViewModel>() {
     private var mIsCollected = false
     private var mId = 0
     private var mItemCollect: MenuItem? = null
-
-    override fun getLayoutId() = R.layout.activity_web
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

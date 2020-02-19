@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.base
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.ssk.lib_annotation.base.ViewBinder
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager
@@ -18,14 +20,15 @@ import com.ssk.wanandroid.util.DeviceInfo
 /**
  * Created by shisenkun on 2019-06-18.
  */
-abstract class BaseActivity : AppCompatActivity() {
+@SuppressLint("Registered")
+open class BaseActivity : AppCompatActivity() {
 
     var mLoadingDialog: LoadingDialog? = null
     var toolbar: Toolbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
+        ViewBinder.injectActivity(this)
         initView(savedInstanceState)
         initData(savedInstanceState)
         EventManager.register(this)
@@ -48,8 +51,6 @@ abstract class BaseActivity : AppCompatActivity() {
         startActivity(Intent(this, clazz).putExtras(bundle))
         doEnterAnim()
     }
-
-    abstract fun getLayoutId(): Int
 
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
         toolbar = findViewById(R.id.toolbar)

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ScheduleTypeVo
@@ -25,9 +26,8 @@ import java.util.*
 /**
  * Created by shisenkun on 2019-07-29.
  */
+@BindContentView(R.layout.activity_edit_schedule)
 class EditScheduleActivity : WanActivity<EditScheduleViewModel>() {
-
-    override fun getLayoutId() = R.layout.activity_edit_schedule
 
     private val mScheduleTypeVoList = mutableListOf<ScheduleTypeVo>(
         ScheduleTypeVo(1, "工作"),

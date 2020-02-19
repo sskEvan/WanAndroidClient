@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ScheduleVo
@@ -23,6 +24,7 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * Created by shisenkun on 2019-07-28.
  */
+@BindContentView(R.layout.fragment_schedule)
 class ScheduleFragment : WanFragment<ScheduleViewModel>() {
 
     companion object {
@@ -43,8 +45,6 @@ class ScheduleFragment : WanFragment<ScheduleViewModel>() {
     private val mAdapter by lazy { ScheduleAdapter(mutableListOf()) }
     private var mType: Int = 0
     private var mStatus: Int = 0
-
-    override fun getLayoutResId() = R.layout.fragment_schedule
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)

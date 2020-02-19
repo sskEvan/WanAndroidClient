@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
+import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.base.BaseActivity
 import com.ssk.wanandroid.util.RevealActivityAnimation
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_shedule.*
 /**
  * Created by shisenkun on 2019-07-28.
  */
+@BindContentView(R.layout.activity_shedule)
 class ScheduleActivity : BaseActivity() {
 
     companion object {
@@ -34,8 +36,6 @@ class ScheduleActivity : BaseActivity() {
     private lateinit var mPagerAdapter: SchedulePagerAdapter
     private var mCurrentPagerPosition = 0
     private var mStatus = STATUS_NOT_COMPLETED
-
-    override fun getLayoutId() = R.layout.activity_shedule
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
