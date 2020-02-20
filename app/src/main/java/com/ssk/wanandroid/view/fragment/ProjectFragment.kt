@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager

@@ -1,17 +1,16 @@
 package com.ssk.wanandroid.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
-import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.view.adapter.ArticleAdapter
 import com.ssk.wanandroid.viewmodel.KnowledgeDetailViewModel
 import com.ssk.wanandroid.widget.CollectButton
@@ -25,9 +24,14 @@ import org.greenrobot.eventbus.ThreadMode
 @BindContentView(R.layout.activity_knowledge_detail)
 class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
 
+    companion object {
+        private const val REQUEST_CODE_COLLECT = 100
+    }
+
     private val mAdapter by lazy { ArticleAdapter() }
     private lateinit var commonListPager: CommonListPager<ArticleVo>
     private var mPosition = 0
+    private lateinit var mCollectButton: CollectButton
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -58,6 +62,7 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
         mAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                 mPosition = position
+                mCollectButton = view as CollectButton
                 when (view.id) {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(
@@ -66,23 +71,23 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
                         )
                     }
                     R.id.collectButton -> {
-                        collect(view, position)
+                        handleCollectAction()
                     }
                 }
             }
         }
     }
 
-    @CheckLogin
-    private fun collect(view: View, position: Int) {
-        if (mAdapter.data[position].collect) {
-            (view as CollectButton).startUncollectAnim()
-            mViewModel.unCollectArticle(mAdapter.data[position].id)
+    @CheckLogin(REQUEST_CODE_COLLECT)
+    private fun handleCollectAction() {
+        if (mAdapter.data[mPosition].collect) {
+            (mCollectButton as CollectButton).startUncollectAnim()
+            mViewModel.unCollectArticle(mAdapter.data[mPosition].id)
         } else {
-            (view as CollectButton).startCollectAnim()
-            mViewModel.collectArticle(mAdapter.data[position].id)
+            (mCollectButton as CollectButton).startCollectAnim()
+            mViewModel.collectArticle(mAdapter.data[mPosition].id)
         }
-        mAdapter.data[position].collect = !mAdapter.data[position].collect
+        mAdapter.data[mPosition].collect = !mAdapter.data[mPosition].collect
     }
 
     private fun forwardWanWebActivity(title: String, url: String, id: Int, isCollected: Boolean) {
@@ -144,6 +149,13 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
         if (event.id == mAdapter.data[mPosition].id) {
             mAdapter.data[mPosition].collect = event.isCollected
             mAdapter.notifyItemChanged(mPosition)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_CODE_COLLECT) {
+            handleCollectAction()
         }
     }
 

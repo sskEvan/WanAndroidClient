@@ -28,7 +28,7 @@ import java.lang.reflect.ParameterizedType
  * Created by shisenkun on 2019-06-18.
  */
 @SuppressLint("Registered")
-open class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
+open class WanActivity<VM : BaseViewModel> : AppCompatActivity() {
 
     var mLoadingDialog: LoadingDialog? = null
     var toolbar: Toolbar? = null
@@ -57,7 +57,8 @@ open class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
         }
     }
 
-    private fun provideVMClass2(): Class<VM>? = (javaClass.genericSuperclass as ParameterizedType).getActualTypeArguments()[0] as Class<VM>
+    private fun provideVMClass2(): Class<VM>? =
+        (javaClass.genericSuperclass as ParameterizedType).getActualTypeArguments()[0] as Class<VM>
 
     open fun startObserve() {}
 
@@ -77,7 +78,7 @@ open class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
     protected fun setupToolbar(displayHomeAsUpEnabled: Boolean) {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        toolbar!!.setNavigationOnClickListener{
+        toolbar!!.setNavigationOnClickListener {
             onBackPressed()
         }
         val actionBar = supportActionBar
@@ -115,12 +116,13 @@ open class WanActivity<VM: BaseViewModel> : AppCompatActivity() {
     protected fun immersiveStatusBar(color: Int, handleLayoutOverLap: Boolean) {
         if (AndroidVersion.hasLollipop()) {
             val decorView = window.decorView
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             window.statusBarColor = ContextCompat.getColor(this, color)
             val contentView: ViewGroup = decorView.findViewById(android.R.id.content)
             contentView.setPadding(
                 decorView.paddingLeft,
-                if(handleLayoutOverLap) DeviceInfo.statusBarHeight else 0,
+                if (handleLayoutOverLap) DeviceInfo.statusBarHeight else 0,
                 decorView.paddingRight,
                 decorView.paddingBottom
             )

@@ -1,5 +1,7 @@
 package com.ssk.wanandroid.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
@@ -38,11 +40,16 @@ import org.greenrobot.eventbus.ThreadMode
 @BindContentView(R.layout.activity_search)
 class SearchActivity : WanActivity<SearchViewModel>() {
 
+    companion object {
+        private const val REQUEST_CODE_COLLECT = 100
+    }
+
     private lateinit var mSearchAdapter: SearchAdapter
     private var mSearchKey: String? = null
     private lateinit var etSearch: EditText
     private lateinit var commonListPager: CommonListPager<ArticleVo>
     private var mPosition = 0
+    private lateinit var mCollectButton: CollectButton
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -159,30 +166,30 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         mSearchAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                 mPosition = position
-
+                mCollectButton = view as CollectButton
                 when (view.id) {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(mSearchAdapter.data[position].title.fromHtml(), mSearchAdapter.data[position].link,
                             mSearchAdapter.data[position].id, mSearchAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
-                        collect(view, position)
+                        handleCollectAction()
                     }
                 }
             }
         }
     }
 
-    @CheckLogin
-    private fun collect(view: View, position: Int) {
-        if(mSearchAdapter.data[position].collect) {
-            (view as CollectButton).startUncollectAnim()
-            mViewModel.unCollectArticle(mSearchAdapter.data[position].id)
+    @CheckLogin(REQUEST_CODE_COLLECT)
+    private fun handleCollectAction() {
+        if(mSearchAdapter.data[mPosition].collect) {
+            mCollectButton.startUncollectAnim()
+            mViewModel.unCollectArticle(mSearchAdapter.data[mPosition].id)
         }else {
-            (view as CollectButton).startCollectAnim()
-            mViewModel.collectArticle(mSearchAdapter.data[position].id)
+            mCollectButton.startCollectAnim()
+            mViewModel.collectArticle(mSearchAdapter.data[mPosition].id)
         }
-        mSearchAdapter.data[position].collect = !mSearchAdapter.data[position].collect
+        mSearchAdapter.data[mPosition].collect = !mSearchAdapter.data[mPosition].collect
     }
 
     private fun setupHotSearchTagLayout(hotSearchVoList: List<HotSearchVo>) {
@@ -257,6 +264,13 @@ class SearchActivity : WanActivity<SearchViewModel>() {
         if (event.id == mSearchAdapter.data[mPosition].id) {
             mSearchAdapter.data[mPosition].collect = event.isCollected
             mSearchAdapter.notifyItemChanged(mPosition)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_CODE_COLLECT) {
+            handleCollectAction()
         }
     }
 

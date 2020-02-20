@@ -2,4 +2,4 @@ package com.ssk.wanandroid.aspect.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class CheckLogin
+annotation class CheckLogin(val requestCode : Int = -1)

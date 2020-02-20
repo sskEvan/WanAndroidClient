@@ -10,7 +10,7 @@ import java.util.ArrayList
  * Created by shisenkun on 2019-07-03.
  */
 class ProjectTagPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-    private val mFragments = ArrayList<Fragment>()
+    val mFragments = ArrayList<Fragment>()
     private val mFragmentTitles = ArrayList<String>()
 
     fun addFragment(fragment: Fragment, title: String) {
@@ -29,4 +29,6 @@ class ProjectTagPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm
     override fun getPageTitle(position: Int): CharSequence? {
         return mFragmentTitles[position]
     }
+
+
 }

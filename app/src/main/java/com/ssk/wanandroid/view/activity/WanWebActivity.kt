@@ -14,11 +14,9 @@ import kotlinx.android.synthetic.main.activity_web.*
 import android.net.Uri
 import androidx.lifecycle.Observer
 import com.ssk.lib_annotation.annotation.BindContentView
-import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.event.OnCollectChangedEvent
-import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.viewmodel.WanWebViewModel
 
@@ -28,6 +26,10 @@ import com.ssk.wanandroid.viewmodel.WanWebViewModel
  */
 @BindContentView(R.layout.activity_web)
 class WanWebActivity : WanActivity<WanWebViewModel>() {
+
+    companion object {
+        private const val REQUEST_CODE_COLLECT = 100
+    }
 
     private var mIsNetworkError = true
     private lateinit var mUrl: String
@@ -155,7 +157,7 @@ class WanWebActivity : WanActivity<WanWebViewModel>() {
         if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
     }
 
-    @CheckLogin
+    @CheckLogin(REQUEST_CODE_COLLECT)
     private fun collectArticle() {
         if(mIsCollected) {
             mViewModel.unCollectArticle(mId)
@@ -182,4 +184,10 @@ class WanWebActivity : WanActivity<WanWebViewModel>() {
         startActivity(intent)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_CODE_COLLECT) {
+            collectArticle()
+        }
+    }
 }

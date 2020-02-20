@@ -13,18 +13,15 @@ import com.ssk.wanandroid.view.activity.SearchActivity
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.BannerVo
 import com.ssk.wanandroid.view.adapter.ArticleAdapter
-import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.AndroidVersion
 import com.ssk.wanandroid.util.BannerGlideImageLoader
 import com.ssk.wanandroid.viewmodel.HomeViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
-import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
-import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.widget.CommonListPager
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -37,6 +34,8 @@ import org.greenrobot.eventbus.ThreadMode
 class HomeFragment : WanFragment<HomeViewModel>() {
 
     companion object {
+        private const val REQUEST_CODE_COLLECT = 100
+
         fun create() = HomeFragment()
     }
 
@@ -46,6 +45,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
     private val mArticleAdapter by lazy { ArticleAdapter() }
     private var mPosition = 0
+    private lateinit var mCollectButton: CollectButton
 
     private var bannerLayout: Banner? = null
     private lateinit var commonListPager: CommonListPager<ArticleVo>
@@ -123,6 +123,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             onItemChildClickListener =
                 BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                     mPosition = position
+                    mCollectButton = view as CollectButton
                     when (view.id) {
                         R.id.cvItemRoot -> {
                             forwardWanWebActivity(
@@ -133,23 +134,23 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                             )
                         }
                         R.id.collectButton -> {
-                            collect(view, position)
+                            handleCollectAction()
                         }
                     }
                 }
         }
     }
 
-    @CheckLogin
-    private fun collect(view: View, position: Int) {
-        if (mArticleAdapter.data[position].collect) {
-            (view as CollectButton).startUncollectAnim()
-            mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
+    @CheckLogin(REQUEST_CODE_COLLECT)
+    private fun handleCollectAction() {
+        if (mArticleAdapter.data[mPosition].collect) {
+            mCollectButton.startUncollectAnim()
+            mViewModel.unCollectArticle(mArticleAdapter.data[mPosition].id)
         } else {
-            (view as CollectButton).startCollectAnim()
-            mViewModel.collectArticle(mArticleAdapter.data[position].id)
+            mCollectButton.startCollectAnim()
+            mViewModel.collectArticle(mArticleAdapter.data[mPosition].id)
         }
-        mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
+        mArticleAdapter.data[mPosition].collect = !mArticleAdapter.data[mPosition].collect
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -237,6 +238,13 @@ class HomeFragment : WanFragment<HomeViewModel>() {
                 mArticleAdapter.notifyItemChanged(mArticleAdapter.data.indexOf(it) + 1)
                 return
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_CODE_COLLECT) {
+            handleCollectAction()
         }
     }
 

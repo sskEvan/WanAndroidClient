@@ -1,5 +1,6 @@
 package com.ssk.wanandroid.view.activity
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
@@ -47,7 +48,9 @@ class LoginActivity : WanActivity<LoginViewModel>() {
 
             R.id.menu_item_regist -> {
                 startActivity(RegistActivity::class.java)
-                WanAndroid.uiHandler.postDelayed({finish()}, 300)
+                WanAndroid.uiHandler.postDelayed({
+                    finish()
+                }, 300)
             }
         }
         return true

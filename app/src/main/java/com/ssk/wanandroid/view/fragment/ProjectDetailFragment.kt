@@ -1,14 +1,13 @@
 package com.ssk.wanandroid.view.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.base.WanFragment
@@ -17,7 +16,6 @@ import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabClickResponseEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabUpwardControlEvent
 import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
-import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.view.adapter.ProjectAdapter
 import com.ssk.wanandroid.util.EventManager
 import com.ssk.wanandroid.viewmodel.ProjectDetailViewModel
@@ -33,6 +31,8 @@ import org.greenrobot.eventbus.ThreadMode
 class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
 
     companion object {
+        private const val REQUEST_CODE_COLLECT = 100
+
         fun create(projectId: Int): ProjectDetailFragment = ProjectDetailFragment().apply {
             val bundle = Bundle()
             bundle.putInt("projectId", projectId)
@@ -47,6 +47,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
     private var mPosition = 0
     private var mNoMoreData = false
     private lateinit var commonListPager: CommonListPager<ArticleVo>
+    private lateinit var mCollectButton: CollectButton
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -119,6 +120,7 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
         mProjectAdapter.run {
             onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
                 mPosition = position
+                mCollectButton = view as CollectButton
                 when (view.id) {
                     R.id.cvItemRoot -> {
                         forwardWanWebActivity(
@@ -127,23 +129,23 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                         )
                     }
                     R.id.collectButton -> {
-                       collect(view, position)
+                       handleCollectAction()
                     }
                 }
             }
         }
     }
 
-    @CheckLogin
-    private fun collect(view: View, position: Int) {
-        if (mProjectAdapter.data[position].collect) {
-            (view as CollectButton).startUncollectAnim()
-            mViewModel.unCollectArticle(mProjectAdapter.data[position].id)
+    @CheckLogin(REQUEST_CODE_COLLECT)
+    private fun handleCollectAction() {
+        if (mProjectAdapter.data[mPosition].collect) {
+            mCollectButton.startUncollectAnim()
+            mViewModel.unCollectArticle(mProjectAdapter.data[mPosition].id)
         } else {
-            (view as CollectButton).startCollectAnim()
-            mViewModel.collectArticle(mProjectAdapter.data[position].id)
+            mCollectButton.startCollectAnim()
+            mViewModel.collectArticle(mProjectAdapter.data[mPosition].id)
         }
-        mProjectAdapter.data[position].collect = !mProjectAdapter.data[position].collect
+        mProjectAdapter.data[mPosition].collect = !mProjectAdapter.data[mPosition].collect
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -213,6 +215,13 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                 mProjectAdapter.notifyItemChanged(mProjectAdapter.data.indexOf(it))
                 return
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_CODE_COLLECT) {
+            handleCollectAction()
         }
     }
 

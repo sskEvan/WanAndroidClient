@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.ext.logDebug
 import com.ssk.wanandroid.ext.logError
 import com.ssk.wanandroid.ext.logWarn
@@ -19,6 +20,7 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
+import org.aspectj.lang.reflect.MethodSignature
 
 @Aspect
 class CheckLoginAspect {
@@ -37,23 +39,35 @@ class CheckLoginAspect {
      */
     @Around("methodCutPoint()")
     @Throws(Throwable::class)
-    fun jointPotin(joinPoint: ProceedingJoinPoint): Any? {
+    fun joinPoint(joinPoint: ProceedingJoinPoint): Any? {
 
         val obj = joinPoint.getThis()
 
-        if (false) {
+        if (WanAndroid.currentUser != null) {
             logWarn("检测到已登录！")
             return joinPoint.proceed()
         } else {
             logWarn("检测到未登录！")
             showToast("请先登陆!")
+            val signature = joinPoint.signature as MethodSignature
+            val annotation = signature.method.getAnnotation(CheckLogin::class.java) as CheckLogin
+            val requestCode = annotation.requestCode
+
             if (obj is Activity) {
-                obj.startActivity(Intent(obj, LoginActivity::class.java))
+                if(requestCode == -1) {
+                    obj.startActivity(Intent(obj, LoginActivity::class.java))
+                }else {
+                    obj.startActivityForResult(Intent(obj, LoginActivity::class.java), requestCode)
+                }
                 obj.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
                 // 不再执行方法（切入点）
                 return null
             } else if (obj is Fragment) {
-                obj.context!!.startActivity(Intent(obj.context, LoginActivity::class.java))
+                if(requestCode == -1) {
+                    obj.activity!!.startActivity(Intent(obj.context, LoginActivity::class.java))
+                }else {
+                    obj.startActivityForResult(Intent(obj.context, LoginActivity::class.java), requestCode)
+                }
                 obj.activity!!.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
                 // 不再执行方法（切入点）
                 return null
