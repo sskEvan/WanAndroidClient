@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'android-aspectjx'
+
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     defaultConfig {
@@ -58,7 +60,7 @@ dependencies {
     implementation rootProject.ext.dependencies["smartRefreshHeader"]
     implementation rootProject.ext.dependencies["flowLayout"]
 
+    implementation rootProject.ext.dependencies["aspectj"]
+
     implementation project(':lib_annotation')
-
-
 }

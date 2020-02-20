@@ -7,7 +7,6 @@ import android.view.*
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.lib_annotation.annotation.BindContentView
-import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.view.activity.SearchActivity
@@ -22,6 +21,7 @@ import com.ssk.wanandroid.widget.CollectButton
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.util.EventManager
@@ -85,16 +85,20 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
     private fun setupCommonListPager() {
         commonListPager = mContentView.findViewById(R.id.commonListPager)
-        val headerLayout = layoutInflater.inflate(R.layout.layout_article_list_header,
+        val headerLayout = layoutInflater.inflate(
+            R.layout.layout_article_list_header,
             commonListPager.getRecyclerView().parent as ViewGroup,
-            false)
+            false
+        )
         bannerLayout = headerLayout.findViewById(R.id.bannerLayout) as Banner
         bannerLayout?.run {
             setBannerStyle(BannerConfig.NUM_INDICATOR)
             setImageLoader(BannerGlideImageLoader())
             setOnBannerListener {
-                forwardWanWebActivity(mBannerTitles[it], mBannerUrls[it],
-                    mArticleAdapter.data[it].id, mArticleAdapter.data[it].collect)
+                forwardWanWebActivity(
+                    mBannerTitles[it], mBannerUrls[it],
+                    mArticleAdapter.data[it].id, mArticleAdapter.data[it].collect
+                )
             }
         }
 
@@ -116,32 +120,36 @@ class HomeFragment : WanFragment<HomeViewModel>() {
 
         mArticleAdapter.run {
             addHeaderView(headerLayout)
-            onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener{_, view, position ->
-                mPosition = position
-                when (view.id) {
-                    R.id.cvItemRoot -> {
-                        forwardWanWebActivity(mArticleAdapter.data[position].title, mArticleAdapter.data[position].link,
-                            mArticleAdapter.data[position].id, mArticleAdapter.data[position].collect)
-                    }
-                    R.id.collectButton -> {
-                        if(WanAndroid.currentUser != null) {
-                            if(mArticleAdapter.data[position].collect) {
-                                (view as CollectButton).startUncollectAnim()
-                                mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
-                            }else {
-                                (view as CollectButton).startCollectAnim()
-                                mViewModel.collectArticle(mArticleAdapter.data[position].id)
-                            }
-                            mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
-                        }else {
-                            showToast("请先登陆!")
-                            startActivity(LoginActivity::class.java, false)
-                            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+            onItemChildClickListener =
+                BaseQuickAdapter.OnItemChildClickListener { _, view, position ->
+                    mPosition = position
+                    when (view.id) {
+                        R.id.cvItemRoot -> {
+                            forwardWanWebActivity(
+                                mArticleAdapter.data[position].title,
+                                mArticleAdapter.data[position].link,
+                                mArticleAdapter.data[position].id,
+                                mArticleAdapter.data[position].collect
+                            )
+                        }
+                        R.id.collectButton -> {
+                            collect(view, position)
                         }
                     }
                 }
-            }
         }
+    }
+
+    @CheckLogin
+    private fun collect(view: View, position: Int) {
+        if (mArticleAdapter.data[position].collect) {
+            (view as CollectButton).startUncollectAnim()
+            mViewModel.unCollectArticle(mArticleAdapter.data[position].id)
+        } else {
+            (view as CollectButton).startCollectAnim()
+            mViewModel.collectArticle(mArticleAdapter.data[position].id)
+        }
+        mArticleAdapter.data[position].collect = !mArticleAdapter.data[position].collect
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -157,7 +165,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
             toolbar?.title = "首页"
             animateToolbarTitle()
             bannerLayout?.startAutoPlay()
-        }else {
+        } else {
             bannerLayout?.stopAutoPlay()
         }
     }
@@ -224,7 +232,7 @@ class HomeFragment : WanFragment<HomeViewModel>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: OnCollectChangedEvent) {
         mArticleAdapter.data.forEach {
-            if(event.id == it.id) {
+            if (event.id == it.id) {
                 it.collect = event.isCollected
                 mArticleAdapter.notifyItemChanged(mArticleAdapter.data.indexOf(it) + 1)
                 return

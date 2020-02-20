@@ -2,12 +2,14 @@ package com.ssk.wanandroid.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.view.activity.WanWebActivity
 import com.ssk.wanandroid.base.WanFragment
 import com.ssk.wanandroid.bean.ArticleVo
@@ -18,7 +20,6 @@ import com.ssk.wanandroid.event.OnProjectFragmentFabVisiableControlEvent
 import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.view.adapter.ProjectAdapter
 import com.ssk.wanandroid.util.EventManager
-import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.viewmodel.ProjectDetailViewModel
 import com.ssk.wanandroid.widget.CollectButton
 import com.ssk.wanandroid.widget.CommonListPager
@@ -126,24 +127,23 @@ class ProjectDetailFragment : WanFragment<ProjectDetailViewModel>() {
                         )
                     }
                     R.id.collectButton -> {
-                        if (WanAndroid.currentUser != null) {
-                            if (mProjectAdapter.data[position].collect) {
-                                (view as CollectButton).startUncollectAnim()
-                                mViewModel.unCollectArticle(mProjectAdapter.data[position].id)
-                            } else {
-                                (view as CollectButton).startCollectAnim()
-                                mViewModel.collectArticle(mProjectAdapter.data[position].id)
-                            }
-                            mProjectAdapter.data[position].collect = !mProjectAdapter.data[position].collect
-                        } else {
-                            showToast("请先登陆!")
-                            startActivity(LoginActivity::class.java, false)
-                            mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
-                        }
+                       collect(view, position)
                     }
                 }
             }
         }
+    }
+
+    @CheckLogin
+    private fun collect(view: View, position: Int) {
+        if (mProjectAdapter.data[position].collect) {
+            (view as CollectButton).startUncollectAnim()
+            mViewModel.unCollectArticle(mProjectAdapter.data[position].id)
+        } else {
+            (view as CollectButton).startCollectAnim()
+            mViewModel.collectArticle(mProjectAdapter.data[position].id)
+        }
+        mProjectAdapter.data[position].collect = !mProjectAdapter.data[position].collect
     }
 
     override fun initData(savedInstanceState: Bundle?) {

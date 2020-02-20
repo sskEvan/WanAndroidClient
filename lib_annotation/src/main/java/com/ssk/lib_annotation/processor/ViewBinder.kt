@@ -1,13 +1,11 @@
-package com.ssk.lib_annotation.base
+package com.ssk.lib_annotation.processor
 
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ssk.lib_annotation.annotation.BindContentView
-import java.lang.ClassCastException
 import java.lang.NullPointerException
 
 /**

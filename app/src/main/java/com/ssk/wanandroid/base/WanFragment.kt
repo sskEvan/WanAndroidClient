@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
-import com.ssk.lib_annotation.base.ViewBinder
+import com.ssk.lib_annotation.processor.ViewBinder
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager

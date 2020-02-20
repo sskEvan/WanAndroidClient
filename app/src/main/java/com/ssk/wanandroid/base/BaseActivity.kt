@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.ssk.lib_annotation.base.ViewBinder
+import com.ssk.lib_annotation.processor.ViewBinder
 import com.ssk.wanandroid.view.dialog.LoadingDialog
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.util.EventManager

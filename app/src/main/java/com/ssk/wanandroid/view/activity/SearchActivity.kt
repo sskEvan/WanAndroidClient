@@ -14,13 +14,12 @@ import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
-import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.bean.HotSearchVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.ext.fromHtml
-import com.ssk.wanandroid.ext.showToast
 import com.ssk.wanandroid.util.AndroidVersion
 import com.ssk.wanandroid.util.TransitionUtil
 import com.ssk.wanandroid.view.adapter.SearchAdapter
@@ -167,24 +166,23 @@ class SearchActivity : WanActivity<SearchViewModel>() {
                             mSearchAdapter.data[position].id, mSearchAdapter.data[position].collect)
                     }
                     R.id.collectButton -> {
-                        if(WanAndroid.currentUser != null) {
-                            if(mSearchAdapter.data[position].collect) {
-                                (view as CollectButton).startUncollectAnim()
-                                mViewModel.unCollectArticle(mSearchAdapter.data[position].id)
-                            }else {
-                                (view as CollectButton).startCollectAnim()
-                                mViewModel.collectArticle(mSearchAdapter.data[position].id)
-                            }
-                            mSearchAdapter.data[position].collect = !mSearchAdapter.data[position].collect
-                        }else {
-                            showToast("请先登陆!")
-                            startActivity(LoginActivity::class.java)
-                            overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
-                        }
+                        collect(view, position)
                     }
                 }
             }
         }
+    }
+
+    @CheckLogin
+    private fun collect(view: View, position: Int) {
+        if(mSearchAdapter.data[position].collect) {
+            (view as CollectButton).startUncollectAnim()
+            mViewModel.unCollectArticle(mSearchAdapter.data[position].id)
+        }else {
+            (view as CollectButton).startCollectAnim()
+            mViewModel.collectArticle(mSearchAdapter.data[position].id)
+        }
+        mSearchAdapter.data[position].collect = !mSearchAdapter.data[position].collect
     }
 
     private fun setupHotSearchTagLayout(hotSearchVoList: List<HotSearchVo>) {

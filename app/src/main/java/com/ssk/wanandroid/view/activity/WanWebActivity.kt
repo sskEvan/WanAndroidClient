@@ -15,6 +15,7 @@ import android.net.Uri
 import androidx.lifecycle.Observer
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.event.OnCollectChangedEvent
 import com.ssk.wanandroid.ext.showToast
@@ -154,17 +155,12 @@ class WanWebActivity : WanActivity<WanWebViewModel>() {
         if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
     }
 
+    @CheckLogin
     private fun collectArticle() {
-        if(WanAndroid.currentUser != null) {
-            if(mIsCollected) {
-                mViewModel.unCollectArticle(mId)
-            }else {
-                mViewModel.collectArticle(mId)
-            }
+        if(mIsCollected) {
+            mViewModel.unCollectArticle(mId)
         }else {
-            showToast("请先登陆!")
-            startActivity(LoginActivity::class.java)
-            overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
+            mViewModel.collectArticle(mId)
         }
     }
 

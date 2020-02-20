@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.view.activity.LoginActivity
 import com.ssk.wanandroid.R
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.app.WanAndroid
 import com.ssk.wanandroid.base.BaseFragment
 import com.ssk.wanandroid.view.dialog.CommonConfirmDialog
@@ -52,7 +53,7 @@ class MineFragment : BaseFragment() {
                         mRecoverIvHeadPortraitBgAnim?.cancel()
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        if(mLastTouchY != -1) {
+                        if (mLastTouchY != -1) {
                             if (event.y - mLastTouchY > 5 && nsvRoot.scrollY == 0
                                 && ivHeadPortraitBg.height <= mIvHeadPortraitBgOriginalHeight * 2
                             ) {  //向下滑动到顶了,并且背景图片高度不大于原始高度到2倍
@@ -85,25 +86,11 @@ class MineFragment : BaseFragment() {
         tvUserName.setOnClickListener { onUserClick() }
 
         srlSchedule.setOnClickListener {
-            if(WanAndroid.currentUser != null) {
-                val bundle = Bundle()
-                bundle.putInt("status", STATUS_NOT_COMPLETED)
-                startActivity(ScheduleActivity::class.java, bundle, true)
-            }else {
-                showToast("请先登陆!")
-                startActivity(LoginActivity::class.java, false)
-                mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
-            }
+            forwardScheduleActivity()
         }
 
         srlCollect.setOnClickListener {
-            if(WanAndroid.currentUser != null) {
-                startActivity(MyCollectActivity::class.java, true)
-            }else {
-                showToast("请先登陆!")
-                startActivity(LoginActivity::class.java, false)
-                mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
-            }
+            forwardMyCollectActivity()
         }
 
         srlAbout.setOnClickListener { showToast("关于") }
@@ -133,6 +120,19 @@ class MineFragment : BaseFragment() {
         }
     }
 
+    @CheckLogin
+    private fun forwardScheduleActivity() {
+        val bundle = Bundle()
+        bundle.putInt("status", STATUS_NOT_COMPLETED)
+        startActivity(ScheduleActivity::class.java, bundle, true)
+    }
+
+
+    @CheckLogin
+    private fun forwardMyCollectActivity() {
+        startActivity(MyCollectActivity::class.java, true)
+    }
+
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
@@ -149,7 +149,7 @@ class MineFragment : BaseFragment() {
     }
 
     private fun updateAccountUi() {
-        if(WanAndroid.currentUser != null) {
+        if (WanAndroid.currentUser != null) {
             Glide.with(mActivity)
                 .load(R.mipmap.ic_test_head_portrait)
                 .bitmapTransform(CropCircleTransformation(mActivity))
@@ -160,7 +160,7 @@ class MineFragment : BaseFragment() {
                 .into(ivHeadPortraitBg)
             tvUserName.text = WanAndroid.currentUser!!.username
             btnLogout.visibility = View.VISIBLE
-        }else {
+        } else {
             ivHeadPortrait.setImageResource(R.mipmap.ic_head_portrait_default)
             ivHeadPortraitBg.setImageResource(R.mipmap.ic_head_portrait_bg)
             tvUserName.text = "点击登陆"
@@ -171,7 +171,8 @@ class MineFragment : BaseFragment() {
 
     private fun startRecoverIvHeadPortraitBgAnim() {
         mRecoverIvHeadPortraitBgAnim?.cancel()
-        mRecoverIvHeadPortraitBgAnim = ValueAnimator.ofInt(ivHeadPortraitBg.height, mIvHeadPortraitBgOriginalHeight)
+        mRecoverIvHeadPortraitBgAnim =
+            ValueAnimator.ofInt(ivHeadPortraitBg.height, mIvHeadPortraitBgOriginalHeight)
         mRecoverIvHeadPortraitBgAnim!!.addUpdateListener { animation ->
             ivHeadPortraitBg.layoutParams.height = animation!!.animatedValue as Int
             ivHeadPortraitBg.requestLayout()

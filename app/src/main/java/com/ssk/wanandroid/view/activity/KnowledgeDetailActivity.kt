@@ -1,11 +1,13 @@
 package com.ssk.wanandroid.view.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ssk.lib_annotation.annotation.BindContentView
 import com.ssk.wanandroid.R
 import com.ssk.wanandroid.app.WanAndroid
+import com.ssk.wanandroid.aspect.annotation.CheckLogin
 import com.ssk.wanandroid.base.WanActivity
 import com.ssk.wanandroid.bean.ArticleVo
 import com.ssk.wanandroid.event.OnCollectChangedEvent
@@ -64,24 +66,23 @@ class KnowledgeDetailActivity : WanActivity<KnowledgeDetailViewModel>() {
                         )
                     }
                     R.id.collectButton -> {
-                        if (WanAndroid.currentUser != null) {
-                            if (mAdapter.data[position].collect) {
-                                (view as CollectButton).startUncollectAnim()
-                                mViewModel.unCollectArticle(mAdapter.data[position].id)
-                            } else {
-                                (view as CollectButton).startCollectAnim()
-                                mViewModel.collectArticle(mAdapter.data[position].id)
-                            }
-                            mAdapter.data[position].collect = !mAdapter.data[position].collect
-                        } else {
-                            showToast("请先登陆!")
-                            startActivity(LoginActivity::class.java)
-                            overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_bottom_none)
-                        }
+                        collect(view, position)
                     }
                 }
             }
         }
+    }
+
+    @CheckLogin
+    private fun collect(view: View, position: Int) {
+        if (mAdapter.data[position].collect) {
+            (view as CollectButton).startUncollectAnim()
+            mViewModel.unCollectArticle(mAdapter.data[position].id)
+        } else {
+            (view as CollectButton).startCollectAnim()
+            mViewModel.collectArticle(mAdapter.data[position].id)
+        }
+        mAdapter.data[position].collect = !mAdapter.data[position].collect
     }
 
     private fun forwardWanWebActivity(title: String, url: String, id: Int, isCollected: Boolean) {
